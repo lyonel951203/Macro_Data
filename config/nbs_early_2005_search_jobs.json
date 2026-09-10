@@ -1,0 +1,7 @@
+{
+  "jobs": [
+    {"name": "industrial_2005_early", "term": "工业增加值", "start_date": "2005-01-01", "end_date": "2005-07-31"},
+    {"name": "retail_2005_early", "term": "社会消费品零售总额", "start_date": "2005-01-01", "end_date": "2005-07-31"},
+    {"name": "economy_2005_early", "term": "国民经济", "start_date": "2005-01-01", "end_date": "2005-07-31"}
+  ]
+}

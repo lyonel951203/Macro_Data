@@ -1,0 +1,5 @@
+items:
+- path: data/raw/pboc/2026/09/03/8f71dd1e651d2e5d8e7120555a000c54a517c41fb01d94b39948183badab9769.html
+  url: http://www.pbc.gov.cn/diaochatongjisi/116219/116225/2026061217051611931/index.html
+- path: data/raw/pboc/2026/09/03/9ebce7e21c93d92980814be8f754dcc255ebe29dbbdf2531973e09361832c168.html
+  url: http://www.pbc.gov.cn/diaochatongjisi/116219/116225/2026071515025183948/index.html

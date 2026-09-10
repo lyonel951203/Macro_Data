@@ -1,0 +1,98 @@
+# Research code must depend on these canonical IDs, never on page titles.
+
+# China - National Bureau of Statistics
+CN_GDP_YOY: {country: CN, source: NBS, frequency: Q, unit: pct_yoy, pit_required: true}
+CN_INDUSTRIAL_VALUE_ADDED_YOY: {country: CN, source: NBS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_SERVICE_PRODUCTION_YOY: {country: CN, source: NBS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_RETAIL_SALES_YOY: {country: CN, source: NBS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_FAI_YTD_YOY: {country: CN, source: NBS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_MANUFACTURING_INVESTMENT_YTD_YOY: {country: CN, source: NBS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_INFRA_INVESTMENT_YTD_YOY: {country: CN, source: NBS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_REAL_ESTATE_INVESTMENT_YTD_YOY: {country: CN, source: NBS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_HOME_SALES_YTD_YOY: {country: CN, source: NBS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_NEW_HOME_SALES_AREA_YTD_YOY: {country: CN, source: NBS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_NEW_HOME_SALES_VALUE_YTD_YOY: {country: CN, source: NBS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_CPI_YOY: {country: CN, source: NBS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_CORE_CPI_YOY: {country: CN, source: NBS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_PPI_YOY: {country: CN, source: NBS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_URBAN_SURVEYED_UNEMPLOYMENT: {country: CN, source: NBS, frequency: M, unit: pct, pit_required: true}
+CN_PMI_MANUFACTURING: {country: CN, source: NBS, frequency: M, unit: index, pit_required: true}
+CN_PMI_NONMANUFACTURING: {country: CN, source: NBS, frequency: M, unit: index, pit_required: true}
+CN_PMI_COMPOSITE: {country: CN, source: NBS, frequency: M, unit: index, pit_required: true}
+CN_PMI_PRODUCTION: {country: CN, source: NBS, frequency: M, unit: index, pit_required: true}
+CN_PMI_NEW_ORDERS: {country: CN, source: NBS, frequency: M, unit: index, pit_required: true}
+CN_PMI_NEW_EXPORT_ORDERS: {country: CN, source: NBS, frequency: M, unit: index, pit_required: true}
+CN_PMI_RAW_MATERIAL_INVENTORY: {country: CN, source: NBS, frequency: M, unit: index, pit_required: true}
+CN_PMI_EMPLOYMENT: {country: CN, source: NBS, frequency: M, unit: index, pit_required: true}
+CN_PMI_SUPPLIER_DELIVERY: {country: CN, source: NBS, frequency: M, unit: index, pit_required: true}
+
+# China - People's Bank of China
+CN_M0_YOY: {country: CN, source: PBOC, frequency: M, unit: pct_yoy, pit_required: true}
+CN_M1_YOY: {country: CN, source: PBOC, frequency: M, unit: pct_yoy, pit_required: true}
+CN_M2_YOY: {country: CN, source: PBOC, frequency: M, unit: pct_yoy, pit_required: true}
+CN_RMB_LOAN_BAL_YOY: {country: CN, source: PBOC, frequency: M, unit: pct_yoy, pit_required: true}
+CN_NEW_RMB_LOANS_YTD: {country: CN, source: PBOC, frequency: M, unit: tn_cny_ytd, pit_required: true}
+CN_RMB_DEPOSIT_BAL_YOY: {country: CN, source: PBOC, frequency: M, unit: pct_yoy, pit_required: true}
+CN_NEW_RMB_DEPOSITS_YTD: {country: CN, source: PBOC, frequency: M, unit: tn_cny_ytd, pit_required: true}
+CN_TSF_FLOW_YTD: {country: CN, source: PBOC, frequency: M, unit: tn_cny_ytd, pit_required: true}
+CN_TSF_STOCK: {country: CN, source: PBOC, frequency: M, unit: tn_cny, pit_required: true}
+CN_TSF_STOCK_YOY: {country: CN, source: PBOC, frequency: M, unit: pct_yoy, pit_required: true}
+CN_M2_STOCK: {country: CN, source: PBOC, frequency: M, unit: tn_cny, pit_required: false}
+CN_M1_STOCK: {country: CN, source: PBOC, frequency: M, unit: tn_cny, pit_required: false}
+CN_M0_STOCK: {country: CN, source: PBOC, frequency: M, unit: tn_cny, pit_required: false}
+
+# China - Customs
+CN_EXPORT_CNY: {country: CN, source: CUSTOMS, frequency: M, unit: bn_cny, pit_required: true}
+CN_IMPORT_CNY: {country: CN, source: CUSTOMS, frequency: M, unit: bn_cny, pit_required: true}
+CN_TRADE_BALANCE_CNY: {country: CN, source: CUSTOMS, frequency: M, unit: bn_cny, pit_required: true}
+CN_EXPORT_CNY_YOY: {country: CN, source: CUSTOMS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_IMPORT_CNY_YOY: {country: CN, source: CUSTOMS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_EXPORT_USD: {country: CN, source: CUSTOMS, frequency: M, unit: bn_usd, pit_required: true}
+CN_IMPORT_USD: {country: CN, source: CUSTOMS, frequency: M, unit: bn_usd, pit_required: true}
+CN_TRADE_BALANCE_USD: {country: CN, source: CUSTOMS, frequency: M, unit: bn_usd, pit_required: true}
+CN_EXPORT_USD_YOY: {country: CN, source: CUSTOMS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_IMPORT_USD_YOY: {country: CN, source: CUSTOMS, frequency: M, unit: pct_yoy, pit_required: true}
+
+# China - Ministry of Finance
+CN_GENERAL_BUDGET_REVENUE_YTD_YOY: {country: CN, source: MOF, frequency: M, unit: pct_yoy, pit_required: true}
+CN_GENERAL_BUDGET_EXPENDITURE_YTD_YOY: {country: CN, source: MOF, frequency: M, unit: pct_yoy, pit_required: true}
+CN_TAX_REVENUE_YTD_YOY: {country: CN, source: MOF, frequency: M, unit: pct_yoy, pit_required: true}
+CN_NONTAX_REVENUE_YTD_YOY: {country: CN, source: MOF, frequency: M, unit: pct_yoy, pit_required: true}
+CN_GOV_FUND_REVENUE_YTD_YOY: {country: CN, source: MOF, frequency: M, unit: pct_yoy, pit_required: true}
+CN_GOV_FUND_EXPENDITURE_YTD_YOY: {country: CN, source: MOF, frequency: M, unit: pct_yoy, pit_required: true}
+CN_LAND_SALE_REVENUE_YTD_YOY: {country: CN, source: MOF, frequency: M, unit: pct_yoy, pit_required: true}
+
+# China - State Administration of Foreign Exchange
+CN_FX_RESERVE_USD: {country: CN, source: SAFE, frequency: M, unit: bn_usd, pit_required: true}
+CN_BANK_FX_SETTLEMENT_USD: {country: CN, source: SAFE, frequency: M, unit: bn_usd, pit_required: true}
+CN_BANK_FX_SALES_USD: {country: CN, source: SAFE, frequency: M, unit: bn_usd, pit_required: true}
+CN_BANK_FX_NET_SETTLEMENT_USD: {country: CN, source: SAFE, frequency: M, unit: bn_usd, pit_required: true}
+CN_CROSS_BORDER_RECEIPTS_USD: {country: CN, source: SAFE, frequency: M, unit: bn_usd, pit_required: true}
+CN_CROSS_BORDER_PAYMENTS_USD: {country: CN, source: SAFE, frequency: M, unit: bn_usd, pit_required: true}
+CN_CROSS_BORDER_NET_RECEIPTS_USD: {country: CN, source: SAFE, frequency: M, unit: bn_usd, pit_required: true}
+
+# OECD China revision-history supplements. These do not replace the required
+# domestic official-source series; edition dates provide independent PIT_B.
+CN_OECD_REAL_GDP: {country: CN, source: OECD, frequency: Q, unit: national_currency, pit_required: false}
+CN_OECD_CPI_INDEX: {country: CN, source: OECD, frequency: M, unit: index, pit_required: false}
+CN_OECD_UNEMPLOYMENT: {country: CN, source: OECD, frequency: M, unit: pct, pit_required: false}
+CN_OECD_INDUSTRIAL_PRODUCTION: {country: CN, source: OECD, frequency: M, unit: index, pit_required: false}
+
+# United States - RTDSM target registry (FRED may only be supplemental PIT_D)
+US_REAL_GDP: {country: US, source: RTDSM, frequency: Q, unit: bn_usd_sa_ar, pit_required: true}
+US_NOMINAL_GDP: {country: US, source: RTDSM, frequency: Q, unit: bn_usd_sa_ar, pit_required: true}
+US_GDI: {country: US, source: RTDSM, frequency: Q, unit: bn_usd_sa_ar, pit_required: true}
+US_CPI: {country: US, source: RTDSM, frequency: M, unit: index, pit_required: true}
+US_CORE_CPI: {country: US, source: RTDSM, frequency: M, unit: index, pit_required: true}
+US_GDP_DEFLATOR: {country: US, source: RTDSM, frequency: Q, unit: index, pit_required: true}
+US_INDUSTRIAL_PRODUCTION: {country: US, source: RTDSM, frequency: M, unit: index, pit_required: true}
+US_UNEMPLOYMENT: {country: US, source: RTDSM, frequency: M, unit: pct, pit_required: true}
+US_EMPLOYMENT: {country: US, source: RTDSM, frequency: M, unit: k_persons, pit_required: true}
+US_HOUSING_STARTS: {country: US, source: RTDSM, frequency: M, unit: k_units_sa_ar, pit_required: true}
+US_PERSONAL_INCOME: {country: US, source: RTDSM, frequency: M, unit: bn_usd_sa_ar, pit_required: true}
+US_CONSUMPTION: {country: US, source: RTDSM, frequency: M, unit: bn_usd_sa_ar, pit_required: true}
+US_MONEY_M1: {country: US, source: RTDSM, frequency: M, unit: bn_usd_sa, pit_required: true}
+US_MONEY_M2: {country: US, source: RTDSM, frequency: M, unit: bn_usd_sa, pit_required: true}
+US_REAL_CONSUMPTION: {country: US, source: RTDSM, frequency: Q, unit: bn_usd_sa_ar, pit_required: true}
+US_REAL_INCOME: {country: US, source: RTDSM, frequency: Q, unit: bn_usd_sa_ar, pit_required: true}
+US_LABOR_FORCE: {country: US, source: RTDSM, frequency: M, unit: k_persons, pit_required: true}

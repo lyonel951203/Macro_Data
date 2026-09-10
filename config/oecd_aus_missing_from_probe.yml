@@ -1,0 +1,5 @@
+jobs:
+  - url: "https://sdmx.oecd.org/public/rest/data/OECD.SDD.STES,DSD_STES_REVISIONS@DF_STES_REVISIONS,4.0/AUS+IND.M+Q.CP+UNEMP+TOVM.GR+IX+PT_LF._Z+_T+G47.?dimensionAtObservation=AllDimensions"
+    series:
+      - {ref_area: AUS, frequency: Q, measure: CP, unit_measure: IX, canonical_id: AU_CPI, name: Consumer prices, unit: index, seasonal_adjustment: UNKNOWN}
+      - {ref_area: AUS, frequency: Q, measure: TOVM, unit_measure: IX, canonical_id: AU_RETAIL, name: Retail trade volume, unit: index, seasonal_adjustment: UNKNOWN}

@@ -1,0 +1,45 @@
+{
+  "purpose": "Raw review of recovered 2005-01 CPI and boundaries of the newly discovered 2021 price releases",
+  "items": [
+    {
+      "source": "NBS",
+      "title": "1月份全国居民消费价格总水平同比上涨1.9%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919862.html",
+      "period": "2005-01",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/a417f06660f1907682d91b345d7d29283406049325362bd1bf3d8e40bc30b27f.json"
+    },
+    {
+      "source": "NBS",
+      "title": "2021年5月份居民消费价格同比上涨1.3% 环比下降0.2%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901120.html",
+      "period": "2021-05",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/044a7f5ea4ff1cd91df35503e91de06f9e61824e21035c51bf2241d09a3682c8.json"
+    },
+    {
+      "source": "NBS",
+      "title": "2021年8月份居民消费价格同比上涨0.8% 环比上涨0.1%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901211.html",
+      "period": "2021-08",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/044a7f5ea4ff1cd91df35503e91de06f9e61824e21035c51bf2241d09a3682c8.json"
+    },
+    {
+      "source": "NBS",
+      "title": "2021年3月份工业生产者出厂价格同比上涨4.4% 环比上涨1.6%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901041.html",
+      "period": "2021-03",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/9515969b3a8a2e28394b209a4dd607b8dd6ceb9ef50acf645dea68200281a7aa.json"
+    },
+    {
+      "source": "NBS",
+      "title": "2021年8月份工业生产者出厂价格同比上涨9.5% 环比上涨0.7%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901212.html",
+      "period": "2021-08",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/9515969b3a8a2e28394b209a4dd607b8dd6ceb9ef50acf645dea68200281a7aa.json"
+    }
+  ]
+}

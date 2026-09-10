@@ -1,0 +1,128 @@
+{
+  "batch": "nbs_economy_batch2",
+  "status": "READY_NOT_STARTED",
+  "max_articles": 20,
+  "policy": "Official archived index candidates only; validate body values, monthly/YTD definitions and historical timestamp before ingestion. Never derive PIT from URL or index hint.",
+  "items": [
+    {
+      "title": "一季度国民经济开局总体平稳",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901427.html",
+      "period": "2022-03",
+      "index_raw_file": "data/raw/nbs/2026/09/07/54ad9c274f734651de320158835562fdffd5a644f79ba534cd68210378a13553.html"
+    },
+    {
+      "title": "有力应对超预期因素影响 国民经济企稳回升",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901513.html",
+      "period": "2022-06",
+      "index_raw_file": "data/raw/nbs/2026/09/07/d80b49a6b98debda0f112a6b6068e805e39d5bf08c8ddac270b5741e25cdf315.html"
+    },
+    {
+      "title": "7月份国民经济延续恢复态势",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901548.html",
+      "period": "2022-07",
+      "index_raw_file": "data/raw/nbs/2026/09/07/8636b2df9befae5572f3951b258a80ce7ddd40e293cc24045b9e920af2fb9d05.html"
+    },
+    {
+      "title": "8月份国民经济持续恢复 主要指标总体改善",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901579.html",
+      "period": "2022-08",
+      "index_raw_file": "data/raw/nbs/2026/09/07/8597accb7042d87f95d076662af57e5d009574a6c45738facee19453ca05f545.html"
+    },
+    {
+      "title": "前三季度国民经济恢复向好",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901627.html",
+      "period": "2022-09",
+      "index_raw_file": "data/raw/nbs/2026/09/07/0cf7968baf8db3f5d0ceaa7f79c1a11df7fb39edad6c768275eaf33ad34c3d00.html"
+    },
+    {
+      "title": "10月份国民经济保持恢复态势",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901651.html",
+      "period": "2022-10",
+      "index_raw_file": "data/raw/nbs/2026/09/07/abf26fce4b5a12c234bc42f13b119ab2a04352622e7c04af12344197a42114b6.html"
+    },
+    {
+      "title": "2022年国民经济顶住压力再上新台阶",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901709.html",
+      "period": "2022-12",
+      "index_raw_file": "data/raw/nbs/2026/09/07/ee0cd78c53aa1cab54917b09ac1a214ab6b3e4781f3236e7b0dc1cb2f9c266a2.html"
+    },
+    {
+      "title": "5月份国民经济继续恢复",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202306/t20230615_1940628.html",
+      "period": "2023-05",
+      "index_raw_file": "data/raw/nbs/2026/09/07/4f606b8ae5979fe6ac8b46c523427c41d9760d38d7cacd7b79ec086523e07ac2.html"
+    },
+    {
+      "title": "上半年国民经济恢复向好",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202307/t20230715_1941271.html",
+      "period": "2023-06",
+      "index_raw_file": "data/raw/nbs/2026/09/07/261b6943ea0a2907944cfdab678e9995dd1f42c6c693b08dc10ae7bd77854cfd.html"
+    },
+    {
+      "title": "7月份国民经济持续稳定恢复",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202308/t20230815_1941957.html",
+      "period": "2023-07",
+      "index_raw_file": "data/raw/nbs/2026/09/07/e0c0925f865f1a5185e45b63bc755eb85ab1ea521da1f6e10502fd960f2bdc55.html"
+    },
+    {
+      "title": "8月份国民经济恢复向好",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202309/t20230915_1942848.html",
+      "period": "2023-08",
+      "index_raw_file": "data/raw/nbs/2026/09/07/975eca77489d0d11c871e515e74a4bb0d12be5384b304416d0010bd89bfe2b79.html"
+    },
+    {
+      "title": "前三季度国民经济持续恢复向好 高质量发展稳步推进",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202310/t20231018_1943654.html",
+      "period": "2023-09",
+      "index_raw_file": "data/raw/nbs/2026/09/07/56a740038eca08aa38445310b8cf6d0ba2b2de081bf1044bbf0ffc290413f88d.html"
+    },
+    {
+      "title": "10月份国民经济持续恢复向好",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202311/t20231115_1944527.html",
+      "period": "2023-10",
+      "index_raw_file": "data/raw/nbs/2026/09/07/5020eb18345d9161106f5f02b3e6201710a61ce45d8fd44b146fc82ccd9e56fc.html"
+    },
+    {
+      "title": "11月份国民经济持续回升向好",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202312/t20231215_1945570.html",
+      "period": "2023-11",
+      "index_raw_file": "data/raw/nbs/2026/09/07/4cfefd29381e203db68ea28254119a3896c0d14e41e4dbe6ade03c74b6e3f5cb.html"
+    },
+    {
+      "title": "2023年国民经济回升向好 高质量发展扎实推进",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202401/t20240117_1946624.html",
+      "period": "2023-12",
+      "index_raw_file": "data/raw/nbs/2026/09/07/647fdd2d0e951e323f72b06dc086cacddc1efbb5bcf1a8036dc386a3ef5a3032.html"
+    },
+    {
+      "title": "一季度国民经济实现良好开局",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202404/t20240416_1948561.html",
+      "period": "2024-03",
+      "index_raw_file": "data/raw/nbs/2026/09/07/4b95b8c9b5ae8d43acddd8346c13ab3bd575f1ae6ce92bd140312a675e0d7841.html"
+    },
+    {
+      "title": "5月份国民经济延续回升向好态势 运行总体平稳",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202406/t20240617_1954710.html",
+      "period": "2024-05",
+      "index_raw_file": "data/raw/nbs/2026/09/07/6bc969f8693e05b0e9dd463f2bf2cd9fd985112680a02e46deeb3100e87c80dc.html"
+    },
+    {
+      "title": "11月份国民经济稳步回升",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202412/t20241216_1957767.html",
+      "period": "2024-11",
+      "index_raw_file": "data/raw/nbs/2026/09/07/19e36d970bde866b3c262f989778d7aaff96961ea43f246c3f257e8c4546cbd8.html"
+    },
+    {
+      "title": "一季度国民经济开局良好",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202504/t20250416_1959321.html",
+      "period": "2025-03",
+      "index_raw_file": "data/raw/nbs/2026/09/07/a3d6e26d8104bea140801c985027648e1c69db97c9113c537bf7276263464983.html"
+    },
+    {
+      "title": "上半年国民经济迎难而上、稳中向好",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202507/t20250715_1960414.html",
+      "period": "2025-06",
+      "index_raw_file": "data/raw/nbs/2026/09/07/6a9c79a144235a0843832cceab5111eb9b8081f03d9041ed83de78bcd7953880.html"
+    }
+  ]
+}

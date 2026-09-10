@@ -1,0 +1,26 @@
+# Official annual money-supply tables. These direct statistics paths are
+# currently disallowed by PBOC robots.txt, so the automated HTTP client must
+# not fetch this manifest. It is retained for browser/manual raw-file seeding.
+https://www.pbc.gov.cn/eportal/fileDir/defaultCurSite/resource/cms/2015/07/2004S14.htm
+https://www.pbc.gov.cn/eportal/fileDir/defaultCurSite/resource/cms/2015/07/2005S14.htm
+https://www.pbc.gov.cn/eportal/fileDir/defaultCurSite/resource/cms/2015/07/2006S07.htm
+https://www.pbc.gov.cn/eportal/fileDir/defaultCurSite/resource/cms/2015/07/2007S07.htm
+https://www.pbc.gov.cn/eportal/fileDir/defaultCurSite/resource/cms/2015/07/2008S07.htm
+https://www.pbc.gov.cn/eportal/fileDir/defaultCurSite/resource/cms/2015/07/2009s07.htm
+https://www.pbc.gov.cn/eportal/fileDir/defaultCurSite/resource/cms/2015/07/2010s07.htm
+https://www.pbc.gov.cn/eportal/fileDir/defaultCurSite/resource/cms/2015/07/2011s07.htm
+https://www.pbc.gov.cn/eportal/fileDir/defaultCurSite/resource/cms/2015/07/2012s07.htm
+https://www.pbc.gov.cn/eportal/fileDir/defaultCurSite/resource/cms/2015/07/2013s07.htm
+https://www.pbc.gov.cn/eportal/fileDir/defaultCurSite/resource/cms/2015/07/2014s07.htm
+https://www.pbc.gov.cn/diaochatongjisi/fileDir/resource/cms/2016/01/2016011818584510775.htm
+https://www.pbc.gov.cn/diaochatongjisi/fileDir/resource/cms/2017/01/2017011618241733781.htm
+https://www.pbc.gov.cn/diaochatongjisi/fileDir/resource/cms/2018/04/2018041812261055101.htm
+https://www.pbc.gov.cn/diaochatongjisi/fileDir/resource/cms/2019/01/2019011619032875652.htm
+https://www.pbc.gov.cn/diaochatongjisi/fileDir/resource/cms/2020/01/2020011716393273983.htm
+https://www.pbc.gov.cn/diaochatongjisi/attachDir/2025/11/2025110510340673173.htm
+https://www.pbc.gov.cn/diaochatongjisi/attachDir/2025/11/2025110510401872306.htm
+https://www.pbc.gov.cn/diaochatongjisi/attachDir/2025/11/2025110417121192339.htm
+https://www.pbc.gov.cn/diaochatongjisi/attachDir/2025/11/2025110416484155591.htm
+https://www.pbc.gov.cn/diaochatongjisi/attachDir/2025/11/2025111416483339795.htm
+https://www.pbc.gov.cn/diaochatongjisi/attachDir/2026/01/2026011515582640595.htm
+https://www.pbc.gov.cn/diaochatongjisi/attachDir/2026/08/2026081416590597261.htm

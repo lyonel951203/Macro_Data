@@ -1,0 +1,2 @@
+# One bounded probe of the official NBS site search for a known 2005 release.
+https://www.stats.gov.cn/search/s?qt=2005%E5%B9%B4%E5%B1%85%E6%B0%91%E6%B6%88%E8%B4%B9%E4%BB%B7%E6%A0%BC

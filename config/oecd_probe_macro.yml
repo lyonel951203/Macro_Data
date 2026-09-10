@@ -1,0 +1,6 @@
+jobs:
+  - url: "https://sdmx.oecd.org/public/rest/data/OECD.SDD.STES,DSD_STES_REVISIONS@DF_STES_REVISIONS,4.0/FRA.M+Q.B1GQ_Q+CP+UNEMP.IX+PT_LF..?startPeriod=2024-01&dimensionAtObservation=AllDimensions"
+    series:
+      - {ref_area: FRA, frequency: Q, measure: B1GQ_Q, unit_measure: IX, canonical_id: FR_REAL_GDP, name: Real GDP, unit: index, seasonal_adjustment: UNKNOWN}
+      - {ref_area: FRA, frequency: M, measure: CP, unit_measure: IX, canonical_id: FR_CPI, name: Consumer prices, unit: index, seasonal_adjustment: UNKNOWN}
+      - {ref_area: FRA, frequency: M, measure: UNEMP, unit_measure: PT_LF, canonical_id: FR_UNEMPLOYMENT, name: Unemployment, unit: pct, seasonal_adjustment: UNKNOWN}

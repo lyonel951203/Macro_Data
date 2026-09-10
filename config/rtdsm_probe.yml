@@ -1,0 +1,8 @@
+series:
+  - url: https://www.philadelphiafed.org/-/media/FRBP/Assets/Surveys-And-Data/real-time-data/data-files/xlsx/routputMvQd.xlsx?hash=B3AD0AED9E268AA077E8D9B8AAF2AC83&sc_lang=en
+    canonical_id: US_REAL_GDP
+    source_id: ROUTPUT
+    name: Real GDP
+    unit: bn_usd_sa_ar
+    observation_frequency: Q
+    seasonal_adjustment: SA

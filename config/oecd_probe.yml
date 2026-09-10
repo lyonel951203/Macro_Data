@@ -1,0 +1,11 @@
+jobs:
+  - url: "https://sdmx.oecd.org/public/rest/data/OECD.SDD.STES,DSD_STES_REVISIONS@DF_STES_REVISIONS,4.0/FRA.M.PRVM.IX.BTE.?startPeriod=2024-01&dimensionAtObservation=AllDimensions"
+    series:
+      - ref_area: FRA
+        frequency: M
+        measure: PRVM
+        unit_measure: IX
+        canonical_id: FR_INDUSTRIAL_PRODUCTION
+        name: Industrial production
+        unit: index
+        seasonal_adjustment: UNKNOWN

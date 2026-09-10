@@ -1,0 +1,9 @@
+{
+  "jobs": [
+    {"name": "industrial_2005_late", "term": "工业增加值", "start_date": "2005-08-01", "end_date": "2006-02-28"},
+    {"name": "retail_2005_late", "term": "社会消费品零售总额", "start_date": "2005-08-01", "end_date": "2006-02-28"},
+    {"name": "prices_2005_dec_cpi", "term": "居民消费价格", "start_date": "2006-01-01", "end_date": "2006-02-15"},
+    {"name": "prices_2005_dec_ppi", "term": "工业品出厂价格", "start_date": "2006-01-01", "end_date": "2006-02-15"},
+    {"name": "pmi_2005_first", "term": "采购经理指数", "start_date": "2005-01-01", "end_date": "2006-02-28"}
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "purpose": "Earliest official industrial and retail monthly observations, 2005 H1; titles with quarters are discovery hints only, monthly body values must be reviewed",
+  "items": [
+    {
+      "source": "NBS",
+      "title": "1月份全国工业生产平稳增长 完成增加值4844亿元",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919860.html",
+      "period": "2005-01",
+      "kind": "statistics_release_search:工业增加值",
+      "index_raw_file": "data/raw/nbs/2026/09/08/82259d6201d7d4a54515cceeb70c8c22750fea348040b02ae6580c22b67eb37f.json"
+    },
+    {
+      "source": "NBS",
+      "title": "1-2月份全国社会消费品零售总额同比增长13.6%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919866.html",
+      "period": "2005-02",
+      "kind": "statistics_release_search:社会消费品零售总额",
+      "index_raw_file": "data/raw/nbs/2026/09/08/799d46e6031b3508117071ed5823a721e9c12aba9c20103dae1a2fad1ed0df72.json"
+    },
+    {
+      "source": "NBS",
+      "title": "1-2月份全国实现工业增加值9034亿元 同比增长16.9%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919867.html",
+      "period": "2005-02",
+      "kind": "statistics_release_search:工业增加值",
+      "index_raw_file": "data/raw/nbs/2026/09/08/82259d6201d7d4a54515cceeb70c8c22750fea348040b02ae6580c22b67eb37f.json"
+    },
+    {
+      "source": "NBS",
+      "title": "一季度我国工业实现增加值14415亿 增长16.2%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919878.html",
+      "period": "2005-03",
+      "kind": "statistics_release_search:工业增加值",
+      "index_raw_file": "data/raw/nbs/2026/09/08/82259d6201d7d4a54515cceeb70c8c22750fea348040b02ae6580c22b67eb37f.json"
+    },
+    {
+      "source": "NBS",
+      "title": "一季度全国社会消费品零售总额增长13.7%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919879.html",
+      "period": "2005-03",
+      "kind": "statistics_release_search:社会消费品零售总额",
+      "index_raw_file": "data/raw/nbs/2026/09/08/799d46e6031b3508117071ed5823a721e9c12aba9c20103dae1a2fad1ed0df72.json"
+    },
+    {
+      "source": "NBS",
+      "title": "4月份社会消费品零售总额4663亿元 同比增长12.2%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919890.html",
+      "period": "2005-04",
+      "kind": "statistics_release_search:社会消费品零售总额",
+      "index_raw_file": "data/raw/nbs/2026/09/08/799d46e6031b3508117071ed5823a721e9c12aba9c20103dae1a2fad1ed0df72.json"
+    },
+    {
+      "source": "NBS",
+      "title": "4月份全国实现工业增加值5647亿 同比增长16%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919891.html",
+      "period": "2005-04",
+      "kind": "statistics_release_search:工业增加值",
+      "index_raw_file": "data/raw/nbs/2026/09/08/82259d6201d7d4a54515cceeb70c8c22750fea348040b02ae6580c22b67eb37f.json"
+    },
+    {
+      "source": "NBS",
+      "title": "5月份全国社会消费品零售总额同比增长12.8%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919898.html",
+      "period": "2005-05",
+      "kind": "statistics_release_search:社会消费品零售总额",
+      "index_raw_file": "data/raw/nbs/2026/09/08/799d46e6031b3508117071ed5823a721e9c12aba9c20103dae1a2fad1ed0df72.json"
+    },
+    {
+      "source": "NBS",
+      "title": "5月份全国完成工业增加值5702亿元 同比增长16.6%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919899.html",
+      "period": "2005-05",
+      "kind": "statistics_release_search:工业增加值",
+      "index_raw_file": "data/raw/nbs/2026/09/08/82259d6201d7d4a54515cceeb70c8c22750fea348040b02ae6580c22b67eb37f.json"
+    },
+    {
+      "source": "NBS",
+      "title": "上半年全国社会消费品零售总额同比增长13.2%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919910.html",
+      "period": "2005-06",
+      "kind": "statistics_release_search:社会消费品零售总额",
+      "index_raw_file": "data/raw/nbs/2026/09/08/799d46e6031b3508117071ed5823a721e9c12aba9c20103dae1a2fad1ed0df72.json"
+    },
+    {
+      "source": "NBS",
+      "title": "上半年全国完成工业增加值32274亿 增长16.4%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919911.html",
+      "period": "2005-06",
+      "kind": "statistics_release_search:工业增加值",
+      "index_raw_file": "data/raw/nbs/2026/09/08/82259d6201d7d4a54515cceeb70c8c22750fea348040b02ae6580c22b67eb37f.json"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{"items":[
+  {"url":"https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1899839.html","release_at":"2018-01-31T09:00:00+08:00","values":[
+    {"id":"CN_PMI_MANUFACTURING","period":"2018-01","value":51.3,"quote":"2018年1月份，中国制造业采购经理指数（PMI）为51.3%"},
+    {"id":"CN_PMI_NONMANUFACTURING","period":"2018-01","value":55.3,"quote":"2018年1月份，中国非制造业商务活动指数为55.3%"},
+    {"id":"CN_PMI_COMPOSITE","period":"2018-01","value":54.6,"quote":"2018年1月份，中国综合PMI产出指数为54.6%"},
+    {"id":"CN_PMI_PRODUCTION","period":"2018-01","value":53.5,"quote":"生产指数为53.5%，虽比上月回落0.5个百分点，仍处于扩张区间，表明制造业生产保持稳定增长"},
+    {"id":"CN_PMI_NEW_ORDERS","period":"2018-01","value":52.6,"quote":"新订单指数为52.6%，比上月回落0.8个百分点，位于临界点之上，表明制造业市场需求扩张步伐有所放慢"},
+    {"id":"CN_PMI_RAW_MATERIAL_INVENTORY","period":"2018-01","value":48.8,"quote":"原材料库存指数为48.8%，比上月回升0.8个百分点，低于临界点，表明制造业主要原材料库存量降幅收窄"},
+    {"id":"CN_PMI_EMPLOYMENT","period":"2018-01","value":48.3,"quote":"从业人员指数为48.3%，比上月下降0.2个百分点，位于临界点以下，表明制造业企业用工量减少"},
+    {"id":"CN_PMI_SUPPLIER_DELIVERY","period":"2018-01","value":49.2,"quote":"供应商配送时间指数为49.2%，比上月下降0.1个百分点，位于临界点以下，表明制造业原材料供应商交货时间放慢"}
+  ]},
+  {"url":"https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1899470.html","release_at":"2017-04-17T10:00:00+08:00","values":[
+    {"id":"CN_SERVICE_PRODUCTION_YOY","period":"2017-03","value":8.3,"table_label":"四、服务业生产指数","column":2,"table_month":"3月","table_ytd":"1-3月"}
+  ]},
+  {"url":"https://www.stats.gov.cn/sj/xwfbh/fbhwd/202302/t20230203_1899897.html","release_at":"2018-04-17T10:00:00+08:00","values":[
+    {"id":"CN_URBAN_SURVEYED_UNEMPLOYMENT","period":"2018-01","value":5.0,"quote":"1至3月份，全国城镇调查失业率分别为5.0%、5.0%和5.1%"},
+    {"id":"CN_URBAN_SURVEYED_UNEMPLOYMENT","period":"2018-02","value":5.0,"quote":"1至3月份，全国城镇调查失业率分别为5.0%、5.0%和5.1%"},
+    {"id":"CN_URBAN_SURVEYED_UNEMPLOYMENT","period":"2018-03","value":5.1,"quote":"1至3月份，全国城镇调查失业率分别为5.0%、5.0%和5.1%"}
+  ]}
+]}

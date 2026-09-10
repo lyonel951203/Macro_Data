@@ -1,0 +1,78 @@
+{
+  "purpose": "Download raw only; require body review before offline ingestion.",
+  "missing_sample_strata": [],
+  "items": [
+    {
+      "source": "NBS",
+      "title": "2月份全国居民消费价格同比上涨3.9%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919865.html",
+      "period": "2005-02",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/71b65fbefffce79e188f20df03a6d3f5b96f601f1ee85c216004c2b8fe402ade.json",
+      "family": "CPI"
+    },
+    {
+      "source": "NBS",
+      "title": "1月份全国工业品出厂价格比去年同月上涨5.8%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919861.html",
+      "period": "2005-01",
+      "kind": "statistics_release_search:工业品出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/abfaa2f6c96f2cdbda762e3511c0451285756ce27488712f8d3cdce9b313affd.json",
+      "family": "PPI"
+    },
+    {
+      "source": "NBS",
+      "title": "1月份居民消费价格同比上涨1.5%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919184.html",
+      "period": "2010-01",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/8aa98c58c2503520d3ee6b3f4dff6cb4b43ac6a5ae20110c797f7aa37842afbc.json",
+      "family": "CPI"
+    },
+    {
+      "source": "NBS",
+      "title": "1月份工业品出厂价格同比上涨4.3%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919185.html",
+      "period": "2010-01",
+      "kind": "statistics_release_search:工业品出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/f1cd3fcfbbb4b86c14ea0b6fbe91d057e70c8347ba9e31724d2c0c90dd0edf8b.json",
+      "family": "PPI"
+    },
+    {
+      "source": "NBS",
+      "title": "2015年1月份居民消费价格变动情况",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1898695.html",
+      "period": "2015-01",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/07/c74c18a6240aeef5647c7bc0d5ae0d3410a47211af4ea17527ff3e9f95f1425a.json",
+      "family": "CPI"
+    },
+    {
+      "source": "NBS",
+      "title": "2015年2月份工业生产者出厂价格同比下降4.8%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1898722.html",
+      "period": "2015-02",
+      "kind": "statistics_release_search:工业品出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/24082667d8cc5eea64cfb8f1626316798cff40d4e9f1ebab33158ad00d11877c.json",
+      "family": "PPI"
+    },
+    {
+      "source": "NBS",
+      "title": "2019年1月份居民消费价格同比上涨1.7%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900235.html",
+      "period": "2019-01",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/07/96edd59af01a6369f38a4455ab719deb2046e12a559515e2de182b671a0aa5fb.json",
+      "family": "CPI"
+    },
+    {
+      "source": "NBS",
+      "title": "2019年1月份工业生产者出厂价格同比上涨0.1%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900234.html",
+      "period": "2019-01",
+      "kind": "statistics_release_search:工业品出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/bc0f904151ab276717e93860e4bf12d20486bb151900ebc2b16f6d8f1f4854a3.json",
+      "family": "PPI"
+    }
+  ]
+}

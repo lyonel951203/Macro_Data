@@ -1,0 +1,4 @@
+jobs:
+  - url: "https://sdmx.oecd.org/public/rest/data/OECD.SDD.STES,DSD_STES_REVISIONS@DF_STES_REVISIONS,4.0/CHN.Q.B1GQ_Q...?dimensionAtObservation=AllDimensions"
+    series:
+      - {ref_area: CHN, country: CN, frequency: Q, measure: B1GQ_Q, unit_measure: XDC, canonical_id: CN_OECD_REAL_GDP, name: OECD China real GDP, unit: national_currency, seasonal_adjustment: UNKNOWN}

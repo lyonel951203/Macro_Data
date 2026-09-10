@@ -1,0 +1,9 @@
+# Official NBS search terms. Searches use title-only matching and 2005-2019
+# publication dates; only canonical /sj/zxfb/ release pages are retained.
+居民消费价格
+工业品出厂价格
+工业生产者出厂价格
+采购经理指数
+国民经济运行
+国民经济主要指标
+国内生产总值

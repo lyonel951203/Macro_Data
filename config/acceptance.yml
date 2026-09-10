@@ -1,0 +1,38 @@
+required_scopes:
+  china: true
+  us: true
+  global: false
+
+thresholds:
+  china_series: 25
+  china_historical_series: 25
+  china_monthly_min_periods: 24
+  china_quarterly_min_periods: 8
+  china_period_coverage: 0.95
+  china_strict_raw_rate: 0.95
+  us_rtdsm_series: 15
+  us_rtdsm_samples_per_series: 100
+  raw_reference_rate: 0.999
+
+china_required_sources: [NBS, PBOC, CUSTOMS, MOF, SAFE]
+
+china_structural_missing_months:
+  MOF: [1]
+
+china_required_series:
+  - CN_GDP_YOY
+  - CN_INDUSTRIAL_VALUE_ADDED_YOY
+  - CN_SERVICE_PRODUCTION_YOY
+  - CN_RETAIL_SALES_YOY
+  - CN_FAI_YTD_YOY
+  - CN_CPI_YOY
+  - CN_PPI_YOY
+  - CN_URBAN_SURVEYED_UNEMPLOYMENT
+  - CN_PMI_MANUFACTURING
+  - CN_M2_YOY
+  - CN_RMB_LOAN_BAL_YOY
+  - CN_TSF_STOCK
+  - CN_EXPORT_USD_YOY
+  - CN_IMPORT_USD_YOY
+  - CN_GENERAL_BUDGET_REVENUE_YTD_YOY
+  - CN_FX_RESERVE_USD

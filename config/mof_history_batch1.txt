@@ -1,0 +1,11 @@
+# Ten bounded releases; the first URL is already cached and causes no request.
+https://gks.mof.gov.cn/tongjishuju/202608/t20260814_3995497.htm
+https://gks.mof.gov.cn/tongjishuju/202607/t20260722_3993943.htm
+https://gks.mof.gov.cn/tongjishuju/202606/t20260622_3992033.htm
+https://gks.mof.gov.cn/tongjishuju/202605/t20260515_3989956.htm
+https://gks.mof.gov.cn/tongjishuju/202604/t20260424_3988324.htm
+https://gks.mof.gov.cn/tongjishuju/202603/t20260319_3985695.htm
+https://gks.mof.gov.cn/tongjishuju/202601/t20260130_3982923.htm
+https://gks.mof.gov.cn/tongjishuju/202512/t20251217_3979392.htm
+https://gks.mof.gov.cn/tongjishuju/202511/t20251117_3976517.htm
+https://gks.mof.gov.cn/tongjishuju/202510/t20251017_3974400.htm

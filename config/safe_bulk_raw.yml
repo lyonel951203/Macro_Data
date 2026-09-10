@@ -1,0 +1,9 @@
+items:
+  - path: data/raw/safe/2026/09/03/da8cc069af4f17e85d46cdd6c3b3b7de4c0c44dde3583ce1e4f6536c5fedad4f.xls
+    url: https://www.safe.gov.cn/en/file/file/20180507/463e04aaa9cd4252a3564a62dfee99cf.xls
+  - path: data/raw/safe/2026/09/03/42c240ea686a2c4cd707ab8d8bf8d079c0487e59a74af9a9ee9ac158cf894674.xlsx
+    url: https://www.safe.gov.cn/en/file/file/20180507/55474654a63a48179d74dd9a978fc988.xlsx
+  - path: data/raw/safe/2026/09/03/ddc013da0aba52d91c671371e714ef090981406974a8408c8a20835d08d3f69c.xlsx
+    url: https://www.safe.gov.cn/en/file/file/20260817/b22a987ddfa64884b298dfb64a5f196d.xlsx
+  - path: data/raw/safe/2026/09/03/4416cd4b6faf1a4c544372b85916d20070e895036706ec060ca9d2b5c3de7b68.xls
+    url: https://www.safe.gov.cn/en/file/file/20260817/8d0914fb4bd24287857265a00724b821.xls

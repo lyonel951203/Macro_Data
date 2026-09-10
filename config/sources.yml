@@ -1,0 +1,85 @@
+network:
+  # Network access is opt-in at the CLI. Discovery, parsing, audit and tests are
+  # offline by default.
+  enabled_by_default: false
+  user_agent: "macro-pit-research/0.1 (read-only; single-threaded)"
+  connect_timeout_seconds: 15
+  read_timeout_seconds: 45
+  respect_robots_txt: true
+  stop_on_robots_error: true
+  cache_first: true
+
+defaults:
+  concurrency: 1
+  min_interval_seconds: 20
+  jitter_seconds: 10
+  max_requests_per_run: 100
+  max_requests_per_day: 200
+  max_consecutive_failures: 3
+  max_retries: 2
+  retry_backoff_seconds: 60
+  block_statuses: [401, 403, 407, 429]
+
+sources:
+  NBS:
+    country: CN
+    base_url: "https://data.stats.gov.cn"
+    # api.so-gov.cn is the search backend referenced by the official NBS
+    # search page.  It is used only for bounded legacy release discovery.
+    allowed_hosts: ["data.stats.gov.cn", "www.stats.gov.cn", "api.so-gov.cn"]
+    min_interval_seconds: 75
+    jitter_seconds: 30
+    # The candidate queue is finite and reviewed. Keep polite pacing and all
+    # safety circuit breakers, but allow one background pass to drain it.
+    # null disables count ceilings; pacing, robots and circuit breakers remain.
+    max_requests_per_run: null
+    max_requests_per_day: null
+  PBOC:
+    country: CN
+    base_url: "http://www.pbc.gov.cn"
+    allowed_hosts: ["www.pbc.gov.cn", "pbc.gov.cn"]
+    min_interval_seconds: 45
+    jitter_seconds: 20
+    max_requests_per_run: null
+    max_requests_per_day: null
+  CUSTOMS:
+    country: CN
+    base_url: "http://www.customs.gov.cn"
+    allowed_hosts: ["www.customs.gov.cn", "customs.gov.cn", "english.customs.gov.cn"]
+    min_interval_seconds: 60
+    jitter_seconds: 30
+    max_requests_per_run: 40
+    max_requests_per_day: 60
+  MOF:
+    country: CN
+    base_url: "https://www.mof.gov.cn"
+    allowed_hosts: ["www.mof.gov.cn", "mof.gov.cn", "gks.mof.gov.cn"]
+    min_interval_seconds: 75
+    jitter_seconds: 30
+    # Leave room for the required robots.txt check plus 50 release pages.
+    max_requests_per_run: 55
+    max_requests_per_day: 80
+  SAFE:
+    country: CN
+    base_url: "https://www.safe.gov.cn"
+    allowed_hosts: ["www.safe.gov.cn", "safe.gov.cn"]
+    min_interval_seconds: 45
+    jitter_seconds: 20
+    max_requests_per_run: null
+    max_requests_per_day: null
+  RTDSM:
+    country: US
+    base_url: "https://www.philadelphiafed.org"
+    allowed_hosts: ["www.philadelphiafed.org", "philadelphiafed.org"]
+    min_interval_seconds: 15
+    jitter_seconds: 10
+    max_requests_per_run: 20
+    max_requests_per_day: 30
+  OECD:
+    country: GLOBAL
+    base_url: "https://sdmx.oecd.org"
+    allowed_hosts: ["sdmx.oecd.org"]
+    min_interval_seconds: 10
+    jitter_seconds: 5
+    max_requests_per_run: 30
+    max_requests_per_day: 50

@@ -1,0 +1,65 @@
+{
+  "review_method": "Manual reading of official archived lead paragraphs; each monthly value and original timestamp is checked again by independent lxml validation.",
+  "items": [
+    {
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919860.html",
+      "release_at": "2005-02-18T09:35:00",
+      "values": [{"canonical_series_id": "CN_INDUSTRIAL_VALUE_ADDED_YOY", "period": "2005-01", "value": 20.9, "quote": "1月份，全部国有工业企业及年产品销售收入500万元以上的非国有工业企业完成增加值4844亿元，比去年同月增长20.9%"}]
+    },
+    {
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919866.html",
+      "release_at": "2005-03-14T13:19:00",
+      "values": [
+        {"canonical_series_id": "CN_RETAIL_SALES_YOY", "period": "2005-01", "value": 11.5, "quote": "1-2月份，社会消费品零售总额10313亿元，比上年同期增长13.6%。其中1月份增长11.5%，2月份增长15.8%"},
+        {"canonical_series_id": "CN_RETAIL_SALES_YOY", "period": "2005-02", "value": 15.8, "quote": "1-2月份，社会消费品零售总额10313亿元，比上年同期增长13.6%。其中1月份增长11.5%，2月份增长15.8%"}
+      ]
+    },
+    {
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919867.html",
+      "release_at": "2005-03-15T10:04:00",
+      "values": [],
+      "exclusion_reason": "YTD_only_no_explicit_monthly_value",
+      "quote": "1-2月份，全部国有工业企业及年产品销售收入500万元以上的非国有工业企业完成增加值9034亿元，同比增长16.9%"
+    },
+    {
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919878.html",
+      "release_at": "2005-04-22T10:32:00",
+      "values": [{"canonical_series_id": "CN_INDUSTRIAL_VALUE_ADDED_YOY", "period": "2005-03", "value": 15.1, "quote": "其中，3月份完成增加值5367亿元，同比增长15.1%"}]
+    },
+    {
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919879.html",
+      "release_at": "2005-04-22T10:34:00",
+      "values": [{"canonical_series_id": "CN_RETAIL_SALES_YOY", "period": "2005-03", "value": 13.9, "quote": "一季度，社会消费品零售总额15112亿元，比去年同期增长13.7%。其中，3月份4799亿元，增长13.9%"}]
+    },
+    {
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919890.html",
+      "release_at": "2005-05-17T10:37:00",
+      "values": [{"canonical_series_id": "CN_RETAIL_SALES_YOY", "period": "2005-04", "value": 12.2, "quote": "4月份，社会消费品零售总额4663亿元，比去年同月增长12.2%"}]
+    },
+    {
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919891.html",
+      "release_at": "2005-05-18T13:24:00",
+      "values": [{"canonical_series_id": "CN_INDUSTRIAL_VALUE_ADDED_YOY", "period": "2005-04", "value": 16.0, "quote": "4月份，全部国有工业企业及年产品销售收入500万元以上的非国有工业企业完成增加5647亿元，同比增长16%", "note": "正文原文漏写增加值的值字，标题明确为工业增加值；保持原稿及引文不变"}]
+    },
+    {
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919898.html",
+      "release_at": "2005-06-14T10:25:00",
+      "values": [{"canonical_series_id": "CN_RETAIL_SALES_YOY", "period": "2005-05", "value": 12.8, "quote": "5月份，社会消费品零售总额4899亿元，比去年同月增长12.8%"}]
+    },
+    {
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919899.html",
+      "release_at": "2005-06-15T10:22:00",
+      "values": [{"canonical_series_id": "CN_INDUSTRIAL_VALUE_ADDED_YOY", "period": "2005-05", "value": 16.6, "quote": "5月份，全部国有工业企业及年产品销售收入500万元以上的非国有工业企业完成增加值5702亿元，同比增长16.6%"}]
+    },
+    {
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919910.html",
+      "release_at": "2005-07-22T10:31:00",
+      "values": [{"canonical_series_id": "CN_RETAIL_SALES_YOY", "period": "2005-06", "value": 12.9, "quote": "上半年，社会消费品零售总额29610亿元，比去年同期增长13.2%。其中，6月份增长12.9%"}]
+    },
+    {
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919911.html",
+      "release_at": "2005-07-22T10:32:00",
+      "values": [{"canonical_series_id": "CN_INDUSTRIAL_VALUE_ADDED_YOY", "period": "2005-06", "value": 16.8, "quote": "上半年，全部国有工业企业和年产品销售收入500万元以上的非国有工业企业累计完成增加值32274亿元，同比增长16.4%。其中，6月份当月完成增加值6191亿元，增长16.8%"}]
+    }
+  ]
+}

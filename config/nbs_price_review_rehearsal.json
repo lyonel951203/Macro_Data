@@ -1,0 +1,64 @@
+{
+  "items": [
+    {
+      "source": "NBS",
+      "title": "2021年7月份工业生产者出厂价格同比上涨9.0% 环比上涨0.5%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901185.html",
+      "period": "2021-07",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/9515969b3a8a2e28394b209a4dd607b8dd6ceb9ef50acf645dea68200281a7aa.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "9515969b3a8a2e28394b209a4dd607b8dd6ceb9ef50acf645dea68200281a7aa"
+    },
+    {
+      "source": "NBS",
+      "title": "2021年7月份居民消费价格同比上涨1.0% 环比上涨0.3%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901184.html",
+      "period": "2021-07",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/044a7f5ea4ff1cd91df35503e91de06f9e61824e21035c51bf2241d09a3682c8.json",
+      "indicator": "CN_CPI_YOY",
+      "index_sha256": "044a7f5ea4ff1cd91df35503e91de06f9e61824e21035c51bf2241d09a3682c8"
+    },
+    {
+      "source": "NBS",
+      "title": "2021年6月份工业生产者出厂价格同比上涨8.8% 环比上涨0.3%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901147.html",
+      "period": "2021-06",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/9515969b3a8a2e28394b209a4dd607b8dd6ceb9ef50acf645dea68200281a7aa.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "9515969b3a8a2e28394b209a4dd607b8dd6ceb9ef50acf645dea68200281a7aa"
+    },
+    {
+      "source": "NBS",
+      "title": "2021年6月份居民消费价格同比上涨1.1% 环比下降0.4%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901146.html",
+      "period": "2021-06",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/044a7f5ea4ff1cd91df35503e91de06f9e61824e21035c51bf2241d09a3682c8.json",
+      "indicator": "CN_CPI_YOY",
+      "index_sha256": "044a7f5ea4ff1cd91df35503e91de06f9e61824e21035c51bf2241d09a3682c8"
+    },
+    {
+      "source": "NBS",
+      "title": "2021年5月份工业生产者出厂价格同比上涨9.0% 环比上涨1.6%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901121.html",
+      "period": "2021-05",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/9515969b3a8a2e28394b209a4dd607b8dd6ceb9ef50acf645dea68200281a7aa.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "9515969b3a8a2e28394b209a4dd607b8dd6ceb9ef50acf645dea68200281a7aa"
+    },
+    {
+      "source": "NBS",
+      "title": "2021年4月份工业生产者出厂价格同比上涨6.8% 环比上涨0.9%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901078.html",
+      "period": "2021-04",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/9515969b3a8a2e28394b209a4dd607b8dd6ceb9ef50acf645dea68200281a7aa.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "9515969b3a8a2e28394b209a4dd607b8dd6ceb9ef50acf645dea68200281a7aa"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "batch": "nbs_economy_batch3",
+  "status": "READY_NOT_STARTED",
+  "max_articles": 20,
+  "policy": "Official archived index candidates only; validate body values, monthly/YTD definitions and historical timestamp before ingestion. Never derive PIT from URL or index hint.",
+  "items": [
+    {
+      "title": "一季度经济运行开局良好",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202304/t20230418_1938706.html",
+      "period": "2023-03",
+      "index_raw_file": "data/raw/nbs/2026/09/07/b3ac41a6d348c7f1b7230b4abca0559b1eeb3725edf74eb2dfee91cd14cb2ffc.html"
+    },
+    {
+      "title": "2024年经济运行稳中有进 主要发展目标顺利实现",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202501/t20250117_1958332.html",
+      "period": "2024-12",
+      "index_raw_file": "data/raw/nbs/2026/09/07/6b16cef14270d782a1f1a62ab7b6b38364e73cc8d1ad634f4e26b3a41689659b.html"
+    },
+    {
+      "title": "7月份国民经济保持稳中有进发展态势",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202508/t20250815_1960789.html",
+      "period": "2025-07",
+      "index_raw_file": "data/raw/nbs/2026/09/07/98e873cdd9eeea591d7f7aef0a60bb40b56964e94004e4f57d7a1a38b48742b6.html"
+    },
+    {
+      "title": "前三季度经济运行稳中有进 高质量发展取得积极成效",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202510/t20251020_1961612.html",
+      "period": "2025-09",
+      "index_raw_file": "data/raw/nbs/2026/09/03/8429975757a19925717b4ccb91861448549f6d9760f0ccba8ac85aea4f9fdfb5.html"
+    },
+    {
+      "title": "11月份国民经济延续稳中有进发展态势",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202512/t20251215_1962075.html",
+      "period": "2025-11",
+      "index_raw_file": "data/raw/nbs/2026/09/07/32966a962b64f4440dde6e8ba6efcc9723d5ff0dd30c38e2e6e69781a9e65f82.html"
+    },
+    {
+      "title": "一季度国民经济实现良好开局",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202604/t20260416_1963330.html",
+      "period": "2026-03",
+      "index_raw_file": "data/raw/nbs/2026/09/07/bdb6304b020fa343f8b7fdef2bc6ff9645d235406e673fc371a0e7af391ba8fd.html"
+    },
+    {
+      "title": "1—4月份国民经济保持稳中有进发展态势",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202605/t20260518_1963732.html",
+      "period": "2026-04",
+      "index_raw_file": "data/raw/nbs/2026/09/07/8e303f0a118aa79a50e4bf32b5a4bc559646a41c95c67f1b8b0c7076dbc9acc0.html"
+    },
+    {
+      "title": "上半年经济运行在合理区间 新动能快速成长",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202607/t20260715_1964121.html",
+      "period": "2026-06",
+      "index_raw_file": "data/raw/nbs/2026/09/03/5bfc4d5e1354e736713666298923ef1ce467a0b9f7e545bfb267059788a572cd.html"
+    },
+    {
+      "title": "4月份国民经济顶住压力稳定增长",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202505/t20250519_1959864.html",
+      "period": "2025-04",
+      "index_raw_file": "data/raw/nbs/2026/09/07/25f9834b2b29c6eb3977e94a773fc3ebc084720ab4f4dc58ebde9b8b83625820.html"
+    }
+  ]
+}

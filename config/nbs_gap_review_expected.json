@@ -1,0 +1,52 @@
+{
+  "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919862.html": {
+    "canonical_series_id": "CN_CPI_YOY",
+    "period": "2005-01",
+    "value": 1.9,
+    "pit_grade": "A",
+    "release_at": "2005-02-22T09:11:00+08:00",
+    "available_at": "2005-02-22T09:11:00+08:00",
+    "body_evidence": "1月份，全国居民消费价格总水平比去年同月上涨1.9%",
+    "timestamp_evidence": "2005/02/22 09:11"
+  },
+  "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901120.html": {
+    "canonical_series_id": "CN_CPI_YOY",
+    "period": "2021-05",
+    "value": 1.3,
+    "pit_grade": "A",
+    "release_at": "2021-06-09T09:30:00+08:00",
+    "available_at": "2021-06-09T09:30:00+08:00",
+    "body_evidence": "2021年5月份，全国居民消费价格同比上涨1.3%",
+    "timestamp_evidence": "2021/06/09 09:30"
+  },
+  "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901211.html": {
+    "canonical_series_id": "CN_CPI_YOY",
+    "period": "2021-08",
+    "value": 0.8,
+    "pit_grade": "A",
+    "release_at": "2021-09-09T09:30:00+08:00",
+    "available_at": "2021-09-09T09:30:00+08:00",
+    "body_evidence": "2021年8月份，全国居民消费价格同比上涨0.8%",
+    "timestamp_evidence": "2021/09/09 09:30"
+  },
+  "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901041.html": {
+    "canonical_series_id": "CN_PPI_YOY",
+    "period": "2021-03",
+    "value": 4.4,
+    "pit_grade": "A",
+    "release_at": "2021-04-09T09:30:00+08:00",
+    "available_at": "2021-04-09T09:30:00+08:00",
+    "body_evidence": "2021年3月份，全国工业生产者出厂价格同比上涨4.4%",
+    "timestamp_evidence": "2021/04/09 09:30"
+  },
+  "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901212.html": {
+    "canonical_series_id": "CN_PPI_YOY",
+    "period": "2021-08",
+    "value": 9.5,
+    "pit_grade": "A",
+    "release_at": "2021-09-09T09:30:00+08:00",
+    "available_at": "2021-09-09T09:30:00+08:00",
+    "body_evidence": "2021年8月份，全国工业生产者出厂价格同比上涨9.5%",
+    "timestamp_evidence": "2021/09/09 09:30"
+  }
+}

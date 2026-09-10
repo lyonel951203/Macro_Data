@@ -1,0 +1,82 @@
+{
+  "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919865.html": {
+    "canonical_series_id": "CN_CPI_YOY",
+    "period": "2005-02",
+    "value": 3.9,
+    "pit_grade": "A",
+    "release_at": "2005-03-11T10:07:00+08:00",
+    "available_at": "2005-03-11T10:07:00+08:00",
+    "body_evidence": "2月份，全国居民消费价格比去年同月上涨3.9%",
+    "timestamp_evidence": "2005/03/11 10:07"
+  },
+  "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919861.html": {
+    "canonical_series_id": "CN_PPI_YOY",
+    "period": "2005-01",
+    "value": 5.8,
+    "pit_grade": "A",
+    "release_at": "2005-02-21T09:10:00+08:00",
+    "available_at": "2005-02-21T09:10:00+08:00",
+    "body_evidence": "1月份，工业品出厂价格比去年同月上涨5.8%",
+    "timestamp_evidence": "2005/02/21 09:10"
+  },
+  "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919184.html": {
+    "canonical_series_id": "CN_CPI_YOY",
+    "period": "2010-01",
+    "value": 1.5,
+    "pit_grade": "A",
+    "release_at": "2010-02-11T10:00:00+08:00",
+    "available_at": "2010-02-11T10:00:00+08:00",
+    "body_evidence": "1月份，居民消费价格总水平同比上涨1.5%",
+    "timestamp_evidence": "2010/02/11 10:00"
+  },
+  "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919185.html": {
+    "canonical_series_id": "CN_PPI_YOY",
+    "period": "2010-01",
+    "value": 4.3,
+    "pit_grade": "A",
+    "release_at": "2010-02-11T10:00:00+08:00",
+    "available_at": "2010-02-11T10:00:00+08:00",
+    "body_evidence": "1月份，工业品出厂价格同比上涨4.3%",
+    "timestamp_evidence": "2010/02/11 10:00"
+  },
+  "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1898695.html": {
+    "canonical_series_id": "CN_CPI_YOY",
+    "period": "2015-01",
+    "value": 0.8,
+    "pit_grade": "A",
+    "release_at": "2015-02-10T09:30:00+08:00",
+    "available_at": "2015-02-10T09:30:00+08:00",
+    "body_evidence": "2015年1月份，全国居民消费价格总水平同比上涨0.8%",
+    "timestamp_evidence": "2015/02/10 09:30"
+  },
+  "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1898722.html": {
+    "canonical_series_id": "CN_PPI_YOY",
+    "period": "2015-02",
+    "value": -4.8,
+    "pit_grade": "A",
+    "release_at": "2015-03-10T09:30:00+08:00",
+    "available_at": "2015-03-10T09:30:00+08:00",
+    "body_evidence": "2015年2月份，全国工业生产者出厂价格同比下降4.8%",
+    "timestamp_evidence": "2015/03/10 09:30"
+  },
+  "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900235.html": {
+    "canonical_series_id": "CN_CPI_YOY",
+    "period": "2019-01",
+    "value": 1.7,
+    "pit_grade": "A",
+    "release_at": "2019-02-15T09:30:00+08:00",
+    "available_at": "2019-02-15T09:30:00+08:00",
+    "body_evidence": "2019年1月份，全国居民消费价格同比上涨1.7%",
+    "timestamp_evidence": "2019/02/15 09:30"
+  },
+  "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900234.html": {
+    "canonical_series_id": "CN_PPI_YOY",
+    "period": "2019-01",
+    "value": 0.1,
+    "pit_grade": "A",
+    "release_at": "2019-02-15T09:30:00+08:00",
+    "available_at": "2019-02-15T09:30:00+08:00",
+    "body_evidence": "2019年1月份，全国工业生产者出厂价格同比上涨0.1%",
+    "timestamp_evidence": "2019/02/15 09:30"
+  }
+}

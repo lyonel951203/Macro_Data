@@ -1,0 +1,2 @@
+# Narrow-year search; use a separate state path for each date window.
+居民消费价格

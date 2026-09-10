@@ -1,0 +1,13 @@
+# Use one narrowly filtered SDMX CSV query per country/indicator block. Never
+# request the unfiltered revisions dataset.
+jobs:
+  - url: "https://sdmx.oecd.org/public/rest/data/REPLACE_WITH_NARROW_QUERY"
+    series:
+      - ref_area: DEU
+        frequency: M
+        measure: REPLACE_FROM_DATAFLOW
+        unit_measure: REPLACE_FROM_DATAFLOW
+        canonical_id: DE_INDUSTRIAL_PRODUCTION
+        name: Industrial production
+        unit: index
+        seasonal_adjustment: SA

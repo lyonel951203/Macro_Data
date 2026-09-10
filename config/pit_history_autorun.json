@@ -1,0 +1,11 @@
+{
+  "version":1,
+  "start_year":2005,
+  "end_date":"2026-07-31",
+  "max_calendar_days":7,
+  "terms":["采购经理指数","非制造业","国民经济","经济运行","国内生产总值","固定资产投资","房地产"],
+  "scope":"Frozen 34-field plan. NBS discovery and independently verified gap insertion are automated. PBOC/SAFE require further source/definition adapters and remain explicitly pending.",
+  "export_every_inserted_articles":10,
+  "blocked_sources":{"PBOC":"Official catalog robots restrictions; government-reprint adapter and old units/definitions pending", "SAFE":"Historical own-bank/client scope and ordered monthly-flow adapter pending"},
+  "stop_file":"data/history_backfill/pit_history_autorun.stop"
+}

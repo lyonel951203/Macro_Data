@@ -1,0 +1,3 @@
+# Official NBS data-release listing. Start with the first page only; expand
+# pagination only after the archived page proves the official page count.
+https://www.stats.gov.cn/sj/zxfb/

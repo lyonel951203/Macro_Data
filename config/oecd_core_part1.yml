@@ -1,0 +1,9 @@
+# Three narrow queries per country: GDP; CPI+unemployment; IP+retail.
+countries:
+  - {ref_area: JPN, prefix: JP}
+  - {ref_area: DEU, prefix: DE}
+  - {ref_area: FRA, prefix: FR}
+  - {ref_area: GBR, prefix: UK}
+  - {ref_area: ITA, prefix: IT}
+  - {ref_area: CAN, prefix: CA}
+

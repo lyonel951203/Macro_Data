@@ -1,0 +1,8 @@
+{
+  "jobs": [
+    {"name": "economy_indicators_2010", "term": "国民经济主要指标", "start_date": "2010-03-01", "end_date": "2011-01-31", "max_network_pages": 1},
+    {"name": "economy_running_2010", "term": "国民经济运行", "start_date": "2010-03-01", "end_date": "2011-01-31", "max_network_pages": 1},
+    {"name": "cpi_2020_2021", "term": "居民消费价格", "start_date": "2020-03-01", "end_date": "2021-09-30", "max_network_pages": 3},
+    {"name": "ppi_2020_2021", "term": "工业生产者出厂价格", "start_date": "2020-03-01", "end_date": "2021-09-30", "max_network_pages": 3}
+  ]
+}

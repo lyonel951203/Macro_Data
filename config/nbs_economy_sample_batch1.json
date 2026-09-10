@@ -1,0 +1,24 @@
+{
+  "source": "NBS",
+  "purpose": "Bounded review of combined economy releases; raw download only",
+  "items": [
+    {
+      "title": "1-2月份国民经济主要指标数据",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919188.html",
+      "period": "2010-02",
+      "index_raw_file": "data/raw/nbs/2026/09/08/14718766c36972ebd2a24234f638da29838ceffbbca2b5a2259e8c3268f750a1.json"
+    },
+    {
+      "title": "4月份国民经济主要指标数据",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919198.html",
+      "period": "2010-04",
+      "index_raw_file": "data/raw/nbs/2026/09/08/14718766c36972ebd2a24234f638da29838ceffbbca2b5a2259e8c3268f750a1.json"
+    },
+    {
+      "title": "11月份国民经济主要指标数据",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202303/t20230301_1919232.html",
+      "period": "2010-11",
+      "index_raw_file": "data/raw/nbs/2026/09/08/37539f3b95ca541d328f0d9f34a060d8efb76b5ac58621a78c6473c690e0a624.json"
+    }
+  ]
+}

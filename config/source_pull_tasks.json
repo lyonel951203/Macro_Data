@@ -1,0 +1,26 @@
+{
+  "version":1,
+  "max_days":7,
+  "max_urls_per_source":1500,
+  "sources":{
+    "PBOC":{
+      "allowed_hosts":["www.pbc.gov.cn","gxt.hunan.gov.cn","www.mof.gov.cn"],
+      "note":"Official PBOC English release and explicitly identified government reproductions. Blocked Chinese statistics paths excluded. Raw only; actual hosting URL is preserved.",
+      "seeds":[
+        {"url":"https://www.pbc.gov.cn/english/130730/3660709/3660738/2025080815062175244/index.html","title":"Financial Industry Performance Remained Sound and the RMB Exchange Rate Kept Stable (January 2005)","kind":"article","evidence":"Official web search, visible original publication 2005-02-28; migration URL date is not PIT"},
+        {"url":"https://gxt.hunan.gov.cn/xxgk_71033/gzdt/jxyw/201104/t20110415_2079790.html","title":"央行发布2011年一季度金融统计数据报告","kind":"article","evidence":"Official government reproduction, verified web page 2026-09-09"},
+        {"url":"https://www.mof.gov.cn/zhengwuxinxi/caijingshidian/zyzfmhwz/201201/t20120118_624131.htm","title":"2011年全年社会融资规模为12.83万亿元","kind":"article","evidence":"Official MOF reproduction, verified web page 2026-09-09"},
+        {"url":"https://www.mof.gov.cn/zhengwuxinxi/caijingshidian/jjrb/201504/t20150422_1221447.htm","title":"2015年一季度社融存量报道候选","kind":"article","evidence":"Previous PIT34 research lead; body and publication still need raw review"}
+      ]
+    },
+    "SAFE":{
+      "allowed_hosts":["www.safe.gov.cn"],
+      "note":"Oldest listing pages first. First-page pagination observed through index_64.html on 2026-09-09; missing pages are recorded, never claimed exhaustive.",
+      "index_pages_descending_from":64,
+      "seeds":[
+        {"url":"https://www.safe.gov.cn/safe/2010/0608/4902.html","title":"2010年一季度银行代客结售汇和涉外收付款数据","kind":"article","evidence":"PIT34 official historical lead; client-only scope needs separate review"},
+        {"url":"https://www.safe.gov.cn/safe/2011/0127/4918.html","title":"2010年银行代客结售汇和涉外收付款数据","kind":"article","evidence":"Official SAFE historical publication found in official search"}
+      ]
+    }
+  }
+}

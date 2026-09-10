@@ -1,0 +1,12 @@
+# Copy to a working file and fill URLs copied from the official Philadelphia
+# Fed variable pages. Keep each run small; the parser supports the official
+# wide XLSX vintage matrices.
+series:
+  - url: "https://www.philadelphiafed.org/REPLACE_WITH_REVIEWED_XLSX_LINK"
+    canonical_id: US_REAL_GDP
+    source_id: ROUTPUT
+    name: Real GDP
+    unit: bn_usd_sa_ar
+    observation_frequency: Q
+    seasonal_adjustment: SA
+

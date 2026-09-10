@@ -1,0 +1,5 @@
+jobs:
+  - url: "https://sdmx.oecd.org/public/rest/data/OECD.SDD.STES,DSD_STES_REVISIONS@DF_STES_REVISIONS,4.0/CHN.M.CP+UNEMP.IX+PT_LF..?dimensionAtObservation=AllDimensions"
+    series:
+      - {ref_area: CHN, country: CN, frequency: M, measure: CP, unit_measure: IX, canonical_id: CN_OECD_CPI_INDEX, name: OECD China consumer prices, unit: index, seasonal_adjustment: UNKNOWN}
+      - {ref_area: CHN, country: CN, frequency: M, measure: UNEMP, unit_measure: PT_LF, canonical_id: CN_OECD_UNEMPLOYMENT, name: OECD China unemployment, unit: pct, seasonal_adjustment: UNKNOWN}

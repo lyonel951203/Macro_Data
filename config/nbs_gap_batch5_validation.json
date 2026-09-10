@@ -1,0 +1,255 @@
+{
+  "purpose": "Bounded 25-article price backfill with independent search/body/timestamp verification",
+  "items": [
+    {
+      "source": "NBS",
+      "title": "2020年1月份居民消费价格同比上涨5.4%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900631.html",
+      "period": "2020-01",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/6a9a2c0f7af1616329ea2c2c21f4756972276ccb91e637bdd8b5ed3a26fd2e97.json",
+      "indicator": "CN_CPI_YOY",
+      "index_sha256": "6a9a2c0f7af1616329ea2c2c21f4756972276ccb91e637bdd8b5ed3a26fd2e97"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年1月份工业生产者出厂价格同比上涨0.1%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900632.html",
+      "period": "2020-01",
+      "kind": "statistics_release_search:工业品出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/de833f8118da2cb94bb5e664206082136f32e5a85956bdc74bfc4ac71c839b18.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "de833f8118da2cb94bb5e664206082136f32e5a85956bdc74bfc4ac71c839b18"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年2月份工业生产者出厂价格同比下降0.4%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900648.html",
+      "period": "2020-02",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/3fb3c0b64e3986af61a8321e3f447757971070d3a309d547dc133293b04935be.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "3fb3c0b64e3986af61a8321e3f447757971070d3a309d547dc133293b04935be"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年3月份工业生产者出厂价格同比下降1.5%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900674.html",
+      "period": "2020-03",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/13c26206dfa1c18de3bb730ae3d94c26488708473cfbda0bd88eda6a32a76fd7.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "13c26206dfa1c18de3bb730ae3d94c26488708473cfbda0bd88eda6a32a76fd7"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年4月份工业生产者出厂价格同比下降3.1%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900715.html",
+      "period": "2020-04",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/13c26206dfa1c18de3bb730ae3d94c26488708473cfbda0bd88eda6a32a76fd7.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "13c26206dfa1c18de3bb730ae3d94c26488708473cfbda0bd88eda6a32a76fd7"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年5月份工业生产者出厂价格同比下降3.7%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900747.html",
+      "period": "2020-05",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/13c26206dfa1c18de3bb730ae3d94c26488708473cfbda0bd88eda6a32a76fd7.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "13c26206dfa1c18de3bb730ae3d94c26488708473cfbda0bd88eda6a32a76fd7"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年6月份工业生产者出厂价格同比下降3.0%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900771.html",
+      "period": "2020-06",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/13c26206dfa1c18de3bb730ae3d94c26488708473cfbda0bd88eda6a32a76fd7.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "13c26206dfa1c18de3bb730ae3d94c26488708473cfbda0bd88eda6a32a76fd7"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年7月份居民消费价格同比上涨2.7%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900813.html",
+      "period": "2020-07",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/2cf758d3b649a869c805285fafee46c09195e8dd6bd8a168bd2bde79f828e9ee.json",
+      "indicator": "CN_CPI_YOY",
+      "index_sha256": "2cf758d3b649a869c805285fafee46c09195e8dd6bd8a168bd2bde79f828e9ee"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年7月份工业生产者出厂价格同比下降2.4%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900814.html",
+      "period": "2020-07",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/13c26206dfa1c18de3bb730ae3d94c26488708473cfbda0bd88eda6a32a76fd7.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "13c26206dfa1c18de3bb730ae3d94c26488708473cfbda0bd88eda6a32a76fd7"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年8月份居民消费价格同比上涨2.4%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900841.html",
+      "period": "2020-08",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/2cf758d3b649a869c805285fafee46c09195e8dd6bd8a168bd2bde79f828e9ee.json",
+      "indicator": "CN_CPI_YOY",
+      "index_sha256": "2cf758d3b649a869c805285fafee46c09195e8dd6bd8a168bd2bde79f828e9ee"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年8月份工业生产者出厂价格同比下降2.0%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900842.html",
+      "period": "2020-08",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/13c26206dfa1c18de3bb730ae3d94c26488708473cfbda0bd88eda6a32a76fd7.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "13c26206dfa1c18de3bb730ae3d94c26488708473cfbda0bd88eda6a32a76fd7"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年9月份居民消费价格同比上涨1.7%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900867.html",
+      "period": "2020-09",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/2cf758d3b649a869c805285fafee46c09195e8dd6bd8a168bd2bde79f828e9ee.json",
+      "indicator": "CN_CPI_YOY",
+      "index_sha256": "2cf758d3b649a869c805285fafee46c09195e8dd6bd8a168bd2bde79f828e9ee"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年9月份工业生产者出厂价格同比下降2.1%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900868.html",
+      "period": "2020-09",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/13c26206dfa1c18de3bb730ae3d94c26488708473cfbda0bd88eda6a32a76fd7.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "13c26206dfa1c18de3bb730ae3d94c26488708473cfbda0bd88eda6a32a76fd7"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年10月份居民消费价格同比上涨0.5%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900902.html",
+      "period": "2020-10",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/8510cbb202b47db3b0710e9bf3f367917537eebf740944aaa72215266ce5fbb5.json",
+      "indicator": "CN_CPI_YOY",
+      "index_sha256": "8510cbb202b47db3b0710e9bf3f367917537eebf740944aaa72215266ce5fbb5"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年10月份工业生产者出厂价格同比下降2.1%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900903.html",
+      "period": "2020-10",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/fed8b20b33b7c2615f58d247f94046bbadf72a8cdd5576c06b3fc9b86c884fd8.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "fed8b20b33b7c2615f58d247f94046bbadf72a8cdd5576c06b3fc9b86c884fd8"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年11月份居民消费价格同比下降0.5%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900924.html",
+      "period": "2020-11",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/8510cbb202b47db3b0710e9bf3f367917537eebf740944aaa72215266ce5fbb5.json",
+      "indicator": "CN_CPI_YOY",
+      "index_sha256": "8510cbb202b47db3b0710e9bf3f367917537eebf740944aaa72215266ce5fbb5"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年11月份工业生产者出厂价格同比下降1.5%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900925.html",
+      "period": "2020-11",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/fed8b20b33b7c2615f58d247f94046bbadf72a8cdd5576c06b3fc9b86c884fd8.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "fed8b20b33b7c2615f58d247f94046bbadf72a8cdd5576c06b3fc9b86c884fd8"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年12月份居民消费价格同比上涨0.2%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900958.html",
+      "period": "2020-12",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/8510cbb202b47db3b0710e9bf3f367917537eebf740944aaa72215266ce5fbb5.json",
+      "indicator": "CN_CPI_YOY",
+      "index_sha256": "8510cbb202b47db3b0710e9bf3f367917537eebf740944aaa72215266ce5fbb5"
+    },
+    {
+      "source": "NBS",
+      "title": "2020年12月份工业生产者出厂价格同比下降0.4%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900959.html",
+      "period": "2020-12",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/fed8b20b33b7c2615f58d247f94046bbadf72a8cdd5576c06b3fc9b86c884fd8.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "fed8b20b33b7c2615f58d247f94046bbadf72a8cdd5576c06b3fc9b86c884fd8"
+    },
+    {
+      "source": "NBS",
+      "title": "2021年1月份居民消费价格同比下降0.3% 环比上涨1%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900992.html",
+      "period": "2021-01",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/8510cbb202b47db3b0710e9bf3f367917537eebf740944aaa72215266ce5fbb5.json",
+      "indicator": "CN_CPI_YOY",
+      "index_sha256": "8510cbb202b47db3b0710e9bf3f367917537eebf740944aaa72215266ce5fbb5"
+    },
+    {
+      "source": "NBS",
+      "title": "2021年1月份工业生产者出厂价格同比上涨0.3% 环比上涨1%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900993.html",
+      "period": "2021-01",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/fed8b20b33b7c2615f58d247f94046bbadf72a8cdd5576c06b3fc9b86c884fd8.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "fed8b20b33b7c2615f58d247f94046bbadf72a8cdd5576c06b3fc9b86c884fd8"
+    },
+    {
+      "source": "NBS",
+      "title": "2021年2月份居民消费价格同比下降0.2% 环比上涨0.6%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901015.html",
+      "period": "2021-02",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/7e5a51d96404dc00f0fc1bd29fb1e1a25b9e0af3e71f1df094aed624885dcb31.json",
+      "indicator": "CN_CPI_YOY",
+      "index_sha256": "7e5a51d96404dc00f0fc1bd29fb1e1a25b9e0af3e71f1df094aed624885dcb31"
+    },
+    {
+      "source": "NBS",
+      "title": "2021年2月份工业生产者出厂价格同比上涨1.7% 环比上涨0.8%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901016.html",
+      "period": "2021-02",
+      "kind": "statistics_release_search:工业生产者出厂价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/fed8b20b33b7c2615f58d247f94046bbadf72a8cdd5576c06b3fc9b86c884fd8.json",
+      "indicator": "CN_PPI_YOY",
+      "index_sha256": "fed8b20b33b7c2615f58d247f94046bbadf72a8cdd5576c06b3fc9b86c884fd8"
+    },
+    {
+      "source": "NBS",
+      "title": "2021年3月份居民消费价格同比上涨0.4% 环比下降0.5%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901040.html",
+      "period": "2021-03",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/7e5a51d96404dc00f0fc1bd29fb1e1a25b9e0af3e71f1df094aed624885dcb31.json",
+      "indicator": "CN_CPI_YOY",
+      "index_sha256": "7e5a51d96404dc00f0fc1bd29fb1e1a25b9e0af3e71f1df094aed624885dcb31"
+    },
+    {
+      "source": "NBS",
+      "title": "2021年4月份居民消费价格同比上涨0.9% 环比下降0.3%",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901077.html",
+      "period": "2021-04",
+      "kind": "statistics_release_search:居民消费价格",
+      "index_raw_file": "data/raw/nbs/2026/09/08/7e5a51d96404dc00f0fc1bd29fb1e1a25b9e0af3e71f1df094aed624885dcb31.json",
+      "indicator": "CN_CPI_YOY",
+      "index_sha256": "7e5a51d96404dc00f0fc1bd29fb1e1a25b9e0af3e71f1df094aed624885dcb31"
+    }
+  ]
+}

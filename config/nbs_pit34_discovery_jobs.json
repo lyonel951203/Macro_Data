@@ -1,0 +1,10 @@
+{
+  "purpose": "PIT34 起点回溯：每组最多一页，先查候选，再封存正文批次；尚未执行",
+  "jobs": [
+    {"name": "pit34_pmi_manufacturing_2005", "term": "采购经理指数", "start_date": "2005-01-01", "end_date": "2006-02-28"},
+    {"name": "pit34_pmi_nonmanufacturing_2007", "term": "非制造业", "start_date": "2007-01-01", "end_date": "2008-02-29"},
+    {"name": "pit34_gdp_2005_q1", "term": "国民经济", "start_date": "2005-04-01", "end_date": "2005-05-31"},
+    {"name": "pit34_real_estate_2005", "term": "房地产", "start_date": "2005-03-01", "end_date": "2005-07-31"},
+    {"name": "pit34_investment_2011", "term": "固定资产投资", "start_date": "2011-03-01", "end_date": "2011-06-30"}
+  ]
+}

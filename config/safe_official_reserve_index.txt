@@ -1,0 +1,3 @@
+# Official SAFE annual reserve-assets index used to close the 2018-2024
+# monthly foreign-exchange-reserve gap.
+https://www.safe.gov.cn/safe/gfcbzc/
