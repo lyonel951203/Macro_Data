@@ -1,0 +1,46 @@
+﻿version: 1
+run_mode: weekly_revision
+
+# Weekly complete revision audit for OECD history and all RTDSM workbooks.
+sources:
+  OECD:
+    enabled: true
+    job_manifests:
+      - config/oecd_core_part1.yml
+      - config/oecd_core_part2.yml
+    recent_lookback_months: 0
+    skip_unchanged_fetch: false
+  RTDSM:
+    enabled: true
+    job_manifest: config/rtdsm_core.yml
+    skip_unchanged_fetch: false
+  USTREASURY:
+    enabled: true
+    history_start: 2005-01-01
+    daily_lookback_days: 400
+
+state_path: data/daily_global_update/state.json
+lock_path: data/daily_web_update/run.lock
+report_dir: reports/v2/weekly_global_revision
+logs_dir: logs/weekly_global_revision
+
+semantic_audit:
+  enabled: true
+  provider: deepseek
+  base_url: https://api.deepseek.com
+  model: deepseek-flash
+  api_key_env: DEEPSEEK_API_KEY
+  max_candidates: 50
+  max_excerpt_chars: 1400
+  max_output_tokens: 6000
+  timeout_seconds: 180
+  api_attempts: 2
+  report_dir: reports/v2/deepseek_weekly_audit/global
+
+email_notification:
+  enabled: true
+  recipient: 718711226@qq.com
+  label: Global weekly revision
+  config_file: emailconfig.ini
+  timeout_seconds: 60
+  report_dir: reports/v2/email_delivery/global_weekly

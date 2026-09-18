@@ -82,6 +82,48 @@ py -3.11 -m macro_pit acceptance
 indicator metadata table. Each row is a natural month end; each value is the
 latest observation legally available at that month-end timestamp.
 
+For a fixed information cutoff `T`, use `query-wide`. It returns one natural
+month-end row per month from 2005 through the month containing `T`, keeps every
+field in the requested scope, and leaves periods that were not yet published at
+`T` empty. Base values follow `PIT_A` -> `PIT_B` -> delayed-availability Wind.
+The approved IMF all-commodity proxy remains `PIT_D` in the database and enters
+the GLB research view only after its documented 40-day conservative lag; later
+web revisions take effect from their first observed date. Documented Wind
+revisions likewise take effect only from their dated revision event.
+Use --frequency M for month ends or --frequency Q for quarter ends; Q keeps
+quarter-end months and does not aggregate monthly data.
+
+```powershell
+py -3.11 -m macro_pit query-wide --as-of 2026-07-31 --scope CN --frequency M
+py -3.11 -m macro_pit query-wide --as-of 2026-07-31 --scope CN --frequency Q
+py -3.11 -m macro_pit query-wide --as-of 2026-07-31 --scope US --frequency M
+py -3.11 -m macro_pit query-wide --as-of 2026-07-31 --scope GLB --frequency M
+
+# Rebuild the same fixed-T output directly from the effective-event Parquet.
+py -3.11 -m macro_pit query-wide --long-parquet data\exports\cn_pit_long_from_2005-01-01.parquet --as-of 2026-07-31 --scope CN --frequency Q
+```
+
+With `--long-parquet`, the command reads the embedded `valid_from`/`valid_to`
+intervals and does not open DuckDB or the Wind availability sidecar. Without the
+option, the existing database-backed behavior is unchanged.
+
+The command writes values, source periods, cell provenance, field metadata,
+selected long-form observations, and a JSON query receipt under `data/queries/`.
+See `reports/v2/asof_query/README.md` for the full contract and validation.
+
+To export the complete effective PIT history once, without looping over T or
+M/Q, use export-long. The output prefix is stable and repeated runs refresh the
+same CSV, Parquet, and JSON receipt.
+
+~~~powershell
+py -3.11 -m macro_pit export-long --scope CN --start-date 2005-01-01
+.\export_pit_long.cmd CN 2005-01-01
+~~~
+
+Each row carries source_frequency, period_end, value, valid_from, valid_to,
+selection origin, and raw evidence fields. See
+reports/v2/asof_query/LONG_EXPORT.md for the interval contract.
+
 `archive-manual` is the governed fallback for official pages saved in a normal
 browser when automated access is disallowed. It preserves the original file,
 copies verified bytes into the SHA archive, and writes a raw manifest for a
@@ -99,6 +141,21 @@ US RTDSM and OECD use reviewed YAML job manifests rather than broad automatic
 downloads. Start from `config/rtdsm_jobs.example.yml` and
 `config/oecd_jobs.example.yml`. OECD jobs must be filtered by country and
 indicator; unfiltered dataset downloads are intentionally unsupported.
+
+The 00:00 global task also downloads the official IMF `external-data.xlsx`
+workbook and maintains `GLB_IMF_ALL_COMMODITY_PRICE_INDEX` (PALLFNF, monthly,
+2016=100). Its current-history rows are archived as `PIT_D`; query-wide and
+export-long apply the approved estimated visibility rule without relabeling the
+evidence grade. The first live load added 560 months from 1980-01 through
+2026-08, and a cached replay returned 560 unchanged rows.
+
+Three China market factors are implemented from the public ChinaBond curve
+history: `CN_CGB_YTM_10Y`, `CN_CGB_TERM_SPREAD_10Y_1Y`, and
+`CN_AAA_CP_NOTE_CREDIT_SPREAD_3Y`. Each closed month uses the final trading-day
+curve and the documented 17:30 Beijing publication time. The 00:00 unattended
+task is enabled. A user-authorized policy continues only when robots.txt cannot
+be retrieved; an explicit Disallow response still blocks access. The initial
+backfill completed with 716 rows and zero parse errors.
 
 `discover` does not invent historical start dates. Unverified coverage remains
 `UNVERIFIED` until a bounded discovery run supplies evidence.
@@ -135,6 +192,24 @@ that manifest. Browser-saved official pages can instead be archived through the
 manual inbox and parsed as `CN_M0_STOCK`, `CN_M1_STOCK`, and `CN_M2_STOCK`, all
 with `PIT_D` evidence. No Selenium, proxy rotation, or browser-fingerprint
 automation is required or permitted.
+
+The unattended China update therefore keeps the direct PBOC adapter at
+`BLOCKED_POLICY` and uses `PBOC_MIRROR` as a separate fallback. It scans the
+reviewed Shanghai, Jilin, and Qingdao government reprint indexes, preserves the
+reprint URL and publication evidence, and writes the underlying observations as
+source `PBOC` with grade `B`. A page must be an unambiguous national financial
+statistics report and contain all ten core PBOC fields; local financial reports
+are rejected. The mirror configuration is
+`config/pboc_mirror_index_urls.txt`.
+
+The 22:00 China task also observes reviewed Sina and Eastmoney current-history
+APIs every day. These are query fallbacks, not substitutes for official
+evidence. Only 19 verified canonical fields are mapped; every row remains
+`PIT_D`, becomes visible at its archived `first_seen_at`, and retains the raw
+response hash. Fixed-T selection uses `PIT_A > PIT_B > WIND > EASTMONEY_D >
+SINA_D`. The adapters request only the latest three periods, so they establish
+future first-seen availability without pretending to reconstruct historical
+release dates.
 
 For a reviewed release-candidate parquet, the one-time worker can run in the
 background and carry its own checkpoint across calendar days:

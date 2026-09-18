@@ -1,0 +1,54 @@
+﻿canonical_series_id,frequency,lag_days,available_same_day,confidence,eligible,basis,note
+CN_BANK_FX_NET_SETTLEMENT_USD,M,18,false,high,true,calibrated_n162,
+CN_BANK_FX_SALES_USD,M,18,false,high,true,calibrated_n162,
+CN_BANK_FX_SETTLEMENT_USD,M,18,false,high,true,calibrated_n162,
+CN_CPI_YOY,M,11,false,high,true,calibrated_n118,
+CN_CROSS_BORDER_NET_RECEIPTS_USD,M,19,false,high,true,calibrated_n184,
+CN_CROSS_BORDER_PAYMENTS_USD,M,19,false,high,true,calibrated_n184,
+CN_CROSS_BORDER_RECEIPTS_USD,M,19,false,high,true,calibrated_n184,
+CN_FAI_YTD_YOY,M,15,false,high,true,calibrated_n96,
+CN_FX_RESERVE_USD,M,7,false,high,true,calibrated_n119,
+CN_GDP_YOY,Q,18,false,high,true,calibrated_n54,季度序列 lag 自季末起算
+CN_GENERAL_BUDGET_EXPENDITURE_YTD_YOY,M,16,false,medium,true,calibrated_n182,尾部拖到41天需例外清单
+CN_GENERAL_BUDGET_REVENUE_YTD_YOY,M,16,false,medium,true,calibrated_n189,尾部拖到41天需例外清单
+CN_GOV_FUND_EXPENDITURE_YTD_YOY,M,18,false,medium,true,calibrated_n132,尾部拖到41天
+CN_GOV_FUND_REVENUE_YTD_YOY,M,18,false,medium,true,calibrated_n131,尾部拖到41天
+CN_INDUSTRIAL_VALUE_ADDED_YOY,M,15,false,high,true,calibrated_n75,1-2月合并发布
+CN_INFRA_INVESTMENT_YTD_YOY,M,16,false,high,true,calibrated_n52,
+CN_LAND_SALE_REVENUE_YTD_YOY,M,18,false,medium,true,calibrated_n125,尾部拖到41天
+CN_M0_YOY,M,12,false,low,true,calibrated_n19,样本少
+CN_M1_YOY,M,12,false,low,true,calibrated_n20,样本少;2025-01起修订口径回溯值非当时版本
+CN_M2_YOY,M,12,false,low,true,calibrated_n24,样本少
+CN_MANUFACTURING_INVESTMENT_YTD_YOY,M,16,false,high,true,calibrated_n53,
+CN_NEW_HOME_SALES_AREA_YTD_YOY,M,16,false,high,true,calibrated_n48,
+CN_NEW_HOME_SALES_VALUE_YTD_YOY,M,16,false,high,true,calibrated_n48,
+CN_NEW_RMB_DEPOSITS_YTD,M,12,false,low,true,calibrated_n7,样本少
+CN_NEW_RMB_LOANS_YTD,M,14,false,low,true,calibrated_n11,样本少
+CN_NONTAX_REVENUE_YTD_YOY,M,16,false,medium,true,calibrated_n182,尾部拖到41天
+CN_OECD_CPI_INDEX,M,,false,none,false,bulk_contaminated,版本辑别月非真实发布日 不进估计视图
+CN_OECD_INDUSTRIAL_PRODUCTION,M,,false,none,false,bulk_contaminated,版本辑别月非真实发布日 不进估计视图
+CN_PMI_COMPOSITE,M,0,true,high,true,calibrated_n63,月末最后一天09:30发布 春节月可提前1-4天
+CN_PMI_EMPLOYMENT,M,0,true,high,true,calibrated_n205,同上
+CN_PMI_MANUFACTURING,M,0,true,high,true,calibrated_n205,同上
+CN_PMI_NEW_ORDERS,M,0,true,high,true,calibrated_n205,同上
+CN_PMI_NONMANUFACTURING,M,0,true,high,true,calibrated_n104,同上
+CN_PMI_PRODUCTION,M,0,true,high,true,calibrated_n205,同上
+CN_PMI_RAW_MATERIAL_INVENTORY,M,0,true,high,true,calibrated_n205,同上
+CN_PMI_SUPPLIER_DELIVERY,M,0,true,high,true,calibrated_n205,同上
+CN_PPI_YOY,M,11,false,high,true,calibrated_n123,
+CN_REAL_ESTATE_INVESTMENT_YTD_YOY,M,15,false,high,true,calibrated_n153,
+CN_RETAIL_SALES_YOY,M,16,false,high,true,calibrated_n58,1-2月合并发布
+CN_RMB_DEPOSIT_BAL_YOY,M,12,false,low,true,calibrated_n18,样本少
+CN_RMB_LOAN_BAL_YOY,M,13,false,low,true,calibrated_n16,样本少
+CN_SERVICE_PRODUCTION_YOY,M,16,false,high,true,calibrated_n56,
+CN_TAX_REVENUE_YTD_YOY,M,16,false,medium,true,calibrated_n184,尾部拖到41天
+CN_TSF_FLOW_YTD,M,14,false,low,true,calibrated_n8,样本少
+CN_TSF_STOCK,M,14,false,low,true,calibrated_n3,样本仅3期
+CN_TSF_STOCK_YOY,M,14,false,low,true,calibrated_n3,样本仅3期
+CN_URBAN_SURVEYED_UNEMPLOYMENT,M,16,false,medium,true,calibrated_n55,最大76天存在异常月
+CN_EXPORT_USD,M,9,false,low,true,convention_no_local_samples,海关次月7-13日发布 无本地校准样本
+CN_EXPORT_USD_YOY,M,9,false,low,true,convention_no_local_samples,同上
+CN_IMPORT_USD,M,9,false,low,true,convention_no_local_samples,同上
+CN_IMPORT_USD_YOY,M,9,false,low,true,convention_no_local_samples,同上
+CN_TRADE_BALANCE_USD,M,9,false,low,true,convention_no_local_samples,同上
+GLB_IMF_ALL_COMMODITY_PRICE_INDEX,M,40,false,low,true,convention_imf_monthly_current_history,IMF official current-history proxy; conservative 40-day lag; record remains PIT_D

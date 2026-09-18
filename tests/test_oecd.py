@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 
 from macro_pit.archive import RawArtifact
 from macro_pit.sources.oecd import OECDSeries, OECDSource
+from macro_pit.pipeline import _expand_oecd_country_jobs
 
 
 def test_oecd_edition_dimension_becomes_vintages(tmp_path):
@@ -102,3 +103,13 @@ def test_oecd_index_parser_drops_zero_sentinel(tmp_path):
     assert len(rows) == 1
     assert rows[0]["period"] == "2013-02"
     assert rows[0]["value"] == 101.2
+
+
+def test_australia_split_retail_uses_configured_quarterly_frequency():
+    jobs = _expand_oecd_country_jobs({"countries": [{
+        "ref_area": "AUS", "prefix": "AU", "split_production_retail": True,
+        "production_frequency": "Q", "retail_frequency": "Q",
+    }]})
+    retail = next(job for job in jobs if ".TOVM." in job["url"])
+    assert "/AUS.Q.TOVM." in retail["url"]
+    assert retail["series"][0]["frequency"] == "Q"

@@ -1,0 +1,88 @@
+﻿version: 1
+run_mode: daily_light
+
+# Daily China update: new URLs plus the newest successful page only.
+sources:
+  NBS:
+    enabled: true
+    index_manifests:
+      - config/daily_nbs_index_urls.txt
+    recheck_latest: 1
+    max_candidates_per_run: 20
+    retry_backoff_days: [1, 3, 7]
+    not_found_cooldown_days: 30
+  PBOC:
+    enabled: true
+    index_manifests:
+      - config/pboc_index_urls.txt
+    recheck_latest: 1
+    max_candidates_per_run: 20
+    retry_backoff_days: [1, 3, 7]
+    not_found_cooldown_days: 30
+    policy_blocked: true
+    policy_probe: false
+  PBOC_MIRROR:
+    enabled: true
+    index_manifests:
+      - config/pboc_mirror_index_urls.txt
+    recheck_latest: 1
+    max_candidates_per_run: 10
+    retry_backoff_days: [1, 3, 7]
+    not_found_cooldown_days: 30
+    bootstrap_existing_as_baseline: true
+    independent_indexes: true
+    independent_candidates: true
+  MOF:
+    enabled: true
+    index_manifests:
+      - config/daily_mof_index_urls.txt
+    recheck_latest: 1
+    max_candidates_per_run: 20
+    retry_backoff_days: [1, 3, 7]
+    not_found_cooldown_days: 30
+    bootstrap_existing_as_baseline: true
+  SAFE:
+    enabled: true
+    index_manifests:
+      - config/daily_safe_index_urls.txt
+    recheck_latest: 1
+    max_candidates_per_run: 20
+    retry_backoff_days: [1, 3, 7]
+    not_found_cooldown_days: 30
+  EASTMONEY_MACRO:
+    enabled: true
+    latest_periods: 3
+  SINA_MACRO:
+    enabled: true
+    latest_periods: 3
+  OECD:
+    enabled: true
+    job_manifest: config/oecd_china_core.yml
+    recent_lookback_months: 18
+    skip_unchanged_fetch: true
+
+state_path: data/daily_web_update/state.json
+lock_path: data/daily_web_update/run.lock
+report_dir: reports/v2/daily_web_update
+logs_dir: logs/daily_web_update
+
+semantic_audit:
+  enabled: true
+  provider: deepseek
+  base_url: https://api.deepseek.com
+  model: deepseek-flash
+  api_key_env: DEEPSEEK_API_KEY
+  max_candidates: 24
+  max_excerpt_chars: 1400
+  max_output_tokens: 3000
+  timeout_seconds: 120
+  api_attempts: 2
+  report_dir: reports/v2/deepseek_daily_audit/china
+
+email_notification:
+  enabled: true
+  recipient: 718711226@qq.com
+  label: China daily update
+  config_file: emailconfig.ini
+  timeout_seconds: 60
+  report_dir: reports/v2/email_delivery/china_daily

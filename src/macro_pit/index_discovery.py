@@ -31,6 +31,13 @@ SOURCE_RULES = {
         "keywords": ("金融统计数据报告",),
         "kind": "financial_statistics_release",
     },
+    "PBOC_MIRROR": {
+        "base": "https://jrj.sh.gov.cn/SCGK194/",
+        "hosts": {"jrj.sh.gov.cn", "jr.jl.gov.cn", "jrb.qingdao.gov.cn"},
+        "keywords": ("金融统计数据报告",),
+        "kind": "financial_statistics_government_reprint",
+        "force_https": True,
+    },
     "MOF": {
         "base": "https://gks.mof.gov.cn/tongjishuju/",
         "hosts": {"gks.mof.gov.cn"},
@@ -54,6 +61,11 @@ SOURCE_RULES = {
             "国民经济", "经济运行", "居民消费价格", "工业生产者出厂价格",
             "采购经理指数", "国内生产总值",
         ),
+        # Spokesperson Q&A pages repeat many unrelated sub-industry numbers
+        # and are commentary rather than the primary statistical release.
+        # The corresponding zxfb release remains discoverable and is the
+        # authoritative input for automatic ingestion.
+        "exclude_keywords": ("答记者问",),
         "kind": "statistics_release",
     },
     "CUSTOMS": {
@@ -68,23 +80,36 @@ SOURCE_RULES = {
 }
 
 
-def discover_candidates(source: str, raw_files: list[str | Path]) -> list[CandidateUrl]:
+def discover_candidates(
+    source: str,
+    raw_files: list[str | Path],
+    *,
+    base_urls: list[str] | None = None,
+) -> list[CandidateUrl]:
     source_key = source.upper()
     if source_key not in SOURCE_RULES:
         raise ValueError(f"no index discovery rule for {source}")
     rule = SOURCE_RULES[source_key]
     candidates: dict[str, CandidateUrl] = {}
-    for raw_file in raw_files:
+    if base_urls is not None and len(base_urls) != len(raw_files):
+        raise ValueError("base_urls must align one-for-one with raw_files")
+    bases = base_urls or [str(rule["base"])] * len(raw_files)
+    for raw_file, base_url in zip(raw_files, bases, strict=True):
         path = Path(raw_file)
         soup = BeautifulSoup(decode_content(path.read_bytes()), "lxml")
         for anchor in soup.find_all("a", href=True):
             title = " ".join((anchor.get("title") or anchor.get_text(" ", strip=True)).split())
             if not title or not any(keyword in title for keyword in rule["keywords"]):
                 continue
-            url = urljoin(str(rule["base"]), str(anchor["href"]))
+            if any(keyword in title for keyword in rule.get("exclude_keywords", ())):
+                continue
+            url = urljoin(base_url, str(anchor["href"]))
+            parsed_url = urlparse(url)
+            if rule.get("force_https") and parsed_url.scheme == "http":
+                url = parsed_url._replace(scheme="https").geturl()
             if (urlparse(url).hostname or "").lower() not in rule["hosts"]:
                 continue
-            if not re.search(r"/20\d{2}(?:\d{2})?/|20\d{10,}", url):
+            if not re.search(r"/20\d{2}(?:\d{2}){0,2}/|20\d{10,}", url):
                 continue
             candidates[url] = CandidateUrl(
                 source=source_key,
@@ -150,7 +175,11 @@ def fetch_and_discover_indexes(
     finally:
         record_crawl_events(conn, adapter.client.events, parser_version="index_discovery_v1")
         adapter.close()
-    return discover_candidates(source_key, [Path(path) for path in raw_files]), raw_files
+    return discover_candidates(
+        source_key,
+        [Path(path) for path in raw_files],
+        base_urls=urls,
+    ), raw_files
 
 
 def _title_period(title: str) -> str | None:

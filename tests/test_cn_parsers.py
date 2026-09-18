@@ -13,7 +13,7 @@ from macro_pit.errors import ParserRowCountError
 from macro_pit.sources.cn_customs import CustomsSource
 from macro_pit.sources.cn_mof import MOFSource
 from macro_pit.sources.cn_nbs import NBSSource
-from macro_pit.sources.cn_pboc import PBOCSource
+from macro_pit.sources.cn_pboc import PBOCMirrorSource, PBOCSource
 from macro_pit.sources.cn_safe import SAFESource
 
 
@@ -51,6 +51,65 @@ def test_pboc_article_extracts_timestamp_and_metrics(tmp_path):
     assert all(row["pit_grade"] == "A" for row in rows)
     assert all(row["available_at"] == row["release_at"] for row in rows)
     assert by_id["CN_M2_YOY"]["release_at"].isoformat() == "2025-02-14T08:30:05+00:00"
+
+
+def test_pboc_parser_does_not_confuse_tsf_loan_component_with_total_loans(tmp_path):
+    content = """<html><head><title>2026年7月金融统计数据报告</title></head><body>
+    文章来源：2026-08-14 16:30:05
+    社会融资规模存量为463.27万亿元，同比增长7.4%。其中，对实体经济发放的人民币贷款余额278.57万亿元，同比增长5.2%。
+    社会融资规模增量累计为22.25万亿元。其中，对实体经济发放的人民币贷款增加10.17万亿元。
+    广义货币（M2）余额同比增长7.7%。狭义货币（M1）余额同比增长4%。流通中货币（M0）余额同比增长11.6%。
+    月末人民币存款余额346.47万亿元，同比增长8.1%。前七个月人民币存款增加17.79万亿元。
+    月末人民币贷款余额282.29万亿元，同比增长5.1%。前七个月人民币贷款增加10.38万亿元。
+    </body></html>""".encode("utf-8")
+    source = PBOCSource(allow_network=False)
+    try:
+        rows = source.parse_article(content, artifact(tmp_path, content))
+    finally:
+        source.close()
+    values = {row["canonical_series_id"]: row["value"] for row in rows}
+    assert values["CN_RMB_LOAN_BAL_YOY"] == pytest.approx(5.1)
+    assert values["CN_NEW_RMB_LOANS_YTD"] == pytest.approx(10.38)
+
+
+def test_pboc_government_reprint_is_canonical_pboc_pit_b(tmp_path):
+    content = """<html><head><title>2026年7月金融统计数据报告</title></head><body>
+    <h1>2026年7月金融统计数据报告</h1> 发布时间：2026-08-17 07:31:14
+    社会融资规模存量为 463.27 万亿元，同比增长 7.4%。社会融资规模增量累计为 22.25 万亿元。
+    广义货币（M2）余额同比增长 7.7%。狭义货币（M1）余额同比增长 4%。流通中货币（M0）余额同比增长 11.6%。
+    月末人民币存款余额同比增长 8.1%。前七个月人民币存款增加 17.79 万亿元。
+    月末人民币贷款余额同比增长 5.1%。前七个月人民币贷款增加 10.38 万亿元。
+    </body></html>""".encode("utf-8")
+    source = PBOCMirrorSource(allow_network=False)
+    try:
+        rows = source.parse_article(
+            content, artifact(tmp_path, content, "PBOC_MIRROR")
+        )
+    finally:
+        source.close()
+    assert len(rows) == 10
+    assert {row["source"] for row in rows} == {"PBOC"}
+    assert {row["pit_grade"] for row in rows} == {"B"}
+    assert {row["release_date_source"] for row in rows} == {
+        "government_reprint_page_timestamp"
+    }
+    assert {row["parser_version"] for row in rows} == {
+        "pboc_government_reprint_v1"
+    }
+
+
+def test_pboc_government_reprint_rejects_local_report_title(tmp_path):
+    content = """<html><head><title>2026年7月青岛市金融统计数据报告</title></head><body>
+    <h1>2026年7月青岛市金融统计数据报告</h1> 发布时间：2026-08-17
+    </body></html>""".encode("utf-8")
+    source = PBOCMirrorSource(allow_network=False)
+    try:
+        with pytest.raises(ValueError, match="national PBOC report"):
+            source.parse_article(
+                content, artifact(tmp_path, content, "PBOC_MIRROR")
+            )
+    finally:
+        source.close()
 
 
 def test_pboc_money_supply_table_is_current_history_pit_d(tmp_path):
@@ -202,9 +261,9 @@ def test_nbs_news_release_uses_reference_month_not_publication_month(tmp_path):
 def test_nbs_gdp_release_uses_current_quarter_table_cell_only(tmp_path):
     content = """<html><head><title>2026年二季度和上半年国内生产总值初步核算结果</title></head><body>
     2026/07/16 09:30
-    <table><tr><th></th><th colspan="2">绝对额</th><th colspan="2">同比增长</th></tr>
+    <div class="txt-content"><table><tr><th></th><th colspan="2">绝对额（亿元）</th><th colspan="2">比上年同期增长（%）</th></tr>
     <tr><th>二季度</th><th>上半年</th><th>二季度</th><th>上半年</th></tr>
-    <tr><td>GDP</td><td>361511</td><td>695704</td><td>4.3</td><td>4.7</td></tr></table>
+    <tr><td>GDP</td><td>361511</td><td>695704</td><td>4.3</td><td>4.7</td></tr></table></div>
     </body></html>""".encode("utf-8")
     source = NBSSource(allow_network=False)
     try:
@@ -220,8 +279,8 @@ def test_nbs_gdp_release_uses_current_quarter_table_cell_only(tmp_path):
 def test_nbs_first_quarter_gdp_uses_three_column_layout(tmp_path):
     content = """<html><head><title>2026年一季度国内生产总值初步核算结果</title></head><body>
     2026/04/17 10:00
-    <table><tr><th></th><th>绝对额</th><th>同比增长</th></tr>
-    <tr><td>GDP</td><td>334193</td><td>5.0</td></tr></table>
+    <div class="txt-content"><table><tr><th></th><th>绝对额（亿元）</th><th>比上年同期增长（%）</th></tr>
+    <tr><td>GDP</td><td>334193</td><td>5.0</td></tr></table></div>
     </body></html>""".encode("utf-8")
     source = NBSSource(allow_network=False)
     try:
@@ -246,8 +305,9 @@ def test_nbs_legacy_gdp_parenthesized_title_dispatches_quarterly_table(
     # the preliminary-accounting label. The final column is cumulative YoY.
     content = f"""<html><head><title>2021年{quarter_title}国内生产总值（GDP）初步核算结果</title></head>
     <body>{published} 09:30
-    <table><tr><th></th><th colspan="2">现价总量</th><th colspan="2">比上年同期增长</th></tr>
-    <tr><td>GDP</td><td>290964</td><td>823131</td><td>{current}</td><td>{cumulative}</td></tr></table>
+    <div class="txt-content"><table><tr><th></th><th colspan="2">现价总量（亿元）</th><th colspan="2">比上年同期增长（%）</th></tr>
+    <tr><th>{3 if quarter.endswith("Q3") else 4}季度</th><th>{"1-3季度" if quarter.endswith("Q3") else "全年"}</th><th>{3 if quarter.endswith("Q3") else 4}季度</th><th>{"1-3季度" if quarter.endswith("Q3") else "全年"}</th></tr>
+    <tr><td>GDP</td><td>290964</td><td>823131</td><td>{current}</td><td>{cumulative}</td></tr></table></div>
     </body></html>""".encode("utf-8")
     source = NBSSource(allow_network=False)
     try:
@@ -435,3 +495,24 @@ def test_safe_annual_reserve_table_is_conservative_pit_c(tmp_path):
     assert {row["pit_grade"] for row in rows} == {"C"}
     assert rows[0]["available_at"].isoformat() == "2025-01-07T16:00:00+00:00"
     assert rows[0]["release_date_source"].startswith("official_annual_consolidation:")
+
+def test_nbs_q_and_a_anchors_prices_and_aggregate_manufacturing(tmp_path):
+    content = """<html><head><title>国家统计局新闻发言人就2026年8月份国民经济运行情况答记者问</title></head><body>
+    2026/09/15 15:34
+    <div class="txt-content">
+    2025年8月份，工业生产者出厂价格同比下降2.0%。
+    8月份，居民消费价格同比上涨0.8%，工业生产者出厂价格上涨3.8%。
+    1—8月份，制造业投资下降2.3%。
+    锂离子电池制造业投资增长20.6%。
+    8月份，全国城镇调查失业率为5.3%。
+    </div></body></html>""".encode("utf-8")
+    source = NBSSource(allow_network=False)
+    try:
+        rows = source.parse_news_release(content, artifact(tmp_path, content, "NBS"))
+    finally:
+        source.close()
+    by_id = {row["canonical_series_id"]: row for row in rows}
+    assert by_id["CN_PPI_YOY"]["value"] == 3.8
+    assert by_id["CN_MANUFACTURING_INVESTMENT_YTD_YOY"]["value"] == -2.3
+    assert by_id["CN_URBAN_SURVEYED_UNEMPLOYMENT"]["value"] == 5.3
+    assert {row["period"] for row in rows} == {"2026-08"}

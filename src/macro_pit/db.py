@@ -14,7 +14,7 @@ from .errors import DataContractError
 from .timeutils import ensure_aware
 
 
-DB_PATH = os.environ.get("MACRO_PIT_DB_PATH", "macro_pit.duckdb")
+DB_PATH = os.environ.get("MACRO_PIT_DB_PATH", "macro_pit_v2.duckdb")
 
 OBSERVATION_COLUMNS = [
     "country", "source", "canonical_series_id", "source_series_id",
@@ -191,7 +191,14 @@ def _normalize_record(row: dict[str, Any]) -> dict[str, Any]:
     normalized["release_date_source"] = row.get("release_date_source")
 
     if grade == "D" and normalized["available_at"] < normalized["first_seen_at"]:
-        raise DataContractError("PIT_D available_at cannot precede first_seen_at")
+        # Documented-version exception: Wind terminal-EDB historical-revision
+        # snapshots carry a real version date (修正日期), not a guessed one.
+        # Only rows explicitly marked via release_date_source may anchor
+        # available_at to that documented date; all other D records keep the
+        # archival first_seen convention.
+        marker = str(normalized.get("release_date_source") or "")
+        if not marker.startswith("wind_revision_snapshot_"):
+            raise DataContractError("PIT_D available_at cannot precede first_seen_at")
     if normalized["release_at"] and normalized["available_at"] < normalized["release_at"]:
         raise DataContractError("available_at cannot precede release_at")
     return normalized
@@ -227,10 +234,18 @@ def _signature_values(
     unit: str,
     frequency: str,
 ) -> tuple:
-    temporal = (None, None, None) if pit_grade == "D" else (
-        release_epoch,
-        available_epoch,
-        release_date_source,
+    # Ordinary PIT_D rows are archival snapshots, so retrieval timestamps do
+    # not make a new value vintage. A documented Wind revision is different:
+    # its dated marker is the evidence for a real historical version event and
+    # must remain distinct even when its value equals a later terminal export.
+    documented_wind_revision = (
+        pit_grade == "D"
+        and str(release_date_source or "").startswith("wind_revision_snapshot_")
+    )
+    temporal = (
+        (None, None, None)
+        if pit_grade == "D" and not documented_wind_revision
+        else (release_epoch, available_epoch, release_date_source)
     )
     return (source, series_id, period, float(value), pit_grade, unit, frequency, *temporal)
 
@@ -292,6 +307,13 @@ def insert_observations(
                 continue
             key = (row["source"], row["canonical_series_id"], row["period"])
             latest = latest_by_period.get(key)
+            marker = str(row.get("release_date_source") or "")
+            explicit_documented_revision = (
+                row["pit_grade"] == "D"
+                and marker.startswith("wind_revision_snapshot_")
+                and str(row.get("revision_type") or "").lower() == "revision"
+                and row.get("revision_delta") is not None
+            )
 
             if latest is None:
                 vintage_no = 0
@@ -299,7 +321,15 @@ def insert_observations(
                 revision_delta = None
             else:
                 vintage_no = int(latest[7]) + 1
-                if _same_value(latest[0], row["value"]):
+                if explicit_documented_revision:
+                    revision_type = "revision"
+                    revision_delta = float(row["revision_delta"])
+                    if not math.isfinite(revision_delta) or _same_value(revision_delta, 0.0):
+                        raise DataContractError(
+                            "documented Wind revision requires a finite non-zero revision_delta"
+                        )
+                    revisions += 1
+                elif _same_value(latest[0], row["value"]):
                     revision_type = "metadata_update"
                     revision_delta = 0.0
                     metadata_updates += 1

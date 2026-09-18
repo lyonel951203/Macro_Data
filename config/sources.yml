@@ -42,6 +42,14 @@ sources:
     jitter_seconds: 20
     max_requests_per_run: null
     max_requests_per_day: null
+  PBOC_MIRROR:
+    country: CN
+    base_url: "https://jrj.sh.gov.cn"
+    allowed_hosts: ["jrj.sh.gov.cn", "jr.jl.gov.cn", "jrb.qingdao.gov.cn"]
+    min_interval_seconds: 45
+    jitter_seconds: 20
+    max_requests_per_run: 30
+    max_requests_per_day: 60
   CUSTOMS:
     country: CN
     base_url: "http://www.customs.gov.cn"
@@ -67,6 +75,24 @@ sources:
     jitter_seconds: 20
     max_requests_per_run: null
     max_requests_per_day: null
+  SINA_MACRO:
+    country: CN
+    base_url: "https://quotes.sina.cn"
+    allowed_hosts: ["quotes.sina.cn"]
+    min_interval_seconds: 2
+    jitter_seconds: 1
+    max_requests_per_run: 20
+    max_requests_per_day: 100
+
+  EASTMONEY_MACRO:
+    country: CN
+    base_url: "https://datacenter-web.eastmoney.com"
+    allowed_hosts: ["datacenter-web.eastmoney.com"]
+    min_interval_seconds: 2
+    jitter_seconds: 1
+    max_requests_per_run: 10
+    max_requests_per_day: 20
+
   RTDSM:
     country: US
     base_url: "https://www.philadelphiafed.org"
@@ -83,3 +109,32 @@ sources:
     jitter_seconds: 5
     max_requests_per_run: 30
     max_requests_per_day: 50
+
+  CHINABOND:
+    country: CN
+    base_url: "https://yield.chinabond.com.cn"
+    allowed_hosts: ["yield.chinabond.com.cn"]
+    # User-authorized 2026-09-16: continue only when robots.txt cannot be
+    # retrieved; an explicit Disallow response still blocks the request.
+    stop_on_robots_error: false
+    min_interval_seconds: 3
+    jitter_seconds: 2
+    max_requests_per_run: 30
+    max_requests_per_day: 80
+  USTREASURY:
+    country: US
+    base_url: "https://home.treasury.gov"
+    allowed_hosts: ["home.treasury.gov"]
+    min_interval_seconds: 2
+    jitter_seconds: 1
+    max_requests_per_run: 30
+    max_requests_per_day: 80
+
+  IMF:
+    country: GLOBAL
+    base_url: "https://www.imf.org"
+    allowed_hosts: ["www.imf.org", "imf.org"]
+    min_interval_seconds: 5
+    jitter_seconds: 2
+    max_requests_per_run: 3
+    max_requests_per_day: 20

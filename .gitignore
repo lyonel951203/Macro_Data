@@ -35,8 +35,7 @@
 # Python and editor environments
 __pycache__/
 *.py[cod]
-.pytest_cache/
-.pytest_tmp/
+.pytest_*/
 .mypy_cache/
 .ruff_cache/
 .coverage
@@ -53,6 +52,8 @@ dist/
 Thumbs.db
 
 # Local credentials and tools
+/emailconfig.ini
+.secrets/
 .env
 .env.*
 !.env.example

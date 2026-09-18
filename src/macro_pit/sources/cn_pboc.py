@@ -29,9 +29,9 @@ METRICS = [
     MetricPattern("CN_M2_YOY", "M2_YOY", "M2同比", "pct_yoy", r"广义货币[（(]?M2[）)]?余额.*?同比(?P<direction>增长|下降)(?P<value>[\d.,]+)[%％]"),
     MetricPattern("CN_M1_YOY", "M1_YOY", "M1同比", "pct_yoy", r"狭义货币[（(]?M1[）)]?余额.*?同比(?P<direction>增长|下降)(?P<value>[\d.,]+)[%％]"),
     MetricPattern("CN_M0_YOY", "M0_YOY", "M0同比", "pct_yoy", r"流通中货币[（(]?M0[）)]?余额.*?同比(?P<direction>增长|下降)(?P<value>[\d.,]+)[%％]"),
-    MetricPattern("CN_RMB_LOAN_BAL_YOY", "RMB_LOAN_BAL_YOY", "人民币贷款余额同比", "pct_yoy", r"人民币贷款余额.*?同比(?P<direction>增长|下降)(?P<value>[\d.,]+)[%％]"),
+    MetricPattern("CN_RMB_LOAN_BAL_YOY", "RMB_LOAN_BAL_YOY", "人民币贷款余额同比", "pct_yoy", r"(?<!的)人民币贷款余额.*?同比(?P<direction>增长|下降)(?P<value>[\d.,]+)[%％]"),
     MetricPattern("CN_RMB_DEPOSIT_BAL_YOY", "RMB_DEPOSIT_BAL_YOY", "人民币存款余额同比", "pct_yoy", r"人民币存款余额.*?同比(?P<direction>增长|下降)(?P<value>[\d.,]+)[%％]"),
-    MetricPattern("CN_NEW_RMB_LOANS_YTD", "NEW_RMB_LOANS_YTD", "新增人民币贷款累计", "tn_cny_ytd", r"人民币贷款增加(?P<value>[\d.,]+)万亿元", False),
+    MetricPattern("CN_NEW_RMB_LOANS_YTD", "NEW_RMB_LOANS_YTD", "新增人民币贷款累计", "tn_cny_ytd", r"(?<!的)人民币贷款增加(?P<value>[\d.,]+)万亿元", False),
     MetricPattern("CN_NEW_RMB_DEPOSITS_YTD", "NEW_RMB_DEPOSITS_YTD", "新增人民币存款累计", "tn_cny_ytd", r"人民币存款增加(?P<value>[\d.,]+)万亿元", False),
     MetricPattern("CN_TSF_STOCK", "TSF_STOCK", "社会融资规模存量", "tn_cny", r"社会融资规模存量为(?P<value>[\d.,]+)万亿元", False),
     MetricPattern("CN_TSF_STOCK_YOY", "TSF_STOCK_YOY", "社会融资规模存量同比", "pct_yoy", r"社会融资规模存量.*?同比(?P<direction>增长|下降)(?P<value>[\d.,]+)[%％]"),
@@ -39,8 +39,12 @@ METRICS = [
 ]
 
 
+PBOC_CORE_IDS = frozenset(metric.canonical_id for metric in METRICS)
+
+
 class PBOCSource(BaseSource):
     source = "PBOC"
+    observation_source = "PBOC"
     country = "CN"
     parser_version = "pboc_article_v1"
 
@@ -48,7 +52,7 @@ class PBOCSource(BaseSource):
         base = "http://www.pbc.gov.cn/diaochatongjisi/116219/index.html"
         return [
             SourceInventoryEntry(
-                source=self.source,
+                source=self.observation_source,
                 dataset="金融统计数据报告及社会融资规模历史新闻稿",
                 url=base,
                 earliest_period=None,
@@ -73,9 +77,10 @@ class PBOCSource(BaseSource):
             return rows
         year, month = extract_period_from_title(soup, text)
         release = extract_release_evidence(soup, text, artifact.retrieved_at)
+        metric_text = re.sub(r"\s+", "", text)
         rows: list[dict] = []
         for metric in METRICS:
-            match = re.search(metric.pattern, text, flags=re.S)
+            match = re.search(metric.pattern, metric_text, flags=re.S)
             if not match:
                 continue
             if metric.percent:
@@ -84,7 +89,7 @@ class PBOCSource(BaseSource):
                 value = float(match.group("value").replace(",", ""))
             rows.append(
                 make_observation(
-                    source=self.source,
+                    source=self.observation_source,
                     canonical_series_id=metric.canonical_id,
                     source_series_id=metric.source_id,
                     series_name=metric.name,
@@ -150,7 +155,7 @@ class PBOCSource(BaseSource):
             source_id, name, _ = aliases[canonical]
             for (year, month), value in zip(periods, values, strict=True):
                 rows.append(make_observation(
-                    source=self.source,
+                    source=self.observation_source,
                     canonical_series_id=canonical,
                     source_series_id=source_id,
                     series_name=name,
@@ -162,6 +167,55 @@ class PBOCSource(BaseSource):
                     release=release,
                     parser_version="pboc_money_supply_table_v1",
                 ))
+        return rows
+
+
+class PBOCMirrorSource(PBOCSource):
+    """Parse national PBOC reports republished by reviewed government sites.
+
+    The network adapter has its own host allowlist, while observations retain
+    PBOC as the producing source. A government reprint proves visibility only
+    from the reprint publication time, so even an exact timestamp is PIT_B.
+    """
+
+    source = "PBOC_MIRROR"
+    observation_source = "PBOC"
+    parser_version = "pboc_government_reprint_v1"
+    expected_min_rows = len(PBOC_CORE_IDS)
+
+    def parse_article(self, content: bytes, artifact: RawArtifact) -> list[dict]:
+        soup, _ = html_text(content)
+        headlines = [
+            " ".join(str(node).split())
+            for node in soup.find_all(string=re.compile(r"20\d{2}年.*金融统计数据报告"))
+        ]
+        headline = min(headlines, key=len) if headlines else ""
+        if not headline or re.search(
+            r"(?:上海|吉林|青岛)(?:市|省)?.*金融统计数据报告", headline
+        ):
+            raise ValueError(
+                "government reprint is not an unambiguous national PBOC report"
+            )
+
+        rows = super().parse_article(content, artifact)
+        observed_ids = {row["canonical_series_id"] for row in rows}
+        missing = sorted(PBOC_CORE_IDS - observed_ids)
+        if missing:
+            raise ValueError(
+                f"government reprint is missing PBOC core fields: {missing}"
+            )
+
+        for row in rows:
+            if row["pit_grade"] == "D" or row["release_at"] is None:
+                raise ValueError("government reprint has no publication date evidence")
+            evidence = str(row["release_date_source"] or "")
+            row["pit_grade"] = "B"
+            row["release_date_source"] = (
+                "government_reprint_page_timestamp"
+                if "timestamp" in evidence
+                else "government_reprint_page_date"
+            )
+            row["parser_version"] = self.parser_version
         return rows
 
 

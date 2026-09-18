@@ -66,3 +66,41 @@ def test_nbs_running_title_without_guomin_is_discovered(tmp_path):
     raw.write_text('<a href="./202501/t20250117_1958332.html">2024年经济运行稳中有进 主要发展目标顺利实现</a>',encoding="utf-8")
     result=discover_candidates("NBS",[raw])
     assert len(result)==1 and result[0].period=="2024-12"
+
+def test_pboc_mirror_discovery_uses_each_index_as_relative_base(tmp_path):
+    sh = tmp_path / "sh.html"
+    jl = tmp_path / "jl.html"
+    sh.write_text(
+        '<a href="./20260915/abc.html">2026年8月金融统计数据报告</a>',
+        encoding="utf-8",
+    )
+    jl.write_text(
+        '<a href="http://jr.jl.gov.cn/jrzx/zyjrxxzz/gj/202608/t20260817_1.html">2026年7月金融统计数据报告</a>',
+        encoding="utf-8",
+    )
+    rows = discover_candidates(
+        "PBOC_MIRROR",
+        [sh, jl],
+        base_urls=[
+            "https://jrj.sh.gov.cn/SCGK194/index.html",
+            "https://jr.jl.gov.cn/jrzx/zyjrxxzz/gj/",
+        ],
+    )
+    assert {row.url for row in rows} == {
+        "https://jrj.sh.gov.cn/SCGK194/20260915/abc.html",
+        "https://jr.jl.gov.cn/jrzx/zyjrxxzz/gj/202608/t20260817_1.html",
+    }
+
+def test_nbs_spokesperson_q_and_a_is_not_an_automatic_candidate(tmp_path):
+    raw = tmp_path / "index.html"
+    raw.write_text(
+        '<a href="../zxfbhjd/202609/t20260915_1.html">'
+        '国家统计局新闻发言人就2026年8月份国民经济运行情况答记者问</a>'
+        '<a href="./202609/t20260915_2.html">'
+        '8月份国民经济运行平稳</a>',
+        encoding="utf-8",
+    )
+    result = discover_candidates("NBS", [raw])
+    assert [item.url for item in result] == [
+        "https://www.stats.gov.cn/sj/zxfb/202609/t20260915_2.html"
+    ]

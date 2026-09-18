@@ -7,8 +7,13 @@ from pathlib import Path
 import duckdb
 import polars as pl
 
-from .pit import get_snapshot
+from .pit import get_snapshot, get_work_snapshot
 from .timeutils import SHANGHAI
+
+
+DEFAULT_ESTIMATED_AVAILABILITY = (
+    "reports/v2/pit_work_step2_estimated_availability/estimated_available_v1.csv"
+)
 
 
 def build_monthly_wide_snapshot(
@@ -19,13 +24,32 @@ def build_monthly_wide_snapshot(
     *,
     country: str = "CN",
     pit_mode: str = "strict",
+    estimated_availability_path: str | Path = DEFAULT_ESTIMATED_AVAILABILITY,
 ) -> dict[str, Path]:
     """Build month-end PIT panels with one row per as-of date and one column per series.
 
     The values panel holds the latest legally available observation value at
     each month end. The periods panel records which source period supplied each
     value, so forward-filled monthly/quarterly information remains explicit.
+
+    ``pit_mode="work"`` selects the latest source period visible at each
+    cutoff from A/B records and PIT_D terminal values with calibrated estimated
+    availability. A documented Wind or observed official-page revision becomes
+    a later vintage on its recorded/first-observed date. The work series set
+    contains every A/B/Wind/SAFE
+    field visible at the final cutoff; a companion panel labels every cell ``work_A`` /
+    ``work_B`` / ``work_wind`` / ``work_wind_revision`` /
+    ``work_web_revision`` / ``work_safe_d`` /
+    blank. Record-level grades are never modified.
     """
+    if pit_mode != "work":
+        estimated_availability_path = None  # unused in evidence-based modes
+    elif not Path(estimated_availability_path).is_file():
+        raise ValueError(
+            f"work mode requires an estimated-availability sidecar file: "
+            f"{estimated_availability_path}"
+        )
+
     start = date.fromisoformat(start_date)
     end = date.fromisoformat(end_date)
     if start > end:
@@ -35,40 +59,85 @@ def build_monthly_wide_snapshot(
         raise ValueError("date range contains no natural month end")
 
     final_as_of = f"{month_ends[-1].isoformat()} 23:59:59+08:00"
-    final_snapshot = get_snapshot(conn, final_as_of, country=country, pit_mode=pit_mode)
+    if pit_mode == "work":
+        final_snapshot = get_work_snapshot(
+            conn, final_as_of, estimated_availability_path, country=country
+        )
+    else:
+        final_snapshot = get_snapshot(
+            conn, final_as_of, country=country, pit_mode=pit_mode
+        )
     if final_snapshot.is_empty():
         raise ValueError("no PIT observations are available by end_date")
-    final_latest = _latest_series_rows(final_snapshot)
+    final_latest = (
+        final_snapshot.sort("canonical_series_id")
+        if pit_mode == "work"
+        else _latest_series_rows(final_snapshot)
+    )
     series_ids = sorted(final_latest.get_column("canonical_series_id").to_list())
 
-    metadata = (
-        final_latest.select(
-            "canonical_series_id",
-            "series_name",
-            "source",
-            "frequency",
-            "unit",
-            "seasonal_adjustment",
-            "pit_grade",
+    metadata_columns = [
+        "canonical_series_id",
+        "series_name",
+        "source",
+        "frequency",
+        "unit",
+        "seasonal_adjustment",
+    ]
+    if pit_mode == "work":
+        metadata = (
+            final_latest.select(*metadata_columns, "work_origin")
+            .with_columns(
+                pl.when(pl.col("work_origin") == "work_A")
+                .then(pl.lit("A"))
+                .when(pl.col("work_origin") == "work_B")
+                .then(pl.lit("B"))
+                .otherwise(pl.lit("D"))
+                .alias("pit_grade")
+            )
+            .drop("work_origin")
+            .sort("canonical_series_id")
         )
-        .sort("canonical_series_id")
-    )
+    else:
+        metadata = final_latest.select(
+            *metadata_columns, "pit_grade"
+        ).sort("canonical_series_id")
     value_rows: list[dict] = []
     period_rows: list[dict] = []
+    origin_rows: list[dict] = []
     for month_end in month_ends:
         as_of = f"{month_end.isoformat()} 23:59:59+08:00"
-        snapshot = get_snapshot(conn, as_of, country=country, pit_mode=pit_mode)
-        latest = _latest_series_rows(snapshot)
-        values = {
-            row["canonical_series_id"]: row["value"]
-            for row in latest.select("canonical_series_id", "value").iter_rows(named=True)
+        if pit_mode == "work":
+            snapshot = get_work_snapshot(
+                conn, as_of, estimated_availability_path, country=country
+            )
+        else:
+            snapshot = get_snapshot(conn, as_of, country=country, pit_mode=pit_mode)
+        if pit_mode == "work":
+            # Work snapshots already return one latest row per series.
+            latest = snapshot.sort("canonical_series_id")
+        else:
+            latest = _latest_series_rows(snapshot)
+        rows = {
+            row["canonical_series_id"]: row
+            for row in latest.iter_rows(named=True)
         }
-        periods = {
-            row["canonical_series_id"]: row["period"]
-            for row in latest.select("canonical_series_id", "period").iter_rows(named=True)
-        }
-        value_rows.append({"as_of_month_end": month_end, **{key: values.get(key) for key in series_ids}})
-        period_rows.append({"as_of_month_end": month_end, **{key: periods.get(key) for key in series_ids}})
+        value_rows.append(
+            {"as_of_month_end": month_end,
+             # Round binary float noise (e.g. 2809*0.0001 -> 0.28090000000000004)
+             # at the presentation layer; 1e-10 is far below macro precision.
+             **{key: round(rows[key]["value"], 10) if key in rows else None
+                for key in series_ids}}
+        )
+        period_rows.append(
+            {"as_of_month_end": month_end,
+             **{key: rows[key]["period"] if key in rows else None for key in series_ids}}
+        )
+        if pit_mode == "work":
+            origin_rows.append(
+                {"as_of_month_end": month_end,
+                 **{key: rows[key]["work_origin"] if key in rows else None for key in series_ids}}
+            )
 
     # Long PIT panels can legitimately start with more than Polars' default
     # inference window of all-null rows. Inspect the complete row set so later
@@ -87,6 +156,12 @@ def build_monthly_wide_snapshot(
     values_frame.write_csv(paths["values_csv"])
     periods_frame.write_parquet(paths["periods_parquet"])
     metadata.write_csv(paths["metadata_csv"])
+    if pit_mode == "work":
+        provenance_frame = pl.DataFrame(origin_rows, infer_schema_length=None)
+        paths["provenance_csv"] = prefix.with_name(prefix.name + "_provenance.csv")
+        paths["provenance_parquet"] = prefix.with_name(prefix.name + "_provenance.parquet")
+        provenance_frame.write_csv(paths["provenance_csv"])
+        provenance_frame.write_parquet(paths["provenance_parquet"])
     return paths
 
 

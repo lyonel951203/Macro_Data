@@ -1,0 +1,88 @@
+# PIT_work 第2步：PIT_D 记录的估计可用日期
+
+规则版本 `estimated_availability_rules_v1`（config/estimated_availability_rules_v1.csv）。
+口径：estimated_release_date = period_end + 规则滞后天数；非 PMI 序列自估计发布日次日 00:00（Asia/Shanghai）可用（沿用 B 级日期保守惯例）；PMI 序列当月末 09:30 可用。
+数值为终值，vintage_status=latest_snapshot；估计日期不写入主库，仅供 work 模式导出使用。
+
+已赋估计日期的 D 记录：**7720** 条
+
+| 序列 | 来源 | 置信度 | 记录数 | 首期 | 末期 |
+|---|---|---|---:|---|---|
+| CN_BANK_FX_NET_SETTLEMENT_USD | SAFE | high | 199 | 2010-01 | 2026-07 |
+| CN_BANK_FX_SALES_USD | SAFE | high | 199 | 2010-01 | 2026-07 |
+| CN_BANK_FX_SETTLEMENT_USD | SAFE | high | 199 | 2010-01 | 2026-07 |
+| CN_CPI_YOY | WIND | high | 192 | 2005-01 | 2020-12 |
+| CN_CPI_YOY | SINA_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_CPI_YOY | EASTMONEY_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_CROSS_BORDER_NET_RECEIPTS_USD | SAFE | high | 199 | 2010-01 | 2026-07 |
+| CN_CROSS_BORDER_PAYMENTS_USD | SAFE | high | 199 | 2010-01 | 2026-07 |
+| CN_CROSS_BORDER_RECEIPTS_USD | SAFE | high | 199 | 2010-01 | 2026-07 |
+| CN_EXPORT_USD | WIND | low | 260 | 2005-01 | 2026-08 |
+| CN_EXPORT_USD_YOY | WIND | low | 260 | 2005-01 | 2026-08 |
+| CN_FAI_YTD_YOY | SINA_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_FAI_YTD_YOY | WIND | high | 231 | 2005-02 | 2025-12 |
+| CN_FX_RESERVE_USD | EASTMONEY_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_FX_RESERVE_USD | SINA_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_FX_RESERVE_USD | SAFE | high | 221 | 1999-12 | 2018-04 |
+| CN_GDP_YOY | WIND | high | 36 | 2005-Q1 | 2013-Q4 |
+| CN_GENERAL_BUDGET_REVENUE_YTD_YOY | EASTMONEY_MACRO | medium | 3 | 2026-05 | 2026-07 |
+| CN_IMPORT_USD | WIND | low | 260 | 2005-01 | 2026-08 |
+| CN_IMPORT_USD_YOY | WIND | low | 260 | 2005-01 | 2026-08 |
+| CN_INDUSTRIAL_VALUE_ADDED_YOY | SINA_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_INDUSTRIAL_VALUE_ADDED_YOY | EASTMONEY_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_INDUSTRIAL_VALUE_ADDED_YOY | WIND | high | 238 | 2005-01 | 2025-12 |
+| CN_INFRA_INVESTMENT_YTD_YOY | WIND | high | 130 | 2014-04 | 2025-12 |
+| CN_M0_YOY | WIND | low | 260 | 2005-01 | 2026-08 |
+| CN_M0_YOY | SINA_MACRO | low | 3 | 2026-06 | 2026-08 |
+| CN_M0_YOY | EASTMONEY_MACRO | low | 3 | 2026-06 | 2026-08 |
+| CN_M1_YOY | WIND | low | 258 | 2005-01 | 2026-07 |
+| CN_M1_YOY | EASTMONEY_MACRO | low | 3 | 2026-06 | 2026-08 |
+| CN_M1_YOY | SINA_MACRO | low | 3 | 2026-06 | 2026-08 |
+| CN_M2_YOY | WIND | low | 259 | 2005-01 | 2026-07 |
+| CN_M2_YOY | SINA_MACRO | low | 3 | 2026-06 | 2026-08 |
+| CN_M2_YOY | EASTMONEY_MACRO | low | 3 | 2026-06 | 2026-08 |
+| CN_MANUFACTURING_INVESTMENT_YTD_YOY | SINA_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_MANUFACTURING_INVESTMENT_YTD_YOY | WIND | high | 231 | 2005-02 | 2025-12 |
+| CN_NEW_HOME_SALES_AREA_YTD_YOY | WIND | high | 198 | 2005-02 | 2022-12 |
+| CN_NEW_HOME_SALES_VALUE_YTD_YOY | WIND | high | 198 | 2005-02 | 2022-12 |
+| CN_NEW_RMB_DEPOSITS_YTD | WIND | low | 252 | 2005-01 | 2026-08 |
+| CN_NEW_RMB_LOANS_YTD | WIND | low | 260 | 2005-01 | 2026-08 |
+| CN_PMI_EMPLOYMENT | WIND | high | 54 | 2005-01 | 2009-06 |
+| CN_PMI_EMPLOYMENT | SINA_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_PMI_MANUFACTURING | WIND | high | 54 | 2005-01 | 2009-06 |
+| CN_PMI_MANUFACTURING | EASTMONEY_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_PMI_MANUFACTURING | SINA_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_PMI_NEW_ORDERS | SINA_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_PMI_NEW_ORDERS | WIND | high | 54 | 2005-01 | 2009-06 |
+| CN_PMI_NONMANUFACTURING | WIND | high | 132 | 2007-01 | 2017-12 |
+| CN_PMI_NONMANUFACTURING | EASTMONEY_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_PMI_PRODUCTION | SINA_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_PMI_PRODUCTION | WIND | high | 54 | 2005-01 | 2009-06 |
+| CN_PMI_RAW_MATERIAL_INVENTORY | WIND | high | 54 | 2005-01 | 2009-06 |
+| CN_PMI_RAW_MATERIAL_INVENTORY | SINA_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_PMI_SUPPLIER_DELIVERY | WIND | high | 54 | 2005-01 | 2009-06 |
+| CN_PMI_SUPPLIER_DELIVERY | SINA_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_PPI_YOY | WIND | high | 192 | 2005-01 | 2020-12 |
+| CN_PPI_YOY | EASTMONEY_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_REAL_ESTATE_INVESTMENT_YTD_YOY | WIND | high | 231 | 2005-02 | 2025-12 |
+| CN_REAL_ESTATE_INVESTMENT_YTD_YOY | SINA_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_RETAIL_SALES_YOY | SINA_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_RETAIL_SALES_YOY | WIND | high | 239 | 2005-01 | 2025-12 |
+| CN_RETAIL_SALES_YOY | EASTMONEY_MACRO | high | 3 | 2026-06 | 2026-08 |
+| CN_RMB_DEPOSIT_BAL_YOY | WIND | low | 260 | 2005-01 | 2026-08 |
+| CN_RMB_LOAN_BAL_YOY | WIND | low | 260 | 2005-01 | 2026-08 |
+| CN_TRADE_BALANCE_USD | WIND | low | 260 | 2005-01 | 2026-08 |
+| CN_TSF_FLOW_YTD | WIND | low | 260 | 2005-01 | 2026-08 |
+| CN_TSF_STOCK | WIND | low | 142 | 2005-12 | 2026-08 |
+| CN_TSF_STOCK_YOY | WIND | low | 141 | 2005-12 | 2026-07 |
+
+## 未赋估计日期的 D 记录
+
+- DOCUMENTED_WIND_REVISIONS: 20 条（规则 eligible=false 或无规则）
+
+## 边界
+
+- SAFE 的 D 记录来自官方批量表（终值），与 WIND 记录同样只进 work 模式；是否纳入由导出开关控制。
+- 海关 5 项与央行序列置信度 low（无本地校准样本或样本少），下游使用时建议做滞后敏感性测试。
+- OECD 两序列已排除。
+- 带 `wind_revision_snapshot_*` 标记的 Wind 修订事件不使用估计日期；work 模式直接使用其有据修订日。

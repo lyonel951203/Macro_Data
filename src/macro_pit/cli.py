@@ -6,6 +6,10 @@ import click
 import duckdb
 import yaml
 
+from .asof_wide import (
+    FREQUENCIES, SCOPES, build_as_of_wide, build_as_of_wide_from_long,
+    default_output_prefix, export_as_of_wide,
+)
 from .acceptance import run_acceptance
 from .audit import run_audit
 from .db import DB_PATH, get_connection
@@ -22,7 +26,14 @@ from .pipeline import (
     load_url_manifest,
 )
 from .pit import PIT_MODES, get_snapshot
-from .snapshot import build_monthly_snapshots, build_monthly_wide_snapshot
+from .pit_long import (
+    LONG_SCOPES, build_pit_long, default_long_output_prefix, export_pit_long,
+)
+from .snapshot import (
+    DEFAULT_ESTIMATED_AVAILABILITY,
+    build_monthly_snapshots,
+    build_monthly_wide_snapshot,
+)
 
 
 @click.group()
@@ -396,12 +407,24 @@ def export_monthly(
 @click.option("--start-date", default="2005-01-31", show_default=True)
 @click.option("--end-date", required=True)
 @click.option("--country", default="CN", show_default=True)
-@click.option("--pit-mode", type=click.Choice(list(PIT_MODES)), default="strict", show_default=True)
 @click.option(
-    "--output-prefix",
-    default="data/exports/cn_pit_month_end",
+    "--pit-mode",
+    type=click.Choice([*PIT_MODES, "work"]),
+    default="work",
+    show_default=True,
+)
+@click.option(
+    "--estimated-availability",
+    default=DEFAULT_ESTIMATED_AVAILABILITY,
     show_default=True,
     type=click.Path(path_type=Path),
+    help="Sidecar CSV of estimated_available_at for PIT_D records (pit-mode=work only)",
+)
+@click.option(
+    "--output-prefix",
+    default=None,
+    type=click.Path(path_type=Path),
+    help="Output prefix; defaults by mode to cn_pit_work_month_end or cn_pit_month_end",
 )
 @click.pass_context
 def export_wide(
@@ -410,9 +433,22 @@ def export_wide(
     end_date: str,
     country: str,
     pit_mode: str,
-    output_prefix: Path,
+    estimated_availability: Path,
+    output_prefix: Path | None,
 ) -> None:
-    """Export a month-end PIT wide values panel plus period and metadata companions."""
+    """Export a month-end PIT wide values panel plus period and metadata companions.
+
+    The default work mode reconstructs values visible at each cutoff from A/B,
+    estimated-availability terminal values, and documented/observed revisions. It
+    also writes per-cell provenance. Use strict explicitly for the A/B-only
+    audit panel.
+    """
+    if output_prefix is None:
+        output_prefix = Path(
+            "data/exports/cn_pit_work_month_end"
+            if pit_mode == "work"
+            else "data/exports/cn_pit_month_end"
+        )
     conn = _read_connection(ctx.obj["db_path"])
     try:
         paths = build_monthly_wide_snapshot(
@@ -422,9 +458,129 @@ def export_wide(
             end_date,
             country=country,
             pit_mode=pit_mode,
+            estimated_availability_path=estimated_availability,
         )
     finally:
         conn.close()
+    for label, path in paths.items():
+        click.echo(f"{label}: {path}")
+
+
+@cli.command("query-wide")
+@click.option("--as-of", required=True, help="Information cutoff T; date-only means 23:59:59.999999 Asia/Shanghai.")
+@click.option("--scope", type=click.Choice(SCOPES, case_sensitive=False), required=True)
+@click.option("--frequency", type=click.Choice(FREQUENCIES, case_sensitive=False), default="M", show_default=True)
+@click.option("--start-date", default="2005-01-01", show_default=True)
+@click.option(
+    "--long-parquet",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help="Read effective PIT intervals from this long Parquet instead of the database.",
+)
+@click.option(
+    "--estimated-availability",
+    default=DEFAULT_ESTIMATED_AVAILABILITY,
+    show_default=True,
+    type=click.Path(path_type=Path),
+    help="Wind estimated-availability sidecar used by CN queries.",
+)
+@click.option("--output-prefix", default=None, type=click.Path(path_type=Path))
+@click.pass_context
+def query_wide(
+    ctx: click.Context,
+    as_of: str,
+    scope: str,
+    frequency: str,
+    start_date: str,
+    long_parquet: Path | None,
+    estimated_availability: Path,
+    output_prefix: Path | None,
+) -> None:
+    """Export fixed-T historical macro values with A > B > Wind priority.
+
+    M returns month-end rows; Q returns quarter-end rows. Values stay on their
+    own source period. No aggregation and no forward fill are applied.
+    """
+    if long_parquet is not None:
+        result = build_as_of_wide_from_long(
+            long_parquet,
+            as_of,
+            scope,
+            start_date=start_date,
+            frequency=frequency,
+        )
+    else:
+        conn = _read_connection(ctx.obj["db_path"])
+        try:
+            result = build_as_of_wide(
+                conn,
+                as_of,
+                scope,
+                start_date=start_date,
+                frequency=frequency,
+                estimated_availability_path=estimated_availability,
+            )
+        finally:
+            conn.close()
+    prefix = output_prefix or default_output_prefix(scope, as_of, frequency)
+    paths = export_as_of_wide(result, prefix)
+    click.echo(
+        f"scope={result.scope} frequency={result.frequency} input={result.input_mode} "
+        f"as_of={result.as_of_local.isoformat()} "
+        f"rows={result.values.height} fields={result.values.width - 1}"
+    )
+    for label, path in paths.items():
+        click.echo(f"{label}: {path}")
+
+
+@cli.command("export-long")
+@click.option("--scope", type=click.Choice(LONG_SCOPES, case_sensitive=False), required=True)
+@click.option("--start-date", default="2005-01-01", show_default=True)
+@click.option("--end-date", default=None, help="Optional final data-period date.")
+@click.option(
+    "--estimated-availability",
+    default=DEFAULT_ESTIMATED_AVAILABILITY,
+    show_default=True,
+    type=click.Path(path_type=Path),
+    help="Wind estimated-availability sidecar used by CN/ALL exports.",
+)
+@click.option(
+    "--output-prefix",
+    default=None,
+    type=click.Path(path_type=Path),
+    help="Stable output prefix; defaults to data/exports/<scope>_pit_long_from_<start>.",
+)
+@click.pass_context
+def export_long(
+    ctx: click.Context,
+    scope: str,
+    start_date: str,
+    end_date: str | None,
+    estimated_availability: Path,
+    output_prefix: Path | None,
+) -> None:
+    """Export all effective PIT value events; no T or M/Q loop is required.
+
+    The table contains both monthly and quarterly source frequencies. Filter an
+    arbitrary T with valid_from <= T and (valid_to is null or T < valid_to).
+    """
+    conn = _read_connection(ctx.obj["db_path"])
+    try:
+        result = build_pit_long(
+            conn,
+            scope,
+            start_date=start_date,
+            end_date=end_date,
+            estimated_availability_path=estimated_availability,
+        )
+    finally:
+        conn.close()
+    prefix = output_prefix or default_long_output_prefix(scope, start_date)
+    paths = export_pit_long(result, prefix)
+    click.echo(
+        f"scope={result.scope} rows={result.events.height} "
+        f"start_date={result.start_date} end_date={result.end_date or 'latest'}"
+    )
     for label, path in paths.items():
         click.echo(f"{label}: {path}")
 

@@ -96,3 +96,16 @@ US_MONEY_M2: {country: US, source: RTDSM, frequency: M, unit: bn_usd_sa, pit_req
 US_REAL_CONSUMPTION: {country: US, source: RTDSM, frequency: Q, unit: bn_usd_sa_ar, pit_required: true}
 US_REAL_INCOME: {country: US, source: RTDSM, frequency: Q, unit: bn_usd_sa_ar, pit_required: true}
 US_LABOR_FORCE: {country: US, source: RTDSM, frequency: M, unit: k_persons, pit_required: true}
+
+# United States - Treasury official daily curve, monthly final trading day
+US_TREASURY_YIELD_2Y: {country: US, source: USTREASURY, frequency: M, unit: pct, pit_required: true}
+US_TREASURY_YIELD_10Y: {country: US, source: USTREASURY, frequency: M, unit: pct, pit_required: true}
+US_TREASURY_YIELD_30Y: {country: US, source: USTREASURY, frequency: M, unit: pct, pit_required: true}
+
+# China - ChinaBond official yield curves (monthly final trading day)
+CN_CGB_YTM_10Y: {country: CN, source: CHINABOND, frequency: M, unit: pct, pit_required: true}
+CN_CGB_TERM_SPREAD_10Y_1Y: {country: CN, source: CHINABOND, frequency: M, unit: pct_points, pit_required: true}
+CN_AAA_CP_NOTE_CREDIT_SPREAD_3Y: {country: CN, source: CHINABOND, frequency: M, unit: pct_points, pit_required: true}
+
+# Global - IMF current-history commodity proxy; estimated visibility stays PIT_D
+GLB_IMF_ALL_COMMODITY_PRICE_INDEX: {country: GLB, source: IMF, frequency: M, unit: index_2016_100, pit_required: false}

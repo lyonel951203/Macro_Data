@@ -1,0 +1,92 @@
+# PIT_work 第3步：work 模式导出验收
+
+strict 形状: (259, 48); work 形状: (259, 48); provenance 形状: (259, 48)
+
+## 一致性
+
+prov 为 work_A/work_B 的格子与严格表不一致的数量：**0**（必须为 0）
+
+prov 为 work_wind/work_wind_revision/work_safe_d 且**更新了严格表陈旧值**的格子：**2452**（设计内行为：work 规则为最新可见期优先，严格表保留陈旧官方值）
+
+## 覆盖
+
+- 总格子数：12173
+- 严格表非空：8247（67.7%）
+- work 表非空：10683（87.8%）
+- 本模式新增填充：**2436** 格
+
+## 来源标签分布（全表）
+
+| 标签 | 格数 |
+|---|---:|
+| work_A | 4021 |
+| work_B | 1746 |
+| work_safe_d | 318 |
+| work_wind | 4598 |
+
+## 各序列新增填充格数（严格表原本为空）
+
+| 序列 | 新增格数 |
+|---|---:|
+| CN_TSF_STOCK | 245 |
+| CN_TSF_STOCK_YOY | 245 |
+| CN_NEW_HOME_SALES_AREA_YTD_YOY | 204 |
+| CN_NEW_HOME_SALES_VALUE_YTD_YOY | 204 |
+| CN_PMI_NONMANUFACTURING | 132 |
+| CN_MANUFACTURING_INVESTMENT_YTD_YOY | 106 |
+| CN_FAI_YTD_YOY | 103 |
+| CN_GDP_YOY | 96 |
+| CN_INFRA_INVESTMENT_YTD_YOY | 89 |
+| CN_TSF_FLOW_YTD | 83 |
+| CN_FX_RESERVE_USD | 69 |
+| CN_PMI_EMPLOYMENT | 54 |
+| CN_PMI_MANUFACTURING | 54 |
+| CN_PMI_NEW_ORDERS | 54 |
+| CN_PMI_PRODUCTION | 54 |
+| CN_PMI_RAW_MATERIAL_INVENTORY | 54 |
+| CN_PMI_SUPPLIER_DELIVERY | 54 |
+| CN_NEW_RMB_DEPOSITS_YTD | 52 |
+| CN_NEW_RMB_LOANS_YTD | 52 |
+| CN_M0_YOY | 51 |
+| CN_RMB_DEPOSIT_BAL_YOY | 51 |
+| CN_RMB_LOAN_BAL_YOY | 51 |
+| CN_M1_YOY | 49 |
+| CN_REAL_ESTATE_INVESTMENT_YTD_YOY | 45 |
+| CN_BANK_FX_NET_SETTLEMENT_USD | 37 |
+| CN_BANK_FX_SALES_USD | 37 |
+| CN_BANK_FX_SETTLEMENT_USD | 37 |
+| CN_M2_YOY | 28 |
+| CN_CROSS_BORDER_NET_RECEIPTS_USD | 15 |
+| CN_CROSS_BORDER_PAYMENTS_USD | 15 |
+| CN_CROSS_BORDER_RECEIPTS_USD | 15 |
+| CN_RETAIL_SALES_YOY | 1 |
+
+## 各序列升级格数（Wind/SAFE 终值替换陈旧官方值）
+
+| 序列 | 升级格数 |
+|---|---:|
+| CN_M2_YOY | 204 |
+| CN_NEW_RMB_DEPOSITS_YTD | 200 |
+| CN_NEW_RMB_LOANS_YTD | 196 |
+| CN_RETAIL_SALES_YOY | 196 |
+| CN_RMB_DEPOSIT_BAL_YOY | 189 |
+| CN_M1_YOY | 187 |
+| CN_M0_YOY | 186 |
+| CN_RMB_LOAN_BAL_YOY | 182 |
+| CN_INDUSTRIAL_VALUE_ADDED_YOY | 176 |
+| CN_TSF_FLOW_YTD | 168 |
+| CN_CPI_YOY | 138 |
+| CN_PPI_YOY | 134 |
+| CN_MANUFACTURING_INVESTMENT_YTD_YOY | 94 |
+| CN_FX_RESERVE_USD | 72 |
+| CN_REAL_ESTATE_INVESTMENT_YTD_YOY | 55 |
+| CN_FAI_YTD_YOY | 49 |
+| CN_CROSS_BORDER_NET_RECEIPTS_USD | 5 |
+| CN_CROSS_BORDER_PAYMENTS_USD | 5 |
+| CN_CROSS_BORDER_RECEIPTS_USD | 5 |
+| CN_INFRA_INVESTMENT_YTD_YOY | 3 |
+| CN_BANK_FX_NET_SETTLEMENT_USD | 2 |
+| CN_BANK_FX_SALES_USD | 2 |
+| CN_BANK_FX_SETTLEMENT_USD | 2 |
+| CN_NEW_HOME_SALES_AREA_YTD_YOY | 1 |
+| CN_NEW_HOME_SALES_VALUE_YTD_YOY | 1 |

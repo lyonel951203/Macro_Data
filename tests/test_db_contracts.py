@@ -111,6 +111,73 @@ def test_loose_excludes_first_seen_only_grade_d():
     assert insert_observations(conn, [later_same_value]).unchanged == 1
 
 
+def test_pit_d_available_at_before_first_seen_requires_documented_marker():
+    conn = get_connection(":memory:")
+    base = observation(
+        pit_grade="D",
+        release_at=None,
+        first_seen_at="2026-09-15 10:00:00+08:00",
+        available_at="2025-01-18 00:00:00+08:00",
+        retrieved_at="2026-09-15 10:00:00+08:00",
+    )
+    # Unmarked D rows keep the archival convention: reject early available_at.
+    with pytest.raises(DataContractError, match="cannot precede first_seen_at"):
+        insert_observations(conn, [dict(base, release_date_source="first_seen_only")])
+    with pytest.raises(DataContractError, match="cannot precede first_seen_at"):
+        insert_observations(conn, [dict(base, release_date_source=None)])
+
+    # Documented Wind revision snapshots may anchor available_at to the version date.
+    marked = dict(base, release_date_source="wind_revision_snapshot_20250118")
+    assert insert_observations(conn, [marked]).inserted == 1
+    assert get_snapshot(conn, "2025-01-17 23:59:59+08:00", pit_mode="observed").height == 0
+    assert get_snapshot(conn, "2025-01-18 00:00:00+08:00", pit_mode="observed").height == 1
+    assert get_snapshot(conn, "2026-01-01 00:00:00+08:00", pit_mode="strict").height == 0
+    assert get_snapshot(conn, "2026-01-01 00:00:00+08:00", pit_mode="loose").height == 0
+
+
+def test_documented_wind_revision_survives_same_value_terminal_snapshot():
+    conn = get_connection(":memory:")
+    terminal = observation(
+        source="WIND",
+        canonical_series_id="CN_M1_YOY",
+        source_series_id="M0001383",
+        pit_grade="D",
+        release_at=None,
+        release_date_source=None,
+        value=3.3,
+        first_seen_at="2026-09-17 14:00:00+08:00",
+        available_at="2026-09-17 14:00:00+08:00",
+        retrieved_at="2026-09-17 14:00:00+08:00",
+    )
+    insert_observations(conn, [terminal])
+    revision = dict(terminal)
+    revision.update(
+        release_date_source="wind_revision_snapshot_20250214",
+        first_seen_at="2026-09-17 14:15:00+08:00",
+        available_at="2025-02-14 00:00:00+08:00",
+        retrieved_at="2026-09-17 14:15:00+08:00",
+        revision_type="revision",
+        revision_delta=-2.6,
+        raw_sha256="m1-revision",
+    )
+    stats = insert_observations(conn, [revision])
+    assert stats.inserted == 1
+    assert stats.revisions == 1
+    assert insert_observations(conn, [revision]).unchanged == 1
+    rows = conn.execute(
+        """
+        select value, vintage_no, revision_type, revision_delta,
+               release_date_source
+        from observation_vintage
+        order by vintage_no
+        """
+    ).fetchall()
+    assert rows == [
+        (3.3, 0, "initial", None, None),
+        (3.3, 1, "revision", -2.6, "wind_revision_snapshot_20250214"),
+    ]
+
+
 def test_invalid_pit_mode_and_parameterized_country():
     conn = get_connection(":memory:")
     insert_observations(conn, [observation()])

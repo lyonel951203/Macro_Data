@@ -137,33 +137,16 @@ class NBSSource(BaseSource):
         # Older titles include the acronym in parentheses. Dispatch from the
         # title so a GDP reference in another release's footnotes cannot route
         # the whole article to the quarterly parser.
-        if re.search(r"(?:国内生产总值(?:[（(]GDP[）)])?|GDP)初步核算", title, re.IGNORECASE):
+        if "初步核算" in title and re.search(r"GDP|国内生产总值", title, re.IGNORECASE):
             return self.parse_gdp_release(content, artifact)
         return self.parse_news_release(content, artifact)
 
     def parse_gdp_release(self, content: bytes, artifact: RawArtifact) -> list[dict]:
         soup, text = html_text(content)
         title = soup.title.get_text(" ", strip=True) if soup.title else text[:200]
-        quarter_names = {"一": 1, "二": 2, "三": 3, "四": 4}
-        match = re.search(r"(20\d{2})年([一二三四])季度", title)
-        if not match:
-            raise DataContractError("NBS GDP release title has no quarter")
-        year, quarter = int(match.group(1)), quarter_names[match.group(2)]
+        from .nbs_gdp import current_gdp
+        year, quarter, value = current_gdp(soup)
         release = extract_release_evidence(soup, text, artifact.retrieved_at)
-        value = None
-        for table in soup.find_all("table"):
-            for tr in table.find_all("tr"):
-                cells = [" ".join(cell.get_text(" ", strip=True).split()) for cell in tr.find_all(["th", "td"])]
-                if cells and cells[0].strip().upper() == "GDP" and len(cells) >= 3:
-                    try:
-                        value = float(cells[-1] if len(cells) == 3 else cells[-2])
-                    except ValueError:
-                        continue
-                    break
-            if value is not None:
-                break
-        if value is None:
-            raise DataContractError("NBS GDP current-quarter YoY cell not found")
         rows = [
             make_quarterly_observation(
                 source=self.source,
@@ -176,7 +159,7 @@ class NBSSource(BaseSource):
                 value=value,
                 artifact=artifact,
                 release=release,
-                parser_version="nbs_gdp_release_v1",
+                parser_version="nbs_gdp_explicit_quarter_v3",
             )
         ]
         self.validate_row_count(rows)
@@ -199,7 +182,8 @@ class NBSSource(BaseSource):
             return rows
         year, month = _news_period(soup, text, release)
         title = soup.title.get_text(" ", strip=True) if soup.title else ""
-        is_economy = any(term in title for term in ("国民经济", "经济运行")) and "答记者问" not in title
+        is_q_and_a = "答记者问" in title
+        is_economy = any(term in title for term in ("国民经济", "经济运行")) and not is_q_and_a
         article = soup.select_one(".txt-content") or soup.select_one(".TRS_Editor") or soup.select_one(".trs_editor")
         parse_text = re.sub(r"\s+", "", article.get_text(" ", strip=True) if article else text)
         table_values = economy_table_values(article or soup, month, year=year) if is_economy else {}
@@ -211,7 +195,10 @@ class NBSSource(BaseSource):
             ("CN_RETAIL_SALES_YOY", "RETAIL_SALES_YOY", "社会消费品零售总额同比", "pct_yoy", r"(?<![-—–])\d{1,2}月份，社会消费品零售总额[\d,]+亿元，同比(?P<direction>增长|下降)(?P<value>[\d.]+)[%％]"),
             ("CN_FAI_YTD_YOY", "FAI_YTD_YOY", "固定资产投资累计同比", "pct_yoy", r"全国固定资产投资（不含农户）[\d,]+亿元，同比(?P<direction>增长|下降)(?P<value>[\d.]+)[%％]"),
             ("CN_INFRA_INVESTMENT_YTD_YOY", "INFRA_INVESTMENT_YTD_YOY", "基础设施投资累计同比", "pct_yoy", r"基础设施投资同比(?P<direction>增长|下降)(?P<value>[\d.]+)[%％]"),
-            ("CN_MANUFACTURING_INVESTMENT_YTD_YOY", "MANUFACTURING_INVESTMENT_YTD_YOY", "制造业投资累计同比", "pct_yoy", r"制造业投资(?:同比)?(?P<direction>增长|下降)(?P<value>[\d.]+)[%％]"),
+            # Require a non-Chinese boundary so a sub-industry such as
+            # "锂离子电池制造业投资增长20.6%" cannot become the aggregate
+            # manufacturing-investment series.
+            ("CN_MANUFACTURING_INVESTMENT_YTD_YOY", "MANUFACTURING_INVESTMENT_YTD_YOY", "制造业投资累计同比", "pct_yoy", r"(?<![\u4e00-\u9fff])制造业投资(?:同比)?(?P<direction>增长|下降)(?P<value>[\d.]+)[%％]"),
             ("CN_REAL_ESTATE_INVESTMENT_YTD_YOY", "REAL_ESTATE_INVESTMENT_YTD_YOY", "房地产开发投资累计同比", "pct_yoy", r"房地产开发投资(?:同比)?(?P<direction>增长|下降)(?P<value>[\d.]+)[%％]"),
             ("CN_NEW_HOME_SALES_AREA_YTD_YOY", "NEW_HOME_SALES_AREA_YTD_YOY", "新建商品房销售面积累计同比", "pct_yoy", r"新建商品房销售面积[\d,]+万平方米，同比(?P<direction>增长|下降)(?P<value>[\d.]+)[%％]"),
             ("CN_NEW_HOME_SALES_VALUE_YTD_YOY", "NEW_HOME_SALES_VALUE_YTD_YOY", "新建商品房销售额累计同比", "pct_yoy", r"新建商品房销售额[\d,]+亿元，(?:同比)?(?P<direction>增长|下降)(?P<value>[\d.]+)[%％]"),
@@ -229,7 +216,7 @@ class NBSSource(BaseSource):
         ]
         # In a combined release, an unqualified first match can be a YTD rate.
         # Fallbacks must explicitly name this month's observation, including CPI.
-        monthly_prefix = fr"(?<![\d\-—–至]){month}月份?[，,](?:全国)?"
+        monthly_prefix = fr"(?<![\d年\-—–至]){month}月份?[，,](?:全国)?"
         growth = r"(?P<direction>增长|下降)(?P<value>[\d.]+)[%％]"
         price_change = r"(?P<direction>上涨|上升|下降)(?P<value>[\d.]+)[%％]"
         economy_patterns = {
@@ -240,8 +227,19 @@ class NBSSource(BaseSource):
             "CN_PPI_YOY": monthly_prefix + r"(?:工业生产者出厂价格|工业品出厂价格)同比" + price_change,
             "CN_URBAN_SURVEYED_UNEMPLOYMENT": monthly_prefix + r"城镇调查失业率为(?P<value>[\d.]+)[%％]",
         }
+        q_and_a_patterns = dict(economy_patterns)
+        # Q&A prose may omit the word "同比" after an explicitly named
+        # current month. Keep the month anchor, which prevents an older or
+        # comparative price number elsewhere in the interview from matching.
+        q_and_a_patterns["CN_PPI_YOY"] = (
+            monthly_prefix
+            + r"[^。；;]{0,80}?(?:工业生产者出厂价格|工业品出厂价格)(?:同比)?"
+            + price_change
+        )
         for canonical, source_id, name, unit, pattern in patterns:
-            if is_economy and canonical in economy_patterns:
+            if is_q_and_a and canonical in q_and_a_patterns:
+                pattern = q_and_a_patterns[canonical]
+            elif is_economy and canonical in economy_patterns:
                 pattern = economy_patterns[canonical]
             if is_economy and canonical == "CN_INFRA_INVESTMENT_YTD_YOY":
                 pattern = r"(?:基础设施投资同比|分领域看[，,]基础设施投资(?:同比)?)" + growth
@@ -276,7 +274,7 @@ class NBSSource(BaseSource):
                     value=value,
                     artifact=artifact,
                     release=release,
-                    parser_version="nbs_news_release_v4",
+                    parser_version="nbs_news_release_v5",
                     seasonal_adjustment="SA" if canonical.startswith("CN_PMI_") else "NSA",
                 )
             )
@@ -308,7 +306,7 @@ class NBSSource(BaseSource):
                     value=0.0,
                     artifact=artifact,
                     release=release,
-                    parser_version="nbs_news_release_v4",
+                    parser_version="nbs_news_release_v5",
                     seasonal_adjustment="NSA",
                 )
             )

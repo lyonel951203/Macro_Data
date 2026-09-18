@@ -1,0 +1,54 @@
+﻿version: 1
+run_mode: daily_light
+
+# Daily global update: recent OECD periods and conditional file refreshes.
+sources:
+  OECD:
+    enabled: true
+    job_manifests:
+      - config/oecd_core_part1.yml
+      - config/oecd_core_part2.yml
+    recent_lookback_months: 18
+    skip_unchanged_fetch: true
+  RTDSM:
+    enabled: true
+    job_manifest: config/rtdsm_core.yml
+    skip_unchanged_fetch: true
+  CHINABOND:
+    enabled: true
+    history_start: 2006-03-01
+    daily_lookback_days: 75
+  USTREASURY:
+    enabled: true
+    history_start: 2005-01-01
+    daily_lookback_days: 75
+  IMF:
+    enabled: true
+    url: "https://www.imf.org/-/media/files/research/commodityprices/monthly/external-data.xlsx"
+    skip_unchanged_fetch: true
+
+state_path: data/daily_global_update/state.json
+lock_path: data/daily_web_update/run.lock
+report_dir: reports/v2/daily_global_update
+logs_dir: logs/daily_global_update
+
+semantic_audit:
+  enabled: true
+  provider: deepseek
+  base_url: https://api.deepseek.com
+  model: deepseek-flash
+  api_key_env: DEEPSEEK_API_KEY
+  max_candidates: 24
+  max_excerpt_chars: 1400
+  max_output_tokens: 3000
+  timeout_seconds: 120
+  api_attempts: 2
+  report_dir: reports/v2/deepseek_daily_audit/global
+
+email_notification:
+  enabled: true
+  recipient: 718711226@qq.com
+  label: Global daily update
+  config_file: emailconfig.ini
+  timeout_seconds: 60
+  report_dir: reports/v2/email_delivery/global_daily

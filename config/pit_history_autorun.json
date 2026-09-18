@@ -1,11 +1,164 @@
 {
-  "version":1,
-  "start_year":2005,
-  "end_date":"2026-07-31",
-  "max_calendar_days":7,
-  "terms":["采购经理指数","非制造业","国民经济","经济运行","国内生产总值","固定资产投资","房地产"],
-  "scope":"Frozen 34-field plan. NBS discovery and independently verified gap insertion are automated. PBOC/SAFE require further source/definition adapters and remain explicitly pending.",
-  "export_every_inserted_articles":10,
-  "blocked_sources":{"PBOC":"Official catalog robots restrictions; government-reprint adapter and old units/definitions pending", "SAFE":"Historical own-bank/client scope and ordered monthly-flow adapter pending"},
-  "stop_file":"data/history_backfill/pit_history_autorun.stop"
+  "version": 1,
+  "start_year": 2005,
+  "end_date": "2026-07-31",
+  "max_calendar_days": 7,
+  "terms": [
+    "采购经理指数",
+    "非制造业",
+    "国民经济",
+    "经济运行",
+    "国内生产总值",
+    "固定资产投资",
+    "房地产"
+  ],
+  "scope": "Frozen 34-field plan. NBS discovery and independently verified gap insertion are automated. PBOC/SAFE require further source/definition adapters and remain explicitly pending.",
+  "export_every_inserted_articles": 10,
+  "blocked_sources": {
+    "PBOC": "Official catalog robots restrictions; government-reprint adapter and old units/definitions pending",
+    "SAFE": "Historical own-bank/client scope and ordered monthly-flow adapter pending"
+  },
+  "stop_file": "data/history_backfill/pit_history_autorun.stop",
+  "supplemental_jobs": [
+    {
+      "name": "2018_2_q1",
+      "parent": "2018_2",
+      "term": "国民经济",
+      "start_date": "2018-01-01",
+      "end_date": "2018-03-31"
+    },
+    {
+      "name": "2018_2_q2",
+      "parent": "2018_2",
+      "term": "国民经济",
+      "start_date": "2018-04-01",
+      "end_date": "2018-06-30"
+    },
+    {
+      "name": "2018_2_q3",
+      "parent": "2018_2",
+      "term": "国民经济",
+      "start_date": "2018-07-01",
+      "end_date": "2018-09-30"
+    },
+    {
+      "name": "2018_2_q4",
+      "parent": "2018_2",
+      "term": "国民经济",
+      "start_date": "2018-10-01",
+      "end_date": "2018-12-31"
+    },
+    {
+      "name": "2018_3_q1",
+      "parent": "2018_3",
+      "term": "经济运行",
+      "start_date": "2018-01-01",
+      "end_date": "2018-03-31"
+    },
+    {
+      "name": "2018_3_q2",
+      "parent": "2018_3",
+      "term": "经济运行",
+      "start_date": "2018-04-01",
+      "end_date": "2018-06-30"
+    },
+    {
+      "name": "2018_3_q3",
+      "parent": "2018_3",
+      "term": "经济运行",
+      "start_date": "2018-07-01",
+      "end_date": "2018-09-30"
+    },
+    {
+      "name": "2018_3_q4",
+      "parent": "2018_3",
+      "term": "经济运行",
+      "start_date": "2018-10-01",
+      "end_date": "2018-12-31"
+    },
+    {
+      "name": "2019_2_q1",
+      "parent": "2019_2",
+      "term": "国民经济",
+      "start_date": "2019-01-01",
+      "end_date": "2019-03-31"
+    },
+    {
+      "name": "2019_2_q2",
+      "parent": "2019_2",
+      "term": "国民经济",
+      "start_date": "2019-04-01",
+      "end_date": "2019-06-30"
+    },
+    {
+      "name": "2019_2_q3",
+      "parent": "2019_2",
+      "term": "国民经济",
+      "start_date": "2019-07-01",
+      "end_date": "2019-09-30"
+    },
+    {
+      "name": "2019_2_q4",
+      "parent": "2019_2",
+      "term": "国民经济",
+      "start_date": "2019-10-01",
+      "end_date": "2019-12-31"
+    },
+    {
+      "name": "2019_3_q1",
+      "parent": "2019_3",
+      "term": "经济运行",
+      "start_date": "2019-01-01",
+      "end_date": "2019-03-31"
+    },
+    {
+      "name": "2019_3_q2",
+      "parent": "2019_3",
+      "term": "经济运行",
+      "start_date": "2019-04-01",
+      "end_date": "2019-06-30"
+    },
+    {
+      "name": "2019_3_q3",
+      "parent": "2019_3",
+      "term": "经济运行",
+      "start_date": "2019-07-01",
+      "end_date": "2019-09-30"
+    },
+    {
+      "name": "2019_3_q4",
+      "parent": "2019_3",
+      "term": "经济运行",
+      "start_date": "2019-10-01",
+      "end_date": "2019-12-31"
+    },
+    {
+      "name": "2022_3_q1",
+      "parent": "2022_3",
+      "term": "经济运行",
+      "start_date": "2022-01-01",
+      "end_date": "2022-03-31"
+    },
+    {
+      "name": "2022_3_q2",
+      "parent": "2022_3",
+      "term": "经济运行",
+      "start_date": "2022-04-01",
+      "end_date": "2022-06-30"
+    },
+    {
+      "name": "2022_3_q3",
+      "parent": "2022_3",
+      "term": "经济运行",
+      "start_date": "2022-07-01",
+      "end_date": "2022-09-30"
+    },
+    {
+      "name": "2022_3_q4",
+      "parent": "2022_3",
+      "term": "经济运行",
+      "start_date": "2022-10-01",
+      "end_date": "2022-12-31"
+    }
+  ]
 }

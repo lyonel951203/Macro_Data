@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import hashlib
 import math
-import os
 import re
 from datetime import date, datetime
 from pathlib import Path
@@ -12,6 +11,7 @@ from urllib.parse import urlparse, urlunparse
 from .config import source_policy
 from .db import get_connection, record_crawl_events
 from .errors import CrawlSafetyError, DataContractError
+from .fileio import atomic_write_text
 from .http import PoliteHttpClient
 from .index_discovery import CandidateUrl, _title_period, write_candidates
 from .sources.base import decode_content
@@ -301,10 +301,7 @@ def _load_state(path: Path, terms: list[str], start_date: str, end_date: str) ->
 
 def _save_state(path: Path, state: dict) -> None:
     state["updated_at"] = _now_iso()
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
-    os.replace(temporary, path)
+    atomic_write_text(path, json.dumps(state, ensure_ascii=False, indent=2))
 
 
 def _record_events(db_path: Path, client: PoliteHttpClient, offset: int) -> int:
