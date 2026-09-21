@@ -27,7 +27,8 @@ These reference the active source manifests:
 ## Shared production contracts
 
 - `sources.yml` — source policy and network settings.
-- `series_registry.yml` — canonical series registry.
+- `series_registry.yml` — canonical series registry; `active: false` retires a
+  field from user-facing queries and exports without deleting historical rows.
 - `estimated_availability_rules_v1.csv` — virtual publication rules.
 - `estimated_availability_overrides_v1.csv` — reviewed row-level overrides.
 - `acceptance.yml` — acceptance thresholds.

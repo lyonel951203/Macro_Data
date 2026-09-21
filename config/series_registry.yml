@@ -47,11 +47,11 @@ CN_IMPORT_CNY: {country: CN, source: CUSTOMS, frequency: M, unit: bn_cny, pit_re
 CN_TRADE_BALANCE_CNY: {country: CN, source: CUSTOMS, frequency: M, unit: bn_cny, pit_required: true}
 CN_EXPORT_CNY_YOY: {country: CN, source: CUSTOMS, frequency: M, unit: pct_yoy, pit_required: true}
 CN_IMPORT_CNY_YOY: {country: CN, source: CUSTOMS, frequency: M, unit: pct_yoy, pit_required: true}
-CN_EXPORT_USD: {country: CN, source: CUSTOMS, frequency: M, unit: bn_usd, pit_required: true}
-CN_IMPORT_USD: {country: CN, source: CUSTOMS, frequency: M, unit: bn_usd, pit_required: true}
-CN_TRADE_BALANCE_USD: {country: CN, source: CUSTOMS, frequency: M, unit: bn_usd, pit_required: true}
-CN_EXPORT_USD_YOY: {country: CN, source: CUSTOMS, frequency: M, unit: pct_yoy, pit_required: true}
-CN_IMPORT_USD_YOY: {country: CN, source: CUSTOMS, frequency: M, unit: pct_yoy, pit_required: true}
+CN_EXPORT_USD: {country: CN, source: CUSTOMS, frequency: M, unit: bn_usd, pit_required: false, active: false}
+CN_IMPORT_USD: {country: CN, source: CUSTOMS, frequency: M, unit: bn_usd, pit_required: false, active: false}
+CN_TRADE_BALANCE_USD: {country: CN, source: CUSTOMS, frequency: M, unit: bn_usd, pit_required: false, active: false}
+CN_EXPORT_USD_YOY: {country: CN, source: CUSTOMS, frequency: M, unit: pct_yoy, pit_required: false, active: false}
+CN_IMPORT_USD_YOY: {country: CN, source: CUSTOMS, frequency: M, unit: pct_yoy, pit_required: false, active: false}
 
 # China - Ministry of Finance
 CN_GENERAL_BUDGET_REVENUE_YTD_YOY: {country: CN, source: MOF, frequency: M, unit: pct_yoy, pit_required: true}

@@ -18,7 +18,7 @@ thresholds:
   us_rtdsm_samples_per_series: 100
   raw_reference_rate: 0.999
 
-china_required_sources: [NBS, PBOC, CUSTOMS, MOF, SAFE]
+china_required_sources: [NBS, PBOC, MOF, SAFE]
 
 china_structural_missing_months:
   MOF: [1]
@@ -36,7 +36,5 @@ china_required_series:
   - CN_M2_YOY
   - CN_RMB_LOAN_BAL_YOY
   - CN_TSF_STOCK
-  - CN_EXPORT_USD_YOY
-  - CN_IMPORT_USD_YOY
   - CN_GENERAL_BUDGET_REVENUE_YTD_YOY
   - CN_FX_RESERVE_USD

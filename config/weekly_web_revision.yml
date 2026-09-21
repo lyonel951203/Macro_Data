@@ -33,7 +33,7 @@ sources:
     independent_indexes: true
     independent_candidates: true
   CUSTOMS:
-    enabled: true
+    enabled: false
     index_manifests:
       - config/customs_english_index_urls.txt
     # Weekly audit broadens the same official-only revision scan.

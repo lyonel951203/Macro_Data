@@ -1,10 +1,10 @@
-# 当前55个宏观字段：英文、中文、覆盖时间与更新方式
+# 当前50个宏观字段：英文、中文、覆盖时间与更新方式
 
-生成时间：2026-09-17T13:46:50.212510+08:00。
+生成时间：2026-09-21T21:59:35.862139+08:00。
 
 开始时间和结束时间均指字段的原始数据期，不是宽表观察日期。结束时间只统计生成时点已经满足PIT可见条件的记录；库内最晚数据期另列，可能包含尚未到可用日的保守版本。
 
-中国官方网页任务在Asia/Shanghai 22:00维护NBS、PBOC、MOF、SAFE和OECD的47个字段；00:00全球任务维护ChinaBond 3个市场字段。其余5个美元外贸字段保留Wind手工导入，按当前决定不接海关自动更新。
+中国官方网页任务在Asia/Shanghai 22:00维护NBS、PBOC、MOF、SAFE和OECD；00:00全球任务维护ChinaBond 3个市场字段。海关美元出口、进口、差额及进出口同比5项已停用，不进入每日/周度任务、PIT查询和当前字段清单；既有底层记录仅为历史留存。
 
 ## Reviewed PIT_D fallback coverage
 
@@ -24,19 +24,19 @@ The 22:00 task also polls EASTMONEY_MACRO (11 fields) and SINA_MACRO (16 fields)
 | `CN_MANUFACTURING_INVESTMENT_YTD_YOY` | Manufacturing Investment YTD YoY | 制造业投资累计同比 | 月度 | 2005-02 | 2026-08 | 2026-08 | NBS,SINA_MACRO,WIND |
 | `CN_NEW_HOME_SALES_AREA_YTD_YOY` | Commodity Housing Sales Area YTD YoY | 商品房销售面积累计同比 | 月度 | 2005-02 | 2026-08 | 2026-08 | NBS,WIND |
 | `CN_NEW_HOME_SALES_VALUE_YTD_YOY` | Commodity Housing Sales Value YTD YoY | 商品房销售额累计同比 | 月度 | 2005-02 | 2026-08 | 2026-08 | NBS,WIND |
-| `CN_PMI_COMPOSITE` | Composite PMI Output Index | 综合PMI产出指数 | 月度 | 2018-01 | 2026-08 | 2026-08 | NBS |
+| `CN_PMI_COMPOSITE` | Composite PMI Output Index | 综合PMI产出指数 | 月度 | 2018-01 | 2026-08 | 2026-08 | NBS,WIND |
 | `CN_PMI_EMPLOYMENT` | Manufacturing PMI Employment | 制造业PMI从业人员指数 | 月度 | 2005-01 | 2026-08 | 2026-08 | NBS,SINA_MACRO,WIND |
-| `CN_PMI_MANUFACTURING` | Manufacturing PMI | 制造业采购经理指数 | 月度 | 2005-01 | 2026-08 | 2026-08 | EASTMONEY_MACRO,NBS,SINA_MACRO,WIND |
-| `CN_PMI_NEW_ORDERS` | Manufacturing PMI New Orders | 制造业PMI新订单指数 | 月度 | 2005-01 | 2026-08 | 2026-08 | NBS,SINA_MACRO,WIND |
+| `CN_PMI_MANUFACTURING` | Manufacturing PMI | 制造业采购经理指数 | 月度 | 2005-01 | 2026-08 | 2026-08 | CFLP,EASTMONEY_MACRO,NBS,SINA_MACRO,WIND |
+| `CN_PMI_NEW_ORDERS` | Manufacturing PMI New Orders | 制造业PMI新订单指数 | 月度 | 2005-01 | 2026-08 | 2026-08 | CFLP,NBS,SINA_MACRO,WIND |
 | `CN_PMI_NONMANUFACTURING` | Non-Manufacturing Business Activity Index | 非制造业商务活动指数 | 月度 | 2007-01 | 2026-08 | 2026-08 | EASTMONEY_MACRO,NBS,WIND |
-| `CN_PMI_PRODUCTION` | Manufacturing PMI Production | 制造业PMI生产指数 | 月度 | 2005-01 | 2026-08 | 2026-08 | NBS,SINA_MACRO,WIND |
+| `CN_PMI_PRODUCTION` | Manufacturing PMI Production | 制造业PMI生产指数 | 月度 | 2005-01 | 2026-08 | 2026-08 | CFLP,NBS,SINA_MACRO,WIND |
 | `CN_PMI_RAW_MATERIAL_INVENTORY` | Manufacturing PMI Raw Material Inventory | 制造业PMI原材料库存指数 | 月度 | 2005-01 | 2026-08 | 2026-08 | NBS,SINA_MACRO,WIND |
 | `CN_PMI_SUPPLIER_DELIVERY` | Manufacturing PMI Supplier Delivery Time | 制造业PMI供应商配送时间指数 | 月度 | 2005-01 | 2026-08 | 2026-08 | NBS,SINA_MACRO,WIND |
 | `CN_PPI_YOY` | Producer Price Index YoY | 工业生产者出厂价格指数同比 | 月度 | 2005-01 | 2026-08 | 2026-08 | EASTMONEY_MACRO,NBS,WIND |
 | `CN_REAL_ESTATE_INVESTMENT_YTD_YOY` | Real Estate Development Investment YTD YoY | 房地产开发投资累计同比 | 月度 | 2005-02 | 2026-08 | 2026-08 | NBS,SINA_MACRO,WIND |
 | `CN_RETAIL_SALES_YOY` | Retail Sales YoY | 社会消费品零售总额同比 | 月度 | 2005-01 | 2026-08 | 2026-08 | EASTMONEY_MACRO,NBS,SINA_MACRO,WIND |
-| `CN_SERVICE_PRODUCTION_YOY` | Service Production Index YoY | 服务业生产指数同比 | 月度 | 2017-03 | 2026-08 | 2026-08 | NBS |
-| `CN_URBAN_SURVEYED_UNEMPLOYMENT` | Urban Surveyed Unemployment Rate | 全国城镇调查失业率 | 月度 | 2018-01 | 2026-08 | 2026-08 | NBS |
+| `CN_SERVICE_PRODUCTION_YOY` | Service Production Index YoY | 服务业生产指数同比 | 月度 | 2017-03 | 2026-08 | 2026-08 | NBS,WIND |
+| `CN_URBAN_SURVEYED_UNEMPLOYMENT` | Urban Surveyed Unemployment Rate | 全国城镇调查失业率 | 月度 | 2018-01 | 2026-08 | 2026-08 | NBS,WIND |
 
 ## PBOC / 中国人民银行（10项）
 
@@ -61,13 +61,13 @@ The 22:00 task also polls EASTMONEY_MACRO (11 fields) and SINA_MACRO (16 fields)
 
 | Field code | English | 中文 | 频率 | 开始时间 | 当前PIT可见结束时间 | 库内最晚期 | 当前入库来源 |
 |---|---|---|---|---:|---:|---:|---|
-| `CN_GENERAL_BUDGET_EXPENDITURE_YTD_YOY` | General Public Budget Expenditure YTD YoY | 一般公共预算支出累计同比 | 月度 | 2008-08 | 2026-07 | 2026-07 | MOF |
-| `CN_GENERAL_BUDGET_REVENUE_YTD_YOY` | General Public Budget Revenue YTD YoY | 一般公共预算收入累计同比 | 月度 | 2008-08 | 2026-07 | 2026-07 | EASTMONEY_MACRO,MOF |
-| `CN_GOV_FUND_EXPENDITURE_YTD_YOY` | Government Fund Budget Expenditure YTD YoY | 政府性基金预算支出累计同比 | 月度 | 2012-09 | 2026-07 | 2026-07 | MOF |
-| `CN_GOV_FUND_REVENUE_YTD_YOY` | Government Fund Budget Revenue YTD YoY | 政府性基金预算收入累计同比 | 月度 | 2013-12 | 2026-07 | 2026-07 | MOF |
-| `CN_LAND_SALE_REVENUE_YTD_YOY` | Land-Use Rights Sale Revenue YTD YoY | 国有土地使用权出让收入累计同比 | 月度 | 2012-06 | 2026-07 | 2026-07 | MOF |
-| `CN_NONTAX_REVENUE_YTD_YOY` | Nontax Revenue YTD YoY | 非税收入累计同比 | 月度 | 2008-11 | 2026-07 | 2026-07 | MOF |
-| `CN_TAX_REVENUE_YTD_YOY` | Tax Revenue YTD YoY | 税收收入累计同比 | 月度 | 2009-03 | 2026-07 | 2026-07 | MOF |
+| `CN_GENERAL_BUDGET_EXPENDITURE_YTD_YOY` | General Public Budget Expenditure YTD YoY | 一般公共预算支出累计同比 | 月度 | 2008-08 | 2026-08 | 2026-08 | MOF,WIND |
+| `CN_GENERAL_BUDGET_REVENUE_YTD_YOY` | General Public Budget Revenue YTD YoY | 一般公共预算收入累计同比 | 月度 | 2008-08 | 2026-08 | 2026-08 | EASTMONEY_MACRO,MOF,WIND |
+| `CN_GOV_FUND_EXPENDITURE_YTD_YOY` | Government Fund Budget Expenditure YTD YoY | 政府性基金预算支出累计同比 | 月度 | 2012-06 | 2026-08 | 2026-08 | MOF,WIND |
+| `CN_GOV_FUND_REVENUE_YTD_YOY` | Government Fund Budget Revenue YTD YoY | 政府性基金预算收入累计同比 | 月度 | 2012-06 | 2026-08 | 2026-08 | MOF,WIND |
+| `CN_LAND_SALE_REVENUE_YTD_YOY` | Land-Use Rights Sale Revenue YTD YoY | 国有土地使用权出让收入累计同比 | 月度 | 2012-06 | 2026-08 | 2026-08 | MOF,WIND |
+| `CN_NONTAX_REVENUE_YTD_YOY` | Nontax Revenue YTD YoY | 非税收入累计同比 | 月度 | 2008-11 | 2026-08 | 2026-08 | MOF,WIND |
+| `CN_TAX_REVENUE_YTD_YOY` | Tax Revenue YTD YoY | 税收收入累计同比 | 月度 | 2009-03 | 2026-08 | 2026-08 | MOF,WIND |
 
 ## SAFE / 国家外汇管理局（7项）
 
@@ -102,28 +102,16 @@ The 22:00 task also polls EASTMONEY_MACRO (11 fields) and SINA_MACRO (16 fields)
 | `CN_CGB_TERM_SPREAD_10Y_1Y` | China Government Bond Term Spread (10Y minus 1Y) | 国债期限利差（10年减1年） | 月度 | 2006-03 | 2026-08 | 2026-08 | CHINABOND |
 | `CN_CGB_YTM_10Y` | China 10-Year Government Bond Yield to Maturity | 10年期国债到期收益率 | 月度 | 2006-03 | 2026-08 | 2026-08 | CHINABOND |
 
-## WIND / Wind（5项）
-
-不自动更新：保留Wind手工导入；按用户决定不接海关官方更新。
-
-| Field code | English | 中文 | 频率 | 开始时间 | 当前PIT可见结束时间 | 库内最晚期 | 当前入库来源 |
-|---|---|---|---|---:|---:|---:|---|
-| `CN_EXPORT_USD` | Export Value (USD, Monthly) | 出口金额（当月，美元） | 月度 | 2005-01 | 2026-08 | 2026-08 | WIND |
-| `CN_EXPORT_USD_YOY` | Export Value YoY (USD) | 出口金额同比（美元口径） | 月度 | 2005-01 | 2026-08 | 2026-08 | WIND |
-| `CN_IMPORT_USD` | Import Value (USD, Monthly) | 进口金额（当月，美元） | 月度 | 2005-01 | 2026-08 | 2026-08 | WIND |
-| `CN_IMPORT_USD_YOY` | Import Value YoY (USD) | 进口金额同比（美元口径） | 月度 | 2005-01 | 2026-08 | 2026-08 | WIND |
-| `CN_TRADE_BALANCE_USD` | Trade Balance (USD, Monthly) | 贸易差额（当月，美元） | 月度 | 2005-01 | 2026-08 | 2026-08 | WIND |
-
 ## 数据质量核对
 
-- 主库中国字段数：55；字段代码唯一，无空的开始或结束时间。
-- 更新责任分组：NBS 21、PBOC 10、MOF 7、SAFE 7、OECD 2、ChinaBond 3、Wind手工5。
+- 当前可用中国字段数：50；字段代码唯一，无空的开始或结束时间。
+- 更新责任分组：NBS 21、PBOC 10、MOF 7、SAFE 7、OECD 2、ChinaBond 3。
 - 生成时尚未达到PIT可见日、因此库内末期与当前可见末期不同的字段：2项。
 - 混合来源字段保留Wind历史底座；同一期存在官方A/B记录时，工作PIT表优先使用官方记录。
 
 ## Sources receipt
 
-- 数据库：`macro_pit_v2.duckdb`，只读聚合55个CN字段。
+- 数据库：`macro_pit_v2.duckdb`，只读聚合50个当前可用CN字段；5个停用海关字段不计入。
 - 自动更新配置：`config/daily_web_update.yml`、`config/daily_global_update.yml`。
 - 中文口径参考：`scripts/export_current_pit_chinese.py`及当前字段代码。
 - 本清单生成器：`scripts/tools/export_current_field_inventory.py`。

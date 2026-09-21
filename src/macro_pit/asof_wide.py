@@ -12,6 +12,7 @@ import duckdb
 import polars as pl
 
 from .snapshot import DEFAULT_ESTIMATED_AVAILABILITY
+from .series_registry import exclude_inactive_series
 from .timeutils import SHANGHAI, ensure_aware
 
 
@@ -116,6 +117,7 @@ def build_as_of_wide(
         ORDER BY canonical_series_id
         """
     ).pl()
+    metadata = exclude_inactive_series(metadata)
     if metadata.is_empty():
         raise ValueError(f"no fields are registered for scope {scope}")
 
@@ -341,6 +343,7 @@ def build_as_of_wide(
         """,
         parameters,
     ).pl()
+    selected = exclude_inactive_series(selected)
 
     index_ends = _period_ends(start, output_end, frequency)
     index_column = "month_end" if frequency == "M" else "quarter_end"
@@ -463,6 +466,7 @@ def build_as_of_wide_from_long(
             ORDER BY canonical_series_id
             """
         ).pl()
+        metadata = exclude_inactive_series(metadata)
         selected = conn.execute(
             f"""
             SELECT *, valid_from AS available_at
@@ -475,6 +479,7 @@ def build_as_of_wide_from_long(
             """,
             [start, output_end, as_of_utc, as_of_utc],
         ).pl()
+        selected = exclude_inactive_series(selected)
     finally:
         conn.close()
 

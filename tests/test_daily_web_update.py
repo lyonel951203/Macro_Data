@@ -57,12 +57,12 @@ def test_default_china_plan_has_official_sources_and_no_wind():
     plan = dry_run_plan(config, sources)
     assert plan["wind_included"] is False
     assert sources == [
-        "NBS", "PBOC", "PBOC_MIRROR", "CUSTOMS", "MOF", "SAFE",
+        "NBS", "PBOC", "PBOC_MIRROR", "MOF", "SAFE",
         "EASTMONEY_MACRO", "SINA_MACRO", "OECD",
     ]
     web = [
         item for item in plan["sources"]
-        if item["source"] in {"NBS", "PBOC", "PBOC_MIRROR", "CUSTOMS", "MOF", "SAFE"}
+        if item["source"] in {"NBS", "PBOC", "PBOC_MIRROR", "MOF", "SAFE"}
     ]
     oecd = next(item for item in plan["sources"] if item["source"] == "OECD")
     assert all(item["index_urls"] for item in web)

@@ -210,6 +210,8 @@ def _coverage_rows(
     }
     rows: list[dict[str, Any]] = []
     for series_id, spec in registry.items():
+        if spec.get("active", True) is False:
+            continue
         if str(spec.get("country", "")).upper() != country.upper():
             continue
         values = observed.get(series_id)

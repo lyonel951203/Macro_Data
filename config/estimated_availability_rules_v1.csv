@@ -46,9 +46,9 @@ CN_TSF_FLOW_YTD,M,14,false,low,true,calibrated_n8,样本少
 CN_TSF_STOCK,M,14,false,low,true,calibrated_n3,样本仅3期
 CN_TSF_STOCK_YOY,M,14,false,low,true,calibrated_n3,样本仅3期
 CN_URBAN_SURVEYED_UNEMPLOYMENT,M,16,false,medium,true,calibrated_n55,最大76天存在异常月
-CN_EXPORT_USD,M,9,false,low,true,convention_no_local_samples,海关次月7-13日发布 无本地校准样本
-CN_EXPORT_USD_YOY,M,9,false,low,true,convention_no_local_samples,同上
-CN_IMPORT_USD,M,9,false,low,true,convention_no_local_samples,同上
-CN_IMPORT_USD_YOY,M,9,false,low,true,convention_no_local_samples,同上
-CN_TRADE_BALANCE_USD,M,9,false,low,true,convention_no_local_samples,同上
+CN_EXPORT_USD,M,9,false,low,false,retired_field,已停用 不进入每日更新和用户查询
+CN_EXPORT_USD_YOY,M,9,false,low,false,retired_field,已停用 不进入每日更新和用户查询
+CN_IMPORT_USD,M,9,false,low,false,retired_field,已停用 不进入每日更新和用户查询
+CN_IMPORT_USD_YOY,M,9,false,low,false,retired_field,已停用 不进入每日更新和用户查询
+CN_TRADE_BALANCE_USD,M,9,false,low,false,retired_field,已停用 不进入每日更新和用户查询
 GLB_IMF_ALL_COMMODITY_PRICE_INDEX,M,40,false,low,true,convention_imf_monthly_current_history,IMF official current-history proxy; conservative 40-day lag; record remains PIT_D

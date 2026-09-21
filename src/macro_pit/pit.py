@@ -7,6 +7,7 @@ import duckdb
 import polars as pl
 
 from .timeutils import ensure_aware
+from .series_registry import exclude_inactive_series
 
 
 PIT_MODES = {
@@ -49,7 +50,7 @@ def get_snapshot(
         ) = 1
         ORDER BY country, canonical_series_id, period
     """
-    return conn.execute(query, parameters).pl()
+    return exclude_inactive_series(conn.execute(query, parameters).pl())
 
 
 def get_work_snapshot(
@@ -189,10 +190,10 @@ def get_work_snapshot(
         revision_country_filter = "AND country = ?"
         parameters.append(country.upper())
     parameters.append(as_of_ts)
-    return conn.execute(
+    return exclude_inactive_series(conn.execute(
         query.format(
             country_filter=country_filter,
             revision_country_filter=revision_country_filter,
         ),
         parameters,
-    ).pl()
+    ).pl())

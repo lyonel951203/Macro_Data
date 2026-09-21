@@ -235,11 +235,11 @@ def test_cn_official_web_revision_becomes_visible_only_when_observed(tmp_path):
     revised_at = datetime(2020, 8, 15, 9, tzinfo=CN_TZ)
     replacement_at = datetime(2020, 9, 1, 10, tzinfo=CN_TZ)
     base = _row(
-        source="CUSTOMS", field="CN_EXPORT_USD", value=100.0,
+        source="NBS", field="CN_RETAIL_SALES_YOY", value=100.0,
         available=base_at, sha="customs_base",
     )
     revision = _row(
-        source="CUSTOMS", field="CN_EXPORT_USD", value=101.0, grade="D",
+        source="NBS", field="CN_RETAIL_SALES_YOY", value=101.0, grade="D",
         available=revised_at,
         release_date_source="official_web_revision_first_seen",
         sha="customs_revision",
@@ -250,7 +250,7 @@ def test_cn_official_web_revision_becomes_visible_only_when_observed(tmp_path):
         source_url=base["source_url"],
     )
     later_official = _row(
-        source="CUSTOMS", field="CN_EXPORT_USD", value=102.0,
+        source="NBS", field="CN_RETAIL_SALES_YOY", value=102.0,
         available=replacement_at, sha="customs_later",
     )
     insert_observations(conn, [base, revision, later_official])
@@ -268,11 +268,11 @@ def test_cn_official_web_revision_becomes_visible_only_when_observed(tmp_path):
         conn, "2020-09-30", "CN", start_date="2020-06-01",
         estimated_availability_path=sidecar,
     )
-    assert before.values["CN_EXPORT_USD"].drop_nulls().to_list() == [100.0]
-    assert revised.values["CN_EXPORT_USD"].drop_nulls().to_list() == [101.0]
-    assert revised.provenance["CN_EXPORT_USD"].drop_nulls().to_list() == [
+    assert before.values["CN_RETAIL_SALES_YOY"].drop_nulls().to_list() == [100.0]
+    assert revised.values["CN_RETAIL_SALES_YOY"].drop_nulls().to_list() == [101.0]
+    assert revised.provenance["CN_RETAIL_SALES_YOY"].drop_nulls().to_list() == [
         "OBSERVED_WEB_REVISION"
     ]
-    assert replaced.values["CN_EXPORT_USD"].drop_nulls().to_list() == [102.0]
-    assert replaced.provenance["CN_EXPORT_USD"].drop_nulls().to_list() == ["PIT_A"]
+    assert replaced.values["CN_RETAIL_SALES_YOY"].drop_nulls().to_list() == [102.0]
+    assert replaced.provenance["CN_RETAIL_SALES_YOY"].drop_nulls().to_list() == ["PIT_A"]
     conn.close()

@@ -11,6 +11,7 @@ import yaml
 
 from .db import get_connection, insert_observations
 from .pit import get_snapshot
+from .series_registry import inactive_series_ids
 
 
 @dataclass(frozen=True)
@@ -58,16 +59,26 @@ def run_acceptance(
         thresholds.get("china_strict_raw_required", True)
     )
     cn_strict_required = float(thresholds.get("china_strict_raw_rate", 0.95))
+    registry = yaml.safe_load(Path(registry_path).read_text(encoding="utf-8"))
+    inactive = inactive_series_ids(registry_path)
     synthetic = _synthetic_checks()
-    total = int(
-        conn.execute("SELECT count(*) FROM observation_vintage WHERE country IN ('CN','US')").fetchone()[0]
-    )
-    cn_series = _series_count(conn, "country='CN'")
+    active_cn_us_rows = conn.execute(
+        """
+        SELECT canonical_series_id, raw_file, raw_sha256
+        FROM observation_vintage
+        WHERE country IN ('CN','US')
+        """
+    ).fetchall()
+    active_cn_us_rows = [
+        row for row in active_cn_us_rows if str(row[0]) not in inactive
+    ]
+    total = len(active_cn_us_rows)
     cn_populated_ids = {
         str(row[0]) for row in conn.execute(
             "SELECT DISTINCT canonical_series_id FROM observation_vintage WHERE country='CN'"
         ).fetchall()
-    }
+    } - inactive
+    cn_series = len(cn_populated_ids)
     cn_source_ids = {
         str(row[0]) for row in conn.execute(
             "SELECT DISTINCT source FROM observation_vintage WHERE country='CN'"
@@ -79,13 +90,15 @@ def run_acceptance(
     present_required_cn_series = len(required_cn_series & cn_populated_ids)
     present_required_cn_sources = len(required_cn_sources & cn_source_ids)
     historical_cn_series = 0
-    for source, frequency, first_period, last_period, observed_periods in conn.execute(
+    for source, series_id, frequency, first_period, last_period, observed_periods in conn.execute(
         """
-        SELECT source, frequency, min(period), max(period), count(DISTINCT period)
+        SELECT source, canonical_series_id, frequency, min(period), max(period), count(DISTINCT period)
         FROM observation_vintage WHERE country='CN'
         GROUP BY source, canonical_series_id, frequency
         """
     ).fetchall():
+        if str(series_id) in inactive:
+            continue
         minimum = cn_quarterly_min_periods if frequency == "Q" else cn_monthly_min_periods
         excluded_months = {
             int(value) for value in structural_missing_months.get(str(source), [])
@@ -138,18 +151,30 @@ def run_acceptance(
             """
         ).fetchone()[0]
     )
-    raw_rows = conn.execute(
-        "SELECT raw_file, raw_sha256 FROM observation_vintage WHERE country IN ('CN','US')"
-    ).fetchall()
-    raw_found = sum(_raw_matches(path, digest) for path, digest in raw_rows)
+    raw_found = sum(
+        _raw_matches(path, digest) for _, path, digest in active_cn_us_rows
+    )
     raw_rate = raw_found / total if total else 0.0
-    cn_rows = conn.execute("SELECT pit_grade, raw_file, raw_sha256 FROM observation_vintage WHERE country='CN'").fetchall()
+    cn_rows = [
+        row[1:] for row in conn.execute(
+            """
+            SELECT canonical_series_id, pit_grade, raw_file, raw_sha256
+            FROM observation_vintage WHERE country='CN'
+            """
+        ).fetchall()
+        if str(row[0]) not in inactive
+    ]
     cn_total = len(cn_rows)
     cn_strict = sum(grade in {"A", "B"} and _raw_matches(path, digest) for grade, path, digest in cn_rows)
     strict_rate = cn_strict / (cn_total or 1)
-    registry = yaml.safe_load(Path(registry_path).read_text(encoding="utf-8"))
-    cn_registry = sum(1 for spec in registry.values() if spec.get("country") == "CN")
-    us_registry = sum(1 for spec in registry.values() if spec.get("country") == "US")
+    cn_registry = sum(
+        1 for spec in registry.values()
+        if spec.get("country") == "CN" and spec.get("active", True)
+    )
+    us_registry = sum(
+        1 for spec in registry.values()
+        if spec.get("country") == "US" and spec.get("active", True)
+    )
 
     checks = [
         AcceptanceCheck("No credentials required", "YES", True),

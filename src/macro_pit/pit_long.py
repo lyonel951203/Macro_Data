@@ -9,6 +9,7 @@ import duckdb
 import polars as pl
 
 from .asof_wide import SCOPES
+from .series_registry import exclude_inactive_series
 from .snapshot import DEFAULT_ESTIMATED_AVAILABILITY
 
 
@@ -429,6 +430,7 @@ def build_pit_long(
         ORDER BY country, canonical_series_id, period_end, period, valid_from
         """
     ).pl()
+    events = exclude_inactive_series(events)
 
     return PitLongResult(
         events=events,

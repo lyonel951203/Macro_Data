@@ -15,9 +15,9 @@ writer held the shared database lock.
 
 | Workflow | Enabled sources |
 | --- | ---: |
-| China daily | 9 |
+| China daily | 8 |
 | Global daily | 5 |
-| China weekly revision | 7 |
+| China weekly revision | 6 |
 | Global weekly revision | 3 |
 
 The four root launchers still call only `scripts/run_with_live_log.py` and
@@ -29,14 +29,14 @@ Cutoff: `2026-07-31 23:59:59.999999 Asia/Shanghai`; start date: 2005-01-01.
 
 | Scope/frequency | Rows | Fields | Selected cells | Coverage | Latest visible period |
 | --- | ---: | ---: | ---: | ---: | --- |
-| CN / M | 259 | 55 | 11,839 | 83.1% | 2026-07-31 |
-| CN / Q | 87 | 55 | 4,135 | 86.4% | 2026-06-30 |
+| CN / M | 259 | 50 | 10,549 | 81.5% | 2026-07-31 |
+| CN / Q | 87 | 50 | 3,705 | 85.2% | 2026-06-30 |
 | US / M | 259 | 18 | 3,575 | 76.7% | 2026-06-30 |
 | US / Q | 87 | 18 | 1,529 | 97.6% | 2026-06-30 |
 | GLB / M | 259 | 54 | 10,962 | 78.4% | 2026-05-31 |
 | GLB / Q | 87 | 54 | 4,405 | 93.8% | 2026-03-31 |
 
-For all six queries, database input and a newly generated 239,942-row effective
+For all six queries, database input and a newly generated 238,642-row effective
 PIT long Parquet produced byte-identical values, source periods, and cell
 provenance files. The auxiliary metadata source list differs for CN because
 the database inventory lists every ingested source while the effective long
@@ -53,21 +53,22 @@ CN monthly production-data checks returned:
 
 ## Acceptance gate
 
-The maintained test suite passed: **219 passed**.
+The maintained test suite passed: **221 passed**. Five retired Customs fields are explicitly
+filtered from database queries, existing long-Parquet queries, new long exports,
+monthly snapshots and the current field inventory.
 
-The formal acceptance gate passed 16 of 17 checks. Raw archive reproducibility
-was 100%, duplicate vintage rows were 0, all 16 required CN series were
+The formal acceptance gate passed all 17 checks. Raw archive reproducibility
+was 100%, duplicate vintage rows were 0, all 14 required CN series were
 populated, and US RTDSM validation remained 100% over 1,500 sampled cells.
 
-The only failing check is `China required sources: 4 / 5`: CUSTOMS has no
-official observation in the database because the official CDN currently fails
-TLS verification. The strict A/B share is still reported as 48.1%, but is no
+The active China source gate is now `4 / 4`: NBS, PBOC, MOF and SAFE. CUSTOMS
+is outside the active field contract. The strict A/B share is still reported
+as 52.0%, but is no
 longer a hard gate because the production query contract explicitly permits
 governed PIT_D only where A/B is absent.
 
 ## Remaining production step
 
 Observe the next real China 22:00 and global 00:00 runs, including logs,
-DeepSeek reports and email receipts. After that cycle, the remaining business
-blocker is the official Customs five-field backfill through reviewed,
-browser-saved official files and the existing offline archive workflow.
+DeepSeek reports and email receipts. The scheduled workflows no longer probe
+Customs or wait for a Customs backfill.

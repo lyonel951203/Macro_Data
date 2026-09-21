@@ -203,11 +203,11 @@ def test_cn_official_web_revision_is_a_dated_long_event(tmp_path):
     base_at = datetime(2020, 7, 10, 10, tzinfo=CN_TZ)
     revised_at = datetime(2020, 8, 15, 9, tzinfo=CN_TZ)
     base = _row(
-        source="CUSTOMS", field="CN_EXPORT_USD", value=100.0,
+        source="NBS", field="CN_RETAIL_SALES_YOY", value=100.0,
         available=base_at, sha="customs_base",
     )
     revision = _row(
-        source="CUSTOMS", field="CN_EXPORT_USD", value=101.0, grade="D",
+        source="NBS", field="CN_RETAIL_SALES_YOY", value=101.0, grade="D",
         available=revised_at,
         release_date_source="official_web_revision_first_seen",
         sha="customs_revision",
@@ -223,7 +223,7 @@ def test_cn_official_web_revision_is_a_dated_long_event(tmp_path):
         estimated_availability_path=_sidecar(tmp_path / "estimated.csv"),
     )
     events = result.events.filter(
-        result.events["canonical_series_id"] == "CN_EXPORT_USD"
+        result.events["canonical_series_id"] == "CN_RETAIL_SALES_YOY"
     )
     assert events["value"].to_list() == [100.0, 101.0]
     assert events["selection_origin"].to_list() == [

@@ -17,6 +17,7 @@ DB_PATH = ROOT / "macro_pit_v2.duckdb"
 OUT_DIR = ROOT / "reports" / "v2" / "current_field_inventory"
 DAILY_CONFIG = ROOT / "config" / "daily_web_update.yml"
 GLOBAL_CONFIG = ROOT / "config" / "daily_global_update.yml"
+SERIES_REGISTRY = ROOT / "config" / "series_registry.yml"
 SHANGHAI = ZoneInfo("Asia/Shanghai")
 BT = chr(96)
 
@@ -162,14 +163,26 @@ UPDATE_METHODS = {
     "SAFE": "每日22:00：SAFE官方目录自动抓取、解析并幂等入库。",
     "OECD": "每日22:00：OECD官方SDMX修订API完整重取；按EDITION生成PIT_B。",
     "CHINABOND": "每日00:00：中债官方收益率曲线复查最近75天，按月末最后交易日幂等追加PIT_A。",
-    "CUSTOMS": "每日22:00：海关总署官方初值与月报目录检查；首次发布入库PIT_B，已见页面变更按首次观测时点保留修订版本。",
     "WIND": "不自动更新：只保留既有Wind手工导入记录；每日任务不调用Wind接口。",
 }
-SOURCE_ORDER = ["NBS", "PBOC", "MOF", "SAFE", "CUSTOMS", "OECD", "CHINABOND", "WIND"]
+SOURCE_ORDER = ["NBS", "PBOC", "MOF", "SAFE", "OECD", "CHINABOND", "WIND"]
 
 
 def main() -> None:
     now = datetime.now(SHANGHAI)
+    registry = yaml.safe_load(SERIES_REGISTRY.read_text(encoding="utf-8")) or {}
+    inactive_fields = {
+        str(field) for field, spec in registry.items()
+        if isinstance(spec, dict) and spec.get("active", True) is False
+    }
+    active_english_names = {
+        field: name for field, name in ENGLISH_NAMES.items()
+        if field not in inactive_fields
+    }
+    active_chinese_names = {
+        field: name for field, name in CHINESE_NAMES.items()
+        if field not in inactive_fields
+    }
     config = yaml.safe_load(DAILY_CONFIG.read_text(encoding="utf-8"))
     enabled = {
         key for key, value in config["sources"].items()
@@ -194,16 +207,17 @@ def main() -> None:
         """,
         [now],
     ).fetchall()
-    all_latest = dict(
-        conn.execute(
+    visible_rows = [row for row in visible_rows if row[0] not in inactive_fields]
+    all_latest = {
+        field: latest for field, latest in conn.execute(
             """
             select canonical_series_id, max(period)
             from observation_vintage
             where country = 'CN'
             group by canonical_series_id
             """
-        ).fetchall()
-    )
+        ).fetchall() if field not in inactive_fields
+    }
     attributes = {
         row[0]: row[1:]
         for row in conn.execute(
@@ -215,9 +229,9 @@ def main() -> None:
             where country = 'CN'
             group by canonical_series_id
             """
-        ).fetchall()
+        ).fetchall() if row[0] not in inactive_fields
     }
-    source_rows = conn.execute(
+    source_rows = [row for row in conn.execute(
         """
         select canonical_series_id, source
         from observation_vintage
@@ -225,7 +239,7 @@ def main() -> None:
         group by canonical_series_id, source
         order by canonical_series_id, source
         """
-    ).fetchall()
+    ).fetchall() if row[0] not in inactive_fields]
     sources_by_field: dict[str, list[str]] = {}
     for field, source in source_rows:
         sources_by_field.setdefault(field, []).append(source)
@@ -249,8 +263,8 @@ def main() -> None:
     conn.close()
 
     field_ids = {row[0] for row in visible_rows}
-    assert len(visible_rows) == 55
-    assert field_ids == set(ENGLISH_NAMES) == set(CHINESE_NAMES)
+    assert len(visible_rows) == 50
+    assert field_ids == set(active_english_names) == set(active_chinese_names)
     assert all(value[1] == 1 and value[3] == 1 for value in attributes.values())
 
     rows = []
@@ -267,8 +281,8 @@ def main() -> None:
         rows.append(
             {
                 "field_code": field,
-                "english_name": ENGLISH_NAMES[field],
-                "chinese_name": CHINESE_NAMES[field],
+                "english_name": active_english_names[field],
+                "chinese_name": active_chinese_names[field],
                 "frequency": frequency,
                 "frequency_cn": FREQUENCY_NAMES[frequency],
                 "unit": unit,
@@ -292,13 +306,12 @@ def main() -> None:
         "SAFE": 7,
         "OECD": 2,
         "CHINABOND": 3,
-        "WIND": 5,
     }
-    assert len({row["field_code"] for row in rows}) == 55
+    assert len({row["field_code"] for row in rows}) == 50
     assert all(row["start_period"] and row["end_period_visible_at_generated_time"] for row in rows)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    csv_path = OUT_DIR / "all_55_fields_bilingual_coverage_update.csv"
+    csv_path = OUT_DIR / "all_active_fields_bilingual_coverage_update.csv"
     headers = list(rows[0])
     with csv_path.open("w", encoding="utf-8-sig", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=headers)
@@ -306,13 +319,13 @@ def main() -> None:
         writer.writerows(rows)
 
     md_lines = [
-        "# 当前55个宏观字段：英文、中文、覆盖时间与更新方式",
+        "# 当前50个宏观字段：英文、中文、覆盖时间与更新方式",
         "",
         f"生成时间：{now.isoformat()}。",
         "",
         "开始时间和结束时间均指字段的原始数据期，不是宽表观察日期。结束时间只统计生成时点已经满足PIT可见条件的记录；库内最晚数据期另列，可能包含尚未到可用日的保守版本。",
         "",
-        "中国官方网页任务在Asia/Shanghai 22:00维护NBS、PBOC、MOF、SAFE、CUSTOMS和OECD；海关官方源负责美元出口、进口、差额及进出口同比5项，首次发布与后续页面修订分版本保存。00:00全球任务维护ChinaBond 3个市场字段。既有Wind记录保留，但每日任务不调用Wind接口。",
+        "中国官方网页任务在Asia/Shanghai 22:00维护NBS、PBOC、MOF、SAFE和OECD；00:00全球任务维护ChinaBond 3个市场字段。海关美元出口、进口、差额及进出口同比5项已停用，不进入每日/周度任务、PIT查询和当前字段清单；既有底层记录仅为历史留存。",
         "",
     ]
     md_lines.extend([
@@ -326,6 +339,8 @@ def main() -> None:
 
     for source in SOURCE_ORDER:
         selected = [row for row in rows if row["update_owner"] == source]
+        if not selected:
+            continue
         md_lines.extend([
             f"## {source} / {SOURCE_NAMES[source]}（{len(selected)}项）",
             "",
@@ -355,14 +370,14 @@ def main() -> None:
     md_lines.extend([
         "## 数据质量核对",
         "",
-        "- 主库中国字段数：55；字段代码唯一，无空的开始或结束时间。",
-        "- 更新责任分组：NBS 21、PBOC 10、MOF 7、SAFE 7、OECD 2、ChinaBond 3、Wind手工5。",
+        "- 当前可用中国字段数：50；字段代码唯一，无空的开始或结束时间。",
+        "- 更新责任分组：NBS 21、PBOC 10、MOF 7、SAFE 7、OECD 2、ChinaBond 3。",
         f"- 生成时尚未达到PIT可见日、因此库内末期与当前可见末期不同的字段：{len(future_difference)}项。",
         "- 混合来源字段保留Wind历史底座；同一期存在官方A/B记录时，工作PIT表优先使用官方记录。",
         "",
         "## Sources receipt",
         "",
-        f"- 数据库：{BT}macro_pit_v2.duckdb{BT}，只读聚合55个CN字段。",
+        f"- 数据库：{BT}macro_pit_v2.duckdb{BT}，只读聚合50个当前可用CN字段；5个停用海关字段不计入。",
         f"- 自动更新配置：{BT}config/daily_web_update.yml{BT}、{BT}config/daily_global_update.yml{BT}。",
         f"- 中文口径参考：{BT}scripts/export_current_pit_chinese.py{BT}及当前字段代码。",
         f"- 本清单生成器：{BT}scripts/tools/export_current_field_inventory.py{BT}。",
@@ -375,7 +390,8 @@ def main() -> None:
         "database": str(DB_PATH),
         "field_count": len(rows),
         "unique_field_codes": len({row["field_code"] for row in rows}),
-        "all_names_mapped": field_ids == set(ENGLISH_NAMES) == set(CHINESE_NAMES),
+        "all_names_mapped": field_ids == set(active_english_names) == set(active_chinese_names),
+        "inactive_fields": sorted(inactive_fields),
         "all_start_end_non_null": all(
             row["start_period"] and row["end_period_visible_at_generated_time"]
             for row in rows
