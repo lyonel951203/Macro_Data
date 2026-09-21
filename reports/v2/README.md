@@ -23,10 +23,12 @@ the surrounding README files.
 
 ## Historical evidence
 
-Directories under `history/archive_parse/`, plus `nbs_*`, `pboc_*`, `pit_*`,
-`stage*`, and `wind_batch*`, record completed parsing, backfill, review, or migration work.
-They are not scanned by the scheduled runner. They remain useful for tracing a
-database row to the work that introduced or reviewed it.
+Directories under `history/archive_parse/`, `history/nbs/`, `history/pboc/`,
+and `history/wind/` record completed parsing, backfill, review, or migration
+work. Remaining `pit_*` and `stage*` directories will be grouped separately;
+the scheduled runner does not scan these historical report families. They
+remain useful for tracing a database row to the work that introduced or
+reviewed it.
 
 Generated CSV, Parquet, logs, and raw evidence remain local under the existing
 ignore rules. Markdown reports are retained in Git because they document data

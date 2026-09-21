@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 root = next(p for p in [Path.cwd(), *Path.cwd().parents] if (p / "macro_pit_v2.duckdb").exists())
-out = root / "reports/v2/nbs_gap_batch4"
+out = root / "reports/v2/history/nbs/nbs_gap_batch4"
 name = "cn_pit_month_end_2005_20260731"
 before = pd.read_csv(out / "before" / (name + "_values.csv"))
 after = pd.read_csv(root / "data/exports" / (name + "_values.csv"))

@@ -608,12 +608,12 @@ GDP2013-Q4未取得新的同期单季证据；PMI2010-05在6月发布稿的历�
 - 阶段：`exported_and_checked`；结果：`data/history_backfill/nbs_gap_batch5_run.json`。
 - 本批入库：新增 25、修订 0、未变 0。
 - 主库 767073 条；中国 6339 条、47 序列；严格宽表 259 行 × 47 指标。
-- 全量验收：FAIL；报告：`reports/v2/nbs_gap_batch5/review.html`。
+- 全量验收：FAIL；报告：`reports/v2/history/nbs/nbs_gap_batch5/review.html`。
 - 截止日前原始月份：CPI 78、PPI 82；CSV 空值率 70.91%。
 <!-- nbs-price-batch5:end -->
 
 - 启动/恢复入口：`python scripts/history/run_nbs_price_batch_once.py --manifest config/history/nbs/nbs_gap_batch5_validation.json --batch nbs_gap_batch5 --allow-network --status-marker nbs-price-batch5`。运行时持有 `data/history_backfill/nbs_price_batch.lock`，不要重复启动；遇服务器阻断先复核原因，不自动重试。
-- 持久化结果：`data/history_backfill/nbs_gap_batch5_run.json`；正文断点：`nbs_gap_batch5_validation_state.json`；核对证据：`config/history/nbs/nbs_gap_batch5_expected.json`；报告目录：`reports/v2/nbs_gap_batch5/`。
+- 持久化结果：`data/history_backfill/nbs_gap_batch5_run.json`；正文断点：`nbs_gap_batch5_validation_state.json`；核对证据：`config/history/nbs/nbs_gap_batch5_expected.json`；报告目录：`reports/v2/history/nbs/nbs_gap_batch5/`。
 - 日志：`logs/nbs_gap_batch5.stdout.log`、`logs/nbs_gap_batch5.stderr.log`。进程关闭后查看结果 JSON 和本段状态；导出失败时保留原入库结果，恢复不会重复计数。
 
 ### 启动第五批前的入库快照（2026-09-08 13:17，第四批）
@@ -623,11 +623,11 @@ GDP2013-Q4未取得新的同期单季证据；PMI2010-05在6月发布稿的历�
 - 严格月末宽表已于 **13:16** 重导出，仍为 259 行 × 47 个指标。按 2026-07-31 截止日前可用的原始数据期统计：CPI **65 → 67 个月**，PPI **63 → 68 个月**，GDP **18 → 20 个季度**。GDP 原始起点 **2022-Q1 → 2021-Q3**，CSV 首次有值 **2022-04-30 → 2021-10-31**。
 - 导出前后对照：仅 CPI/PPI/GDP 合计 **13 个单元格**变化，9 条新记录的首个月末可见性均通过；空值单元格 **8,638 → 8,632**，空值率 **70.96% → 70.91%**。非空值中的历史陈旧问题仍需逐月补齐。
 - 修复 GDP 旧标题中的“（GDP）”识别，以及 PPI“出厂价格和购进价格同比均下降”的解析；GDP 分派依据标题，避免正文相关链接误触发。完整测试 **67/67 通过**；修复后离线回放 **223 份原始文件、788 条既有 NBS 记录**，数值、数据期、发布时间等均一致。新批次另通过 SHA256、独立正文/表格值、18 个发布边界及重复入库检查。
-- 原 43 个失败项复核：**3 个已修复入库**；5 个为年度“三新”经济稿，5 个为年度 GDP 修订/最终核实稿，不对应当前季度同比目标；30 个 HTTP 404 未重试。原始失败日志保留，处理结果见 `reports/v2/nbs_gap_batch4/existing_queue_resolution.csv`。
+- 原 43 个失败项复核：**3 个已修复入库**；5 个为年度“三新”经济稿，5 个为年度 GDP 修订/最终核实稿，不对应当前季度同比目标；30 个 HTTP 404 未重试。原始失败日志保留，处理结果见 `reports/v2/history/nbs/nbs_gap_batch4/existing_queue_resolution.csv`。
 - 最新全量验收仍为 **FAIL**：必需来源 4/5、核心指标 14/16、历史深度 19/25、可验证 A/B **76.3%**；18 个序列内部覆盖低于 95%。raw 可追溯率 100%、重复 0；美国 RTDSM 通过。
-- 已发现旧稿候选仍为 **332 篇，其中 19 篇已入库**；本批六篇待补价格稿已完成。另已列出 **25 个尚未入库的 2020—2021 价格数据期候选**（CPI 11、PPI 14），见 `reports/v2/nbs_gap_batch4/next_price_candidates.csv`；仍须下载正文并核对。
+- 已发现旧稿候选仍为 **332 篇，其中 19 篇已入库**；本批六篇待补价格稿已完成。另已列出 **25 个尚未入库的 2020—2021 价格数据期候选**（CPI 11、PPI 14），见 `reports/v2/history/nbs/nbs_gap_batch4/next_price_candidates.csv`；仍须下载正文并核对。
 - 本批下载与验证均已退出，断点 `data/history_backfill/nbs_gap_batch4_validation_state.json` 为 **COMPLETE / pending 0**。本批使用 6 篇网络正文及 3 篇缓存；请求账本由 55 增至 63（含 1 次本机沙箱连接拒绝及 1 次 robots 检查），未遇服务器 403/429，未启动下一批网络任务。
-- 复核入口：`reports/v2/nbs_gap_batch4/review.html`、`review.ipynb`（5 个代码单元执行通过）、`validated_samples.csv`、`cached_regression.json`、`export_changes.csv`、`final_result.json`。原导出已保存在该目录 `before/`。逐字段起点、覆盖及两个检查 notebook 已同步刷新至 `reports/v2/pit_csv_inspection/`。
+- 复核入口：`reports/v2/history/nbs/nbs_gap_batch4/review.html`、`review.ipynb`（5 个代码单元执行通过）、`validated_samples.csv`、`cached_regression.json`、`export_changes.csv`、`final_result.json`。原导出已保存在该目录 `before/`。逐字段起点、覆盖及两个检查 notebook 已同步刷新至 `reports/v2/pit_csv_inspection/`。
 
 ### 后台窄搜第三批
 
@@ -700,8 +700,8 @@ GDP2013-Q4未取得新的同期单季证据；PMI2010-05在6月发布稿的历�
 - 本轮另外入库 CPI 2021-05（1.3%）、2021-08（0.8%）；PPI 2021-03（4.4%）、2021-08（9.5%），全部为 PIT_A。5 条合计新增，无修订。
 - 断点：`data/history_backfill/nbs_cpi_2005_q1_search_state.json`、`nbs_cpi_2010_search_state.json`、`nbs_cpi_2020_2021_search_state.json`、`nbs_ppi_2020_2021_search_state.json`；正文断点：`nbs_gap_validation_state.json`，`COMPLETE`，待处理 0。
 - 搜索续跑：`python scripts/history/run_nbs_gap_search_once.py --max-pages-per-job 3 --allow-network`。按 `config/history/nbs/nbs_gap_search_jobs.json` 逐窗执行、共用一个客户端保留跨窗口限速及 robots 缓存；已完成窗口跳过，此配置下一批最多新增 6 个搜索页，完成后退出。
-- 本轮报告目录：`reports/v2/nbs_gap_probe_20260908/`；其中 `search_summary.json`、`new_candidates.csv`、`gap_coverage.json` 保留搜索证据，`validated_samples.csv` 保留正文、数值和发布时间证据。
-- 完整报告：`reports/v2/nbs_gap_probe_20260908/review.html`；可复跑 notebook：`review.ipynb`，全部代码单元执行通过；验收：`acceptance.txt`；完整结果：`final_result.json`。严格宽表已于 10:56 重导出，仍为 259 行、47 指标，并验证 2005-01 CPI 从 2005-02 月末可见，以及 2021-08 CPI/PPI 从 2021-09 月末可见。
+- 本轮报告目录：`reports/v2/history/nbs/nbs_gap_probe_20260908/`；其中 `search_summary.json`、`new_candidates.csv`、`gap_coverage.json` 保留搜索证据，`validated_samples.csv` 保留正文、数值和发布时间证据。
+- 完整报告：`reports/v2/history/nbs/nbs_gap_probe_20260908/review.html`；可复跑 notebook：`review.ipynb`，全部代码单元执行通过；验收：`acceptance.txt`；完整结果：`final_result.json`。严格宽表已于 10:56 重导出，仍为 259 行、47 指标，并验证 2005-01 CPI 从 2005-02 月末可见，以及 2021-08 CPI/PPI 从 2021-09 月末可见。
 - 本轮 NBS 请求账本增加 12 次（4 个搜索页、5 篇正文及 3 次 robots 检查），当日合计 46 次；无 403/429。全部下载进程已退出，搜索和正文断点均已保存。
 - 新候选中另有 6 篇价格稿尚未下载正文，已保存为 `config/history/nbs/nbs_gap_remaining_price_urls.txt` 和报告目录的 `remaining_price_candidates.parquet`；收入稿已排除。
 
@@ -718,11 +718,11 @@ GDP2013-Q4未取得新的同期单季证据；PMI2010-05在6月发布稿的历�
 - 8 篇：2005-02 CPI 3.9%、2005-01 PPI 5.8%；2010-01 CPI 1.5%、PPI 4.3%；2015-01 CPI 0.8%、2015-02 PPI -4.8%；2019-01 CPI 1.7%、PPI 0.1%。全部根据正文与历史页面时间验证为 PIT_A，新增 8 条，无修订。
 - 原始正文下载断点：`data/history_backfill/nbs_legacy_validation_state.json`，`COMPLETE`，待处理 0。
 - 人工核对的预期值与证据片段：`config/history/nbs/nbs_legacy_review_expected.json`；离线复核入口：`scripts/validate_nbs_legacy_batch.py`（默认不写主库；显式 `--ingest` 才入库）。
-- 候选按年/按月缺口：`reports/v2/nbs_legacy/candidate_year_coverage.csv`、`candidate_missing_months.csv`。2005-01 CPI、2010 年大部分月份、PPI 2011–2014、2020-02 至 2021-08 等仍缺候选；候选存在也不代表正文已验证。
-- 搜索重复页证据：`reports/v2/nbs_legacy/search_pagination_audit.json`；离线复核脚本：`scripts/audit_nbs_search_pages.py`。
-- 原有 43 个失败项已分类：30 个 HTTP 404、7 个零行解析、5 个数据期提取失败、1 个 GDP 季度识别失败。清单：`reports/v2/nbs_legacy/existing_queue_failures.csv`；本轮未自动重试。
-- 本轮报告：`reports/v2/nbs_legacy/review.html`；可复跑检查：`review.ipynb`，代码单元已执行通过；逐篇证据：`validated_samples.csv`；验收：`acceptance.txt`；完整结果：`final_result.json`。
-- 导出：`data/exports/cn_pit_month_end_2005_20260731_values.parquet` 及同前缀 periods/metadata 文件。另存 `reports/v2/nbs_legacy/price_panel_source_age.csv`，标示 CPI/PPI 每个月末使用的数据期及其距月末的月数。
+- 候选按年/按月缺口：`reports/v2/history/nbs/nbs_legacy/candidate_year_coverage.csv`、`candidate_missing_months.csv`。2005-01 CPI、2010 年大部分月份、PPI 2011–2014、2020-02 至 2021-08 等仍缺候选；候选存在也不代表正文已验证。
+- 搜索重复页证据：`reports/v2/history/nbs/nbs_legacy/search_pagination_audit.json`；离线复核脚本：`scripts/audit_nbs_search_pages.py`。
+- 原有 43 个失败项已分类：30 个 HTTP 404、7 个零行解析、5 个数据期提取失败、1 个 GDP 季度识别失败。清单：`reports/v2/history/nbs/nbs_legacy/existing_queue_failures.csv`；本轮未自动重试。
+- 本轮报告：`reports/v2/history/nbs/nbs_legacy/review.html`；可复跑检查：`review.ipynb`，代码单元已执行通过；逐篇证据：`validated_samples.csv`；验收：`acceptance.txt`；完整结果：`final_result.json`。
+- 导出：`data/exports/cn_pit_month_end_2005_20260731_values.parquet` 及同前缀 periods/metadata 文件。另存 `reports/v2/history/nbs/nbs_legacy/price_panel_source_age.csv`，标示 CPI/PPI 每个月末使用的数据期及其距月末的月数。
 - 当日 NBS 预算账本为 34 次，本轮增加 13 次（含 1 次沙箱套接字拒绝与 robots 请求）。沙箱拒绝没有访问到服务端；获准出站后搜索/正文请求完成，本轮未遇到服务端 403/429。
 
 ### 下一步
@@ -819,7 +819,7 @@ Read `docs/history/MIGRATION_README.md` before copying the project. Its migratio
 - 转载观测的业务来源保持PBOC，原始转载URL和SHA保留，披露证据统一降为PIT_B。解析器要求全国金融统计报告标题和完整10个核心字段；明确带上海、吉林或青岛地方口径的标题拒绝入库。三个目录和候选页独立失败，同一期已有一个政府转载成功时其他站点失败只记告警。
 - 真实联网验收成功：发现5篇、选中3篇、HTTP成功3篇、解析错误0，最终状态SUCCESS；2026-08十项已入库，上海页日期证据从北京时间2026-09-16 00:00可见，青岛转载提供次日冗余证据。
 - 修复CN_RMB_LOAN_BAL_YOY和CN_NEW_RMB_LOANS_YTD误命中社融分项的问题，并离线重放2026-05至2026-07三篇央行官方原稿，追加5个正确版本。正式query-wide验证：2026-07贷款余额同比5.1、累计新增贷款10.38均选PIT_A；2026-08的4.9和10.44选政府转载PIT_B。
-- 全量测试251项通过。运行回执见reports/v2/daily_web_update/latest.md，接口验证见reports/v2/pboc_mirror_validation/README.md。
+- 全量测试251项通过。运行回执见reports/v2/daily_web_update/latest.md，接口验证见reports/v2/history/pboc/pboc_mirror_validation/README.md。
 ## 2026-09-17 Sina/Eastmoney daily PIT_D fallback
 
 - Added daily lightweight current-history adapters for `EASTMONEY_MACRO` and `SINA_MACRO`; each archives raw responses and keeps only the newest three periods.
@@ -867,7 +867,7 @@ Read `docs/history/MIGRATION_README.md` before copying the project. Its migratio
 - 主库由780,425增至781,574条；复合长表重建为239,942个事件。104个财政 Wind 事件实际进入长表，与A/B重叠数为0。
 - 原有218个财政缺月补上91个；政府性基金收入起点从2013-12提前至2012-06后新暴露8个区间内空月，因此财政缺月净降至135，中国总内部空月由626降至543。
 - 固定T边界已验证：2011-01一般公共预算收入在2011-02-16 23:59:59为空，2011-02-17 00:00起显示32.8，来源为Wind。
-- 入库前备份：`data/backups/macro_pit_v2_pre_wind_fiscal7_20260921.duckdb`，SHA256 `FEDF69C027DD03B88D6A0E0567C30C3370FDDF8CC1DB081A8110F393DAC2D50D`。证据见 `reports/v2/wind_fiscal7_20260921/README.md`。
+- 入库前备份：`data/backups/macro_pit_v2_pre_wind_fiscal7_20260921.duckdb`，SHA256 `FEDF69C027DD03B88D6A0E0567C30C3370FDDF8CC1DB081A8110F393DAC2D50D`。证据见 `reports/v2/history/wind/wind_fiscal7_20260921/README.md`。
 
 ## 2026-09-21：海关总署官方外贸五字段接入
 

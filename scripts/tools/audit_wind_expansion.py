@@ -60,7 +60,7 @@ def main() -> None:
             print(row)
 
     print("\n## summaries")
-    for filename in sorted(glob.glob("reports/v2/wind_batch*/summary.json")):
+    for filename in sorted(glob.glob("reports/v2/history/wind/wind_batch*/summary.json")):
         path = Path(filename)
         try:
             payload = json.loads(path.read_text(encoding="utf-8"))
@@ -69,7 +69,7 @@ def main() -> None:
             print(filename, "ERROR", exc)
 
     print("\n## ingestion")
-    for filename in sorted(glob.glob("reports/v2/wind_batch*/ingestion_result.json")):
+    for filename in sorted(glob.glob("reports/v2/history/wind/wind_batch*/ingestion_result.json")):
         print(filename, Path(filename).read_text(encoding="utf-8").strip())
 
 

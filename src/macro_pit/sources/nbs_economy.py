@@ -62,7 +62,7 @@ def economy_table_values(soup: BeautifulSoup, month: int, *, year: int | None = 
     # Official 2022 real-estate release definitions explicitly say both sales
     # metrics measure newly built properties and are cumulative. Limit this
     # reviewed historical alias to the 2022/2023 combined-release layouts.
-    # Evidence: reports/v2/nbs_economy_batch2/sales_definition_web_evidence.json
+    # Evidence: reports/v2/history/nbs/nbs_economy_batch2/sales_definition_web_evidence.json
     if year in {2022, 2023}:
         labels["商品房销售面积"] = ("CN_NEW_HOME_SALES_AREA_YTD_YOY", 4)
         labels["商品房销售额"] = ("CN_NEW_HOME_SALES_VALUE_YTD_YOY", 4)

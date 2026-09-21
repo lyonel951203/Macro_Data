@@ -4,7 +4,7 @@ import json
 
 import pandas as pd
 
-OUT = Path("reports/v2/wind_batch1")
+OUT = Path("reports/v2/history/wind/wind_batch1")
 summary = json.loads((OUT / "summary.json").read_text(encoding="utf-8"))
 profile = pd.read_csv(OUT / "field_profile.csv").fillna("")
 receipt = pd.read_csv(OUT / "p0_receipt.csv").fillna("")
@@ -62,7 +62,7 @@ body += ("\nHTML 打包状态：本次已尝试标准交付命令，但本机没
          "报告正文保存在本说明中，结构化输入保存在 `artifact.json`；检查与入库不依赖该渲染环境。\n")
 (OUT / "README.md").write_text(body, encoding="utf-8")
 
-source = {"id": "intake", "label": "Wind 首批工作簿及离线复核", "path": "reports/v2/wind_batch1/manifest.json",
+source = {"id": "intake", "label": "Wind 首批工作簿及离线复核", "path": "reports/v2/history/wind/wind_batch1/manifest.json",
           "query": {"engine": "Python", "language": "python", "description": "读取 SHA 归档的 数据.xlsx；检查每个指标和单元格，输出字段覆盖、内嵌操作配置、入库与全量验收。",
                     "tables_used": ["数据.xlsx / 中国_M1_同比", "field_profile.csv", "summary.json", "acceptance.txt"],
                     "executed_at": summary["reviewed_at"]}}
@@ -97,7 +97,7 @@ os.chdir(root)
 sys.path.insert(0, str(root / 'src'))
 import pandas as pd
 from openpyxl import load_workbook
-out = Path('reports/v2/wind_batch1')
+out = Path('reports/v2/history/wind/wind_batch1')
 manifest = json.loads((out / 'manifest.json').read_text(encoding='utf-8'))
 assert hashlib.sha256(Path(manifest['path']).read_bytes()).hexdigest() == manifest['sha256']
 summary = json.loads((out / 'summary.json').read_text(encoding='utf-8'))

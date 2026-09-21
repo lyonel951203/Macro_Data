@@ -15,7 +15,7 @@ import duckdb
 
 
 ROOT = Path(__file__).resolve().parents[3]
-RAW = ROOT / "reports/v2/wind_midgap_20260921/wind_cli_2018_2021.json"
+RAW = ROOT / "reports/v2/history/wind/wind_midgap_20260921/wind_cli_2018_2021.json"
 BATCH10 = ROOT / "data/manual_import/wind_mcp/batch10_midgap_2018_2021.json"
 OVERRIDES = ROOT / "config/estimated_availability_overrides_v1.csv"
 OUTPUT = ROOT / "data/manual_import/wind_mcp/batch11_january_unemployment_2019_2021.json"

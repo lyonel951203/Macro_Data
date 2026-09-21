@@ -19,13 +19,13 @@ from macro_pit.timeutils import SHANGHAI
 root = Path(__file__).resolve().parents[2]
 os.chdir(root)
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument("--output-dir", default="reports/v2/nbs_legacy")
+parser.add_argument("--output-dir", default="reports/v2/history/nbs/nbs_legacy")
 parser.add_argument("--manifest", default="config/history/nbs/nbs_legacy_validation_batch.json")
 parser.add_argument("--state-path", default="data/history_backfill/nbs_legacy_validation_state.json")
 parser.add_argument("--expected", default="config/history/nbs/nbs_legacy_review_expected.json")
 args = parser.parse_args()
 out = Path(args.output_dir)
-candidate_dir = Path("reports/v2/nbs_legacy")
+candidate_dir = Path("reports/v2/history/nbs/nbs_legacy")
 if out != candidate_dir:
     for name in ["candidate_month_coverage.csv", "candidate_year_coverage.csv", "candidate_missing_months.csv"]:
         shutil.copyfile(candidate_dir / name, out / name)

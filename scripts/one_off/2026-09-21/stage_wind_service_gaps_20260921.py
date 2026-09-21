@@ -13,11 +13,11 @@ import duckdb
 
 ROOT = Path(__file__).resolve().parents[3]
 RAW_FILES = [
-    ROOT / "reports/v2/wind_midgap_20260921/wind_cli_service_2017_2021.json",
-    ROOT / "reports/v2/wind_midgap_20260921/wind_cli_service_2022_2026.json",
+    ROOT / "reports/v2/history/wind/wind_midgap_20260921/wind_cli_service_2017_2021.json",
+    ROOT / "reports/v2/history/wind/wind_midgap_20260921/wind_cli_service_2022_2026.json",
 ]
 OUTPUT = ROOT / "data/manual_import/wind_mcp/batch13_service_production_safe_gaps.json"
-REPORT_DIR = ROOT / "reports/v2/wind_midgap_20260921/service_production"
+REPORT_DIR = ROOT / "reports/v2/history/wind/wind_midgap_20260921/service_production"
 CANONICAL = "CN_SERVICE_PRODUCTION_YOY"
 WIND_CODE = "M5767203"
 EXPECTED_META = {

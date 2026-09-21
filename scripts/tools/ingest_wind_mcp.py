@@ -2,7 +2,7 @@
 
 Usage:
   py -3.11 scripts/tools/ingest_wind_mcp.py --pattern "batch3_pmi_*.json" \
-      --output-dir reports/v2/wind_batch3_pmi [--ingest]
+      --output-dir reports/v2/history/wind/wind_batch3_pmi [--ingest]
 
 - Mappings come from config/wind_mcp_mappings.csv (append verified rows per batch).
 - Same contract and assertions as review_wind_batch.py / ingest_wind_mcp_batch2.py:

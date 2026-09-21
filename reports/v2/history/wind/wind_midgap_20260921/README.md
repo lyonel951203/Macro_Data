@@ -32,9 +32,9 @@ batch12和batch13均为0隔离、0重复字段期，隔离库重放全部 unchan
 
 ```powershell
 python scripts/one_off/2026-09-21/stage_wind_unemployment_gaps_2022_2026.py
-python scripts/tools/ingest_wind_mcp.py --pattern batch12_unemployment_gaps_2022_2026.json --output-dir reports/v2/wind_midgap_20260921/unemployment_2022_2026 --ingest
+python scripts/tools/ingest_wind_mcp.py --pattern batch12_unemployment_gaps_2022_2026.json --output-dir reports/v2/history/wind/wind_midgap_20260921/unemployment_2022_2026 --ingest
 python scripts/one_off/2026-09-21/stage_wind_service_gaps_20260921.py
-python scripts/tools/ingest_wind_mcp.py --pattern batch13_service_production_safe_gaps.json --output-dir reports/v2/wind_midgap_20260921/service_production --ingest
+python scripts/tools/ingest_wind_mcp.py --pattern batch13_service_production_safe_gaps.json --output-dir reports/v2/history/wind/wind_midgap_20260921/service_production --ingest
 python scripts/tools/estimate_availability.py
 python -m macro_pit --db-path macro_pit_v2.duckdb export-long --scope ALL --start-date 2005-01-01
 ```

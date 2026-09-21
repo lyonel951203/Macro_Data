@@ -24,7 +24,7 @@ from macro_pit.db import get_connection, insert_observations
 
 
 RAW_ROOT = Path("E:/Macro_Data/data/raw/wind")
-OUT_DIR = Path("E:/Macro_Data/reports/v2/wind_m1_revision_20250214")
+OUT_DIR = Path("E:/Macro_Data/reports/v2/history/wind/wind_m1_revision_20250214")
 OVERRIDES_PATH = Path("E:/Macro_Data/data/derived/wind_pre_revision_overrides.csv")
 PARSER_VERSION = "wind-m1-revision-xlsx-intake/1"
 CANONICAL = "CN_M1_YOY"

@@ -17,7 +17,7 @@ import duckdb
 
 
 ROOT = Path(__file__).resolve().parents[3]
-RAW = ROOT / "reports/v2/wind_midgap_20260921/wind_cli_2022_2026_unemployment.json"
+RAW = ROOT / "reports/v2/history/wind/wind_midgap_20260921/wind_cli_2022_2026_unemployment.json"
 OVERRIDES = ROOT / "config/estimated_availability_overrides_v1.csv"
 OUTPUT = ROOT / "data/manual_import/wind_mcp/batch12_unemployment_gaps_2022_2026.json"
 CANONICAL = "CN_URBAN_SURVEYED_UNEMPLOYMENT"

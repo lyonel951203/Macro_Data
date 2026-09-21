@@ -29,6 +29,6 @@
 
 - reports/v2/daily_web_update/latest.json
 - reports/v2/daily_web_update/latest.md
-- reports/v2/pboc_mirror_validation/cn_20260917_selected_long.csv
-- reports/v2/pboc_mirror_validation/cn_20260917_provenance.csv
-- reports/v2/pboc_mirror_validation/cn_20260917_query.json
+- reports/v2/history/pboc/pboc_mirror_validation/cn_20260917_selected_long.csv
+- reports/v2/history/pboc/pboc_mirror_validation/cn_20260917_provenance.csv
+- reports/v2/history/pboc/pboc_mirror_validation/cn_20260917_query.json

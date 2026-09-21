@@ -17,9 +17,9 @@ import duckdb
 
 
 ROOT = Path(__file__).resolve().parents[3]
-RAW = ROOT / "reports/v2/wind_midgap_20260921/wind_cli_2018_2021.json"
+RAW = ROOT / "reports/v2/history/wind/wind_midgap_20260921/wind_cli_2018_2021.json"
 STAGED = ROOT / "data/manual_import/wind_mcp/batch10_midgap_2018_2021.json"
-REPORT_DIR = ROOT / "reports/v2/wind_midgap_20260921"
+REPORT_DIR = ROOT / "reports/v2/history/wind/wind_midgap_20260921"
 FIELDS = {
     "M5809944": ("CN_PMI_COMPOSITE", "中国综合PMI:产出指数", "%"),
     "M5650805": ("CN_URBAN_SURVEYED_UNEMPLOYMENT", "中国:城镇调查失业率", "%"),

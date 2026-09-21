@@ -4,7 +4,7 @@
 
 ## 范围与结论
 
-`reports/v2/wind_batch1/next_download_7.csv` 七项全部完成：1,694 条观测以 **WIND / PIT_D**（`release_at` 空、`available_at=first_seen_at` 归档时刻）写入主库，771,834 → 773,528。strict/loose 快照零影响（断言通过），导出文件哈希不变。内存重放幂等（1,694 inserted / 1,694 unchanged / 0 重复键）。
+`reports/v2/history/wind/wind_batch1/next_download_7.csv` 七项全部完成：1,694 条观测以 **WIND / PIT_D**（`release_at` 空、`available_at=first_seen_at` 归档时刻）写入主库，771,834 → 773,528。strict/loose 快照零影响（断言通过），导出文件哈希不变。内存重放幂等（1,694 inserted / 1,694 unchanged / 0 重复键）。
 
 ## 映射（名称与单位已与 Wind 元数据逐字核对）
 
