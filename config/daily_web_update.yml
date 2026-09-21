@@ -1,4 +1,4 @@
-﻿version: 1
+version: 1
 run_mode: daily_light
 
 # Daily China update: new URLs plus the newest successful page only.
@@ -32,6 +32,22 @@ sources:
     bootstrap_existing_as_baseline: true
     independent_indexes: true
     independent_candidates: true
+  CUSTOMS:
+    enabled: true
+    index_manifests:
+      - config/customs_english_index_urls.txt
+    # Re-read both preliminary and bulletin pages for the current year so a
+    # revision to an older month is observed instead of checking only latest.
+    recheck_latest: 24
+    max_candidates_per_run: 30
+    retry_backoff_days: [1, 3, 7]
+    not_found_cooldown_days: 30
+    # Do not baseline-skip: pending official months are drained in bounded batches.
+    bootstrap_existing_as_baseline: false
+    independent_indexes: true
+    independent_candidates: true
+    # Keep the batch healthy while the official CDN serves an unverifiable TLS chain.
+    transport_soft_block: true
   MOF:
     enabled: true
     index_manifests:

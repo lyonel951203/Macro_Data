@@ -18,6 +18,7 @@
 *.tar
 *.gz
 /pboc_pagination.html
+/outputs/
 
 # Generated reports and evidence stay local. Keep documentation, analysis code,
 # and the small frozen task manifests required by the backfill scripts.

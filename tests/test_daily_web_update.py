@@ -7,6 +7,7 @@ import json
 import os
 import time
 
+import httpx
 import pytest
 
 import scripts.run_daily_web_update as daily_runner
@@ -56,12 +57,12 @@ def test_default_china_plan_has_official_sources_and_no_wind():
     plan = dry_run_plan(config, sources)
     assert plan["wind_included"] is False
     assert sources == [
-        "NBS", "PBOC", "PBOC_MIRROR", "MOF", "SAFE",
+        "NBS", "PBOC", "PBOC_MIRROR", "CUSTOMS", "MOF", "SAFE",
         "EASTMONEY_MACRO", "SINA_MACRO", "OECD",
     ]
     web = [
         item for item in plan["sources"]
-        if item["source"] in {"NBS", "PBOC", "PBOC_MIRROR", "MOF", "SAFE"}
+        if item["source"] in {"NBS", "PBOC", "PBOC_MIRROR", "CUSTOMS", "MOF", "SAFE"}
     ]
     oecd = next(item for item in plan["sources"] if item["source"] == "OECD")
     assert all(item["index_urls"] for item in web)
@@ -331,6 +332,32 @@ def test_pbo_c_daily_skip_is_neutral_policy_status(tmp_path):
     assert _overall_status([receipt]) == "SUCCESS"
 
 
+def test_customs_unverifiable_tls_is_explicit_neutral_transport_block(tmp_path, monkeypatch):
+    def blocked(*args, **kwargs):
+        raise CrawlSafetyError("cannot verify robots.txt for https://english.customs.gov.cn")
+
+    monkeypatch.setattr(daily_runner, "fetch_and_discover_indexes", blocked)
+    state = {}
+    receipt = run_source(
+        "CUSTOMS",
+        {
+            "transport_soft_block": True,
+            "index_manifests": [],
+            "retry_backoff_days": [1, 3, 7],
+            "not_found_cooldown_days": 30,
+        },
+        state,
+        db_path=tmp_path / "customs_probe.duckdb",
+        allow_network=True,
+        logs_dir=tmp_path,
+    )
+    assert receipt["status"] == "BLOCKED_TRANSPORT"
+    assert "cannot verify robots.txt" in receipt["transport_note"]
+    assert receipt["errors"] == []
+    assert state["transport_status"] == "BLOCKED_TRANSPORT"
+    assert _overall_status([receipt]) == "SUCCESS"
+
+
 def test_recent_start_period_is_month_aligned():
     now = datetime(2026, 9, 17, 10, 0, tzinfo=CN)
     assert _recent_start_period(18, now) == "2025-03"
@@ -593,3 +620,55 @@ def test_fallback_pipeline_budget_exhaustion_writes_deferred_log(tmp_path, monke
     )
     assert daily_log["status"] == "SUCCESS"
     assert daily_log["sources"]["SINA_MACRO"]["status"] == "DEFERRED_BUDGET"
+
+
+@pytest.mark.parametrize(
+    ("body", "start_period", "allow_no_recent", "expected_status", "expected_no_records"),
+    [
+        ("NoRecordsFound", "2025-03", True, "SUCCESS", 1),
+        ("NoRecordsFound", "2025-03", False, "FAILED", 0),
+        ("NotFound", "2025-03", True, "FAILED", 0),
+        ("NoRecordsFound", None, True, "FAILED", 0),
+    ],
+)
+def test_oecd_recent_no_records_is_not_a_query_failure(
+    tmp_path, monkeypatch, body, start_period, allow_no_recent,
+    expected_status, expected_no_records
+):
+    manifest = tmp_path / "oecd_no_records.yml"
+    manifest.write_text(
+        "jobs:\n  - url: https://sdmx.oecd.org/public/rest/data/test\n"
+        f"    allow_no_recent_records: {str(allow_no_recent).lower()}\n"
+        "    series:\n"
+        "      - {ref_area: IND, frequency: Q, measure: B1GQ_Q, "
+        "unit_measure: XDC, canonical_id: IN_REAL_GDP, name: Real GDP, unit: national_currency}\n",
+        encoding="utf-8",
+    )
+
+    class FakeOECDSource:
+        parser_version = "fake"
+        policy = {"allowed_hosts": ["sdmx.oecd.org"], "max_requests_per_run": 10}
+
+        def __init__(self, *args, **kwargs):
+            self.client = SimpleNamespace(events=[])
+
+        def fetch(self, url, **kwargs):
+            request = httpx.Request("GET", url)
+            response = httpx.Response(404, text=body, request=request)
+            raise httpx.HTTPStatusError("404", request=request, response=response)
+
+        def close(self):
+            pass
+
+    monkeypatch.setattr(pipeline_module, "OECDSource", FakeOECDSource)
+    conn = get_connection(tmp_path / "no_records.duckdb")
+    try:
+        result = pipeline_module.ingest_oecd_manifest(
+            conn, manifest_path=manifest, allow_network=True, refresh=True,
+            start_period=start_period, logs_dir=tmp_path,
+        )
+    finally:
+        conn.close()
+    assert result.status == expected_status
+    assert result.no_recent_records == expected_no_records
+    assert result.parse_errors == (0 if expected_no_records else 1)

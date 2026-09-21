@@ -44,9 +44,14 @@ def build_pit_long(
     value. valid_from is inclusive and valid_to is exclusive. A null valid_to
     means the value remains effective through the latest known event.
 
-    Base candidates follow PIT_A, PIT_B, Wind, Eastmoney-D, Sina-D priority.
-    Dated Wind revisions are version events and can supersede an older base; a
-    later A/B vintage can then supersede the revision. Other PIT_D rows remain
+    PIT_A/PIT_B is authoritative. Ordinary Wind PIT_D is emitted only when
+    that field-period has no A/B record at all. SAFE D is also admitted only
+    for CN_FX_RESERVE_USD gaps using its calibrated virtual availability date;
+    Eastmoney-D and Sina-D remain lower-priority fallbacks. Dated Wind revisions
+    are version events and can
+    supersede an older base; a later A/B vintage can then supersede the
+    revision. Silent official-page changes are also dated events from their
+    first observed timestamp. Other PIT_D rows remain
     excluded unless an explicit estimated-availability rule applies.
     """
     scope = scope.upper()
@@ -68,6 +73,7 @@ def build_pit_long(
     wind_revision_sql = _empty_revision_sql()
     estimated_d_union = ""
     fallback_d_union = ""
+    cn_web_revision_sql = _empty_revision_sql()
     imf_revision_sql = _empty_revision_sql()
     if scope in {"CN", "ALL"}:
         sidecar = Path(estimated_availability_path)
@@ -84,7 +90,8 @@ def build_pit_long(
                    CAST(period_end AS DATE) AS period_end, value,
                    CAST(estimated_available_at AS TIMESTAMPTZ) AS visible_from
             FROM read_csv_auto('{safe_path}', header=true)
-            WHERE source = 'WIND'
+            WHERE (source = 'WIND' AND canonical_series_id <> 'CN_FX_RESERVE_USD')
+               OR (source = 'SAFE' AND canonical_series_id = 'CN_FX_RESERVE_USD')
             """
         )
         wind_base_union = f"""
@@ -93,7 +100,7 @@ def build_pit_long(
                    e.canonical_series_id,
                    COALESCE(w.source_series_id, e.canonical_series_id) AS source_series_id,
                    COALESCE(w.series_name, e.canonical_series_id) AS series_name,
-                   'WIND' AS source,
+                   e.source,
                    COALESCE(w.frequency, 'M') AS source_frequency,
                    COALESCE(w.unit, '') AS unit,
                    w.seasonal_adjustment,
@@ -103,7 +110,10 @@ def build_pit_long(
                    e.value,
                    e.visible_from,
                    1 AS source_priority,
-                   'WIND' AS selection_origin,
+                   CASE e.source
+                       WHEN 'SAFE' THEN 'SAFE_ESTIMATED_D'
+                       ELSE 'WIND'
+                   END AS selection_origin,
                    'BASE_PRIORITY' AS event_role,
                    'D' AS pit_grade,
                    NULL::TIMESTAMPTZ AS release_at,
@@ -121,14 +131,29 @@ def build_pit_long(
             LEFT JOIN (
                 SELECT *
                 FROM observation_vintage
-                WHERE country = 'CN' AND source = 'WIND' AND pit_grade = 'D'
+                WHERE country = 'CN' AND pit_grade = 'D'
+                  AND (source = 'WIND' OR (
+                      source = 'SAFE'
+                      AND canonical_series_id = 'CN_FX_RESERVE_USD'
+                  ))
                   AND COALESCE(release_date_source, '') NOT LIKE 'wind_revision_snapshot_%'
                 QUALIFY row_number() OVER (
-                    PARTITION BY canonical_series_id, period
+                    PARTITION BY canonical_series_id, period, source
                     ORDER BY retrieved_at DESC, vintage_no DESC
                 ) = 1
-            ) w USING (canonical_series_id, period)
+            ) w
+              ON w.canonical_series_id = e.canonical_series_id
+             AND w.period = e.period
+             AND w.source = e.source
             WHERE {sidecar_period_filter}
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM observation_vintage official
+                  WHERE official.country = 'CN'
+                    AND official.canonical_series_id = e.canonical_series_id
+                    AND official.period = e.period
+                    AND official.pit_grade IN ('A', 'B')
+              )
         """
         wind_revision_sql = f"""
             SELECT country, canonical_series_id, source_series_id, series_name,
@@ -168,6 +193,23 @@ def build_pit_long(
               AND pit_grade = 'D'
               AND release_date_source =
                   'third_party_current_history_first_seen_only'
+              AND {db_period_filter}
+        """
+        cn_web_revision_sql = f"""
+            SELECT country, canonical_series_id, source_series_id, series_name,
+                   source, frequency AS source_frequency, unit,
+                   seasonal_adjustment, period, period_start, period_end, value,
+                   available_at AS visible_from,
+                   1 AS source_priority,
+                   'OBSERVED_WEB_REVISION' AS selection_origin,
+                   'DATED_REVISION' AS event_role,
+                   pit_grade, release_at, release_date_source, first_seen_at,
+                   vintage_no, revision_type, revision_delta, source_url,
+                   raw_file, raw_sha256, retrieved_at, parser_version
+            FROM observation_vintage
+            WHERE country = 'CN' AND pit_grade = 'D'
+              AND release_date_source =
+                  'official_web_revision_first_seen'
               AND {db_period_filter}
         """
 
@@ -295,11 +337,16 @@ def build_pit_long(
                        WHERE selection_origin = 'EASTMONEY_D'
                    ) OVER (
                        PARTITION BY country, canonical_series_id, period
-                   ) AS first_eastmoney_at
+                   ) AS first_eastmoney_at,
+                   min(visible_from) FILTER (
+                       WHERE selection_origin = 'SAFE_ESTIMATED_D'
+                   ) OVER (
+                       PARTITION BY country, canonical_series_id, period
+                   ) AS first_safe_estimated_at
             FROM base_deduplicated
         ),
         effective_base AS (
-            SELECT * EXCLUDE (first_a_at, first_b_at, first_wind_at, first_eastmoney_at)
+            SELECT * EXCLUDE (first_a_at, first_b_at, first_wind_at, first_eastmoney_at, first_safe_estimated_at)
             FROM base_thresholds
             WHERE selection_origin = 'PIT_A'
                OR (
@@ -312,10 +359,16 @@ def build_pit_long(
                     AND (first_b_at IS NULL OR visible_from < first_b_at)
                )
                OR (
+                    selection_origin = 'SAFE_ESTIMATED_D'
+                    AND (first_a_at IS NULL OR visible_from < first_a_at)
+                    AND (first_b_at IS NULL OR visible_from < first_b_at)
+               )
+               OR (
                     selection_origin = 'EASTMONEY_D'
                     AND (first_a_at IS NULL OR visible_from < first_a_at)
                     AND (first_b_at IS NULL OR visible_from < first_b_at)
                     AND (first_wind_at IS NULL OR visible_from < first_wind_at)
+                    AND (first_safe_estimated_at IS NULL OR visible_from < first_safe_estimated_at)
                )
                OR (
                     selection_origin = 'SINA_D'
@@ -323,6 +376,7 @@ def build_pit_long(
                     AND (first_b_at IS NULL OR visible_from < first_b_at)
                     AND (first_wind_at IS NULL OR visible_from < first_wind_at)
                     AND (first_eastmoney_at IS NULL OR visible_from < first_eastmoney_at)
+                    AND (first_safe_estimated_at IS NULL OR visible_from < first_safe_estimated_at)
                )
                OR (
                     selection_origin = 'ESTIMATED_D'
@@ -332,6 +386,8 @@ def build_pit_long(
         ),
         revision_candidates AS (
             SELECT * FROM ({wind_revision_sql})
+            UNION ALL
+            SELECT * FROM ({cn_web_revision_sql})
             UNION ALL
             SELECT * FROM ({imf_revision_sql})
         ),
@@ -408,8 +464,11 @@ def export_pit_long(
         "fields": fields,
         "grain": "one effective value event per country + field + data period",
         "validity": "valid_from inclusive; valid_to exclusive; null valid_to remains effective",
-        "selection_priority": ["PIT_A", "PIT_B", "WIND", "EASTMONEY_D", "SINA_D", "ESTIMATED_D"],
+        "selection_priority": ["PIT_A", "PIT_B", "SAFE_ESTIMATED_D", "WIND", "EASTMONEY_D", "SINA_D", "ESTIMATED_D"],
+        "wind_base_rule": "ordinary Wind PIT_D is emitted only when no PIT_A/PIT_B exists for the same field-period",
+        "safe_fx_reserve_rule": "SAFE PIT_D for CN_FX_RESERVE_USD is emitted only without A/B and uses the calibrated virtual availability date",
         "wind_revision_rule": "dated Wind revisions are version events",
+        "official_web_revision_rule": "silent official-page changes become version events at first observation",
         "contains_source_frequencies": True,
         "requires_as_of_parameter": False,
     }

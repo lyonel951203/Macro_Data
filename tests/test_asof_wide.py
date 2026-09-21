@@ -51,7 +51,9 @@ def _sidecar(path: Path) -> Path:
     path.write_text(
         "canonical_series_id,source,period,period_end,value,estimated_release_date,estimated_available_at\n"
         "CN_X,WIND,2020-06,2020-06-30,8.0,2020-07-01,2020-07-01T00:00:00+08:00\n"
-        "CN_Y,WIND,2020-06,2020-06-30,20.0,2020-07-04,2020-07-05T00:00:00+08:00\n",
+        "CN_Y,WIND,2020-06,2020-06-30,20.0,2020-07-04,2020-07-05T00:00:00+08:00\n"
+        "CN_FX_RESERVE_USD,SAFE,2020-05,2020-05-31,340.0,2020-06-07,2020-06-08T00:00:00+08:00\n"
+        "CN_FX_RESERVE_USD,SAFE,2020-06,2020-06-30,341.0,2020-07-07,2020-07-08T00:00:00+08:00\n",
         encoding="utf-8",
     )
     return path
@@ -90,6 +92,15 @@ def test_fixed_t_wide_uses_a_then_b_then_wind_and_never_forward_fills(tmp_path):
              available=datetime(2020, 8, 5, tzinfo=CN_TZ), sha="july"),
     ])
     sidecar = _sidecar(tmp_path / "estimated.csv")
+
+    before_official = build_as_of_wide(
+        conn, "2020-07-02", "CN", start_date="2020-06-01",
+        estimated_availability_path=sidecar,
+    )
+    before_row = before_official.values.filter(
+        pl.col("month_end") == pl.date(2020, 6, 30)
+    ).row(0, named=True)
+    assert before_row["CN_X"] is None  # any A/B record makes ordinary Wind gap-ineligible
 
     july = build_as_of_wide(
         conn, "2020-07-31", "CN", start_date="2020-06-01",
@@ -143,6 +154,58 @@ def test_fixed_t_wide_uses_a_then_b_then_wind_and_never_forward_fills(tmp_path):
     conn.close()
 
 
+def test_safe_fx_reserve_estimate_starts_on_virtual_date_and_never_precedes_ab(tmp_path):
+    conn = get_connection(":memory:")
+    insert_observations(conn, [
+        _row(
+            field="CN_FX_RESERVE_USD", source="SAFE", period="2020-05",
+            period_start="2020-05-01", period_end="2020-05-31",
+            value=340.0, grade="D", available=datetime(2026, 9, 1, tzinfo=CN_TZ),
+            sha="fx_may_d",
+        ),
+        _row(
+            field="CN_FX_RESERVE_USD", source="SAFE", period="2020-05",
+            period_start="2020-05-01", period_end="2020-05-31",
+            value=342.0, grade="B", available=datetime(2020, 6, 15, tzinfo=CN_TZ),
+            sha="fx_may_b",
+        ),
+        _row(
+            field="CN_FX_RESERVE_USD", source="SAFE", period="2020-06",
+            period_start="2020-06-01", period_end="2020-06-30",
+            value=341.0, grade="D", available=datetime(2026, 9, 1, tzinfo=CN_TZ),
+            sha="fx_june_d",
+        ),
+    ])
+    sidecar = _sidecar(tmp_path / "estimated.csv")
+
+    before = build_as_of_wide(
+        conn, "2020-07-07T23:59:59+08:00", "CN", start_date="2020-05-01",
+        estimated_availability_path=sidecar,
+    )
+    before_june = before.values.filter(
+        pl.col("month_end") == pl.date(2020, 6, 30)
+    ).row(0, named=True)
+    assert before_june["CN_FX_RESERVE_USD"] is None
+
+    after = build_as_of_wide(
+        conn, "2020-07-08T00:00:00+08:00", "CN", start_date="2020-05-01",
+        estimated_availability_path=sidecar,
+    )
+    may = after.values.filter(
+        pl.col("month_end") == pl.date(2020, 5, 31)
+    ).row(0, named=True)
+    june = after.values.filter(
+        pl.col("month_end") == pl.date(2020, 6, 30)
+    ).row(0, named=True)
+    origins = after.provenance.filter(
+        pl.col("month_end").is_in([date(2020, 5, 31), date(2020, 6, 30)])
+    )["CN_FX_RESERVE_USD"].to_list()
+    assert may["CN_FX_RESERVE_USD"] == 342.0
+    assert june["CN_FX_RESERVE_USD"] == 341.0
+    assert origins == ["PIT_B", "SAFE_ESTIMATED_D"]
+    conn.close()
+
+
 def test_scope_cn_us_glb_and_export_companions(tmp_path):
     conn = get_connection(":memory:")
     insert_observations(conn, [
@@ -163,4 +226,53 @@ def test_scope_cn_us_glb_and_export_companions(tmp_path):
     receipt = json.loads(paths["query_json"].read_text(encoding="utf-8"))
     assert receipt["frequency"] == "M"
     assert receipt["index_column"] == "month_end"
+    conn.close()
+
+
+def test_cn_official_web_revision_becomes_visible_only_when_observed(tmp_path):
+    conn = get_connection(":memory:")
+    base_at = datetime(2020, 7, 10, 10, tzinfo=CN_TZ)
+    revised_at = datetime(2020, 8, 15, 9, tzinfo=CN_TZ)
+    replacement_at = datetime(2020, 9, 1, 10, tzinfo=CN_TZ)
+    base = _row(
+        source="CUSTOMS", field="CN_EXPORT_USD", value=100.0,
+        available=base_at, sha="customs_base",
+    )
+    revision = _row(
+        source="CUSTOMS", field="CN_EXPORT_USD", value=101.0, grade="D",
+        available=revised_at,
+        release_date_source="official_web_revision_first_seen",
+        sha="customs_revision",
+    )
+    revision.update(
+        first_seen_at=revised_at,
+        retrieved_at=revised_at,
+        source_url=base["source_url"],
+    )
+    later_official = _row(
+        source="CUSTOMS", field="CN_EXPORT_USD", value=102.0,
+        available=replacement_at, sha="customs_later",
+    )
+    insert_observations(conn, [base, revision, later_official])
+    sidecar = _sidecar(tmp_path / "estimated.csv")
+
+    before = build_as_of_wide(
+        conn, "2020-08-14", "CN", start_date="2020-06-01",
+        estimated_availability_path=sidecar,
+    )
+    revised = build_as_of_wide(
+        conn, "2020-08-31", "CN", start_date="2020-06-01",
+        estimated_availability_path=sidecar,
+    )
+    replaced = build_as_of_wide(
+        conn, "2020-09-30", "CN", start_date="2020-06-01",
+        estimated_availability_path=sidecar,
+    )
+    assert before.values["CN_EXPORT_USD"].drop_nulls().to_list() == [100.0]
+    assert revised.values["CN_EXPORT_USD"].drop_nulls().to_list() == [101.0]
+    assert revised.provenance["CN_EXPORT_USD"].drop_nulls().to_list() == [
+        "OBSERVED_WEB_REVISION"
+    ]
+    assert replaced.values["CN_EXPORT_USD"].drop_nulls().to_list() == [102.0]
+    assert replaced.provenance["CN_EXPORT_USD"].drop_nulls().to_list() == ["PIT_A"]
     conn.close()

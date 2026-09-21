@@ -104,3 +104,45 @@ def test_nbs_spokesperson_q_and_a_is_not_an_automatic_candidate(tmp_path):
     assert [item.url for item in result] == [
         "https://www.stats.gov.cn/sj/zxfb/202609/t20260915_2.html"
     ]
+
+
+def test_customs_uuid_links_and_english_months_are_discovered(tmp_path):
+    raw = tmp_path / "customs.html"
+    raw.write_text(
+        "<a href='/Statics/4733ad72-5ba7-4b60-bfbd-00e2f4eef77f.html'>"
+        "(1) China's Total Export &amp; Import Values, Dec 2025 (in USD)</a>"
+        "<a href='/Statics/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee.html'>"
+        "(2) China's Total Export &amp; Import Values by Trade Mode, Dec 2025 (in USD)</a>"
+        "<a href='/Statics/bbbbbbbb-cccc-dddd-eeee-ffffffffffff.html'>"
+        "(1) China's Total Export &amp; Import Values, Dec 2025 (in CNY)</a>",
+        encoding="utf-8",
+    )
+    rows = discover_candidates(
+        "CUSTOMS", [raw],
+        base_urls=["https://english.customs.gov.cn/statics/report/preliminary.html"],
+    )
+    assert len(rows) == 1
+    assert rows[0].period == "2025-12"
+    assert rows[0].url == (
+        "https://english.customs.gov.cn/Statics/"
+        "4733ad72-5ba7-4b60-bfbd-00e2f4eef77f.html"
+    )
+
+
+def test_customs_monthly_index_uses_surrounding_row_label(tmp_path):
+    raw = tmp_path / "customs_monthly.html"
+    raw.write_text(
+        "<table><tr><td>（1）Summary of Imports and Exports (In USD) B：Monthly</td>"
+        "<td><a href='/Statics/cccccccc-dddd-eeee-ffff-000000000000.html'>Jan.</a></td>"
+        "</tr><tr><td>（2）Imports and Exports by Country (In USD)</td>"
+        "<td><a href='/Statics/dddddddd-eeee-ffff-0000-111111111111.html'>Jan.</a></td>"
+        "</tr></table>",
+        encoding="utf-8",
+    )
+    rows = discover_candidates(
+        "CUSTOMS", [raw],
+        base_urls=["https://english.customs.gov.cn/statics/report/monthly.html"],
+    )
+    assert len(rows) == 1
+    assert "Summary of Imports and Exports" in rows[0].title
+    assert rows[0].period is None

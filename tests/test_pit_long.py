@@ -61,7 +61,11 @@ def _sidecar(path: Path) -> Path:
         "canonical_series_id,source,period,period_end,value,"
         "estimated_release_date,estimated_available_at\n"
         "CN_X,WIND,2020-06,2020-06-30,8.0,2020-07-01,"
-        "2020-07-01T00:00:00+08:00\n",
+        "2020-07-01T00:00:00+08:00\n"
+        "CN_FX_RESERVE_USD,SAFE,2020-05,2020-05-31,340.0,2020-06-07,"
+        "2020-06-08T00:00:00+08:00\n"
+        "CN_FX_RESERVE_USD,SAFE,2020-06,2020-06-30,341.0,2020-07-07,"
+        "2020-07-08T00:00:00+08:00\n",
         encoding="utf-8",
     )
     return path
@@ -112,13 +116,31 @@ def test_full_long_export_encodes_effective_intervals_and_both_frequencies(tmp_p
                 source="OTHER", field="CN_D", value=88.0, grade="D",
                 available=datetime(2026, 9, 1, tzinfo=CN_TZ), sha="d",
             ),
+            _row(
+                source="SAFE", field="CN_FX_RESERVE_USD", period="2020-05",
+                period_start="2020-05-01", period_end="2020-05-31",
+                value=340.0, grade="D",
+                available=datetime(2026, 9, 1, tzinfo=CN_TZ), sha="fx_may_d",
+            ),
+            _row(
+                source="SAFE", field="CN_FX_RESERVE_USD", period="2020-05",
+                period_start="2020-05-01", period_end="2020-05-31",
+                value=342.0, grade="B",
+                available=datetime(2020, 6, 15, tzinfo=CN_TZ), sha="fx_may_b",
+            ),
+            _row(
+                source="SAFE", field="CN_FX_RESERVE_USD", period="2020-06",
+                period_start="2020-06-01", period_end="2020-06-30",
+                value=341.0, grade="D",
+                available=datetime(2026, 9, 1, tzinfo=CN_TZ), sha="fx_june_d",
+            ),
         ],
     )
     sidecar = _sidecar(tmp_path / "estimated.csv")
     result = build_pit_long(
         conn,
         "CN",
-        start_date="2020-06-01",
+        start_date="2020-05-01",
         estimated_availability_path=sidecar,
     )
 
@@ -126,18 +148,25 @@ def test_full_long_export_encodes_effective_intervals_and_both_frequencies(tmp_p
         result.events["canonical_series_id"] == "CN_X"
     )
     assert x["selection_origin"].to_list() == [
-        "WIND",
         "PIT_B",
         "PIT_A",
         "PIT_A",
         "WIND_REVISION",
     ]
-    assert x["value"].to_list() == [8.0, 9.0, 10.0, 11.0, 12.0]
+    assert x["value"].to_list() == [9.0, 10.0, 11.0, 12.0]
     assert x["valid_to"][:-1].to_list() == x["valid_from"][1:].to_list()
     assert x["valid_to"][-1] is None
     assert 99.0 not in x["value"].to_list()
     assert set(result.events["source_frequency"].to_list()) == {"M", "Q"}
-    assert set(result.events["canonical_series_id"].to_list()) == {"CN_X", "CN_Q"}
+    assert set(result.events["canonical_series_id"].to_list()) == {
+        "CN_X", "CN_Q", "CN_FX_RESERVE_USD",
+    }
+    fx = result.events.filter(
+        result.events["canonical_series_id"] == "CN_FX_RESERVE_USD"
+    )
+    assert fx["period"].to_list() == ["2020-05", "2020-06"]
+    assert fx["selection_origin"].to_list() == ["PIT_B", "SAFE_ESTIMATED_D"]
+    assert fx["value"].to_list() == [342.0, 341.0]
 
     paths = export_pit_long(result, tmp_path / "cn_long")
     assert all(path.is_file() for path in paths.values())
@@ -149,7 +178,7 @@ def test_full_long_export_encodes_effective_intervals_and_both_frequencies(tmp_p
             conn,
             "2020-08-31",
             "CN",
-            start_date="2020-06-01",
+            start_date="2020-05-01",
             frequency=frequency,
             estimated_availability_path=sidecar,
         )
@@ -157,13 +186,49 @@ def test_full_long_export_encodes_effective_intervals_and_both_frequencies(tmp_p
             paths["long_parquet"],
             "2020-08-31",
             "CN",
-            start_date="2020-06-01",
+            start_date="2020-05-01",
             frequency=frequency,
         )
-        columns = [index_column, "CN_Q", "CN_X"]
+        columns = [index_column, "CN_FX_RESERVE_USD", "CN_Q", "CN_X"]
         assert_frame_equal(from_long.values.select(columns), from_database.values.select(columns))
         assert_frame_equal(from_long.periods.select(columns), from_database.periods.select(columns))
         assert_frame_equal(from_long.provenance.select(columns), from_database.provenance.select(columns))
         assert from_long.input_mode == "long_parquet"
         assert from_long.input_reference == str(paths["long_parquet"].resolve())
+    conn.close()
+
+
+def test_cn_official_web_revision_is_a_dated_long_event(tmp_path):
+    conn = get_connection(":memory:")
+    base_at = datetime(2020, 7, 10, 10, tzinfo=CN_TZ)
+    revised_at = datetime(2020, 8, 15, 9, tzinfo=CN_TZ)
+    base = _row(
+        source="CUSTOMS", field="CN_EXPORT_USD", value=100.0,
+        available=base_at, sha="customs_base",
+    )
+    revision = _row(
+        source="CUSTOMS", field="CN_EXPORT_USD", value=101.0, grade="D",
+        available=revised_at,
+        release_date_source="official_web_revision_first_seen",
+        sha="customs_revision",
+    )
+    revision.update(
+        first_seen_at=revised_at,
+        retrieved_at=revised_at,
+        source_url=base["source_url"],
+    )
+    insert_observations(conn, [base, revision])
+    result = build_pit_long(
+        conn, "CN", start_date="2020-06-01",
+        estimated_availability_path=_sidecar(tmp_path / "estimated.csv"),
+    )
+    events = result.events.filter(
+        result.events["canonical_series_id"] == "CN_EXPORT_USD"
+    )
+    assert events["value"].to_list() == [100.0, 101.0]
+    assert events["selection_origin"].to_list() == [
+        "PIT_A", "OBSERVED_WEB_REVISION"
+    ]
+    assert events["valid_to"][0] == events["valid_from"][1]
+    assert events["valid_to"][1] is None
     conn.close()

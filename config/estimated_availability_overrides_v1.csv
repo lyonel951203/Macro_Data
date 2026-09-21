@@ -1,0 +1,12 @@
+canonical_series_id,source,period,value,available_at,basis,source_url
+CN_URBAN_SURVEYED_UNEMPLOYMENT,WIND,2019-01,5.1,2019-03-14T15:00:00+08:00,official_same_period_direct,https://www.stats.gov.cn/sj/sjjd/202302/t20230202_1896155.html
+CN_URBAN_SURVEYED_UNEMPLOYMENT,WIND,2020-01,5.3,2020-03-16T15:00:00+08:00,official_same_period_direct,https://www.stats.gov.cn/sj/sjjd/202302/t20230202_1896311.html
+CN_URBAN_SURVEYED_UNEMPLOYMENT,WIND,2021-01,5.4,2021-03-15T10:00:00+08:00,official_same_period_direct,https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901024.html
+
+CN_URBAN_SURVEYED_UNEMPLOYMENT,WIND,2022-01,5.3,2022-03-15T10:00:00+08:00,official_same_release_inferred,https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901402.html
+CN_URBAN_SURVEYED_UNEMPLOYMENT,WIND,2022-04,6.1,2022-05-16T10:00:00+08:00,official_same_period_direct,https://www.stats.gov.cn/sj/xwfbh/fbhwd/202302/t20230203_1901460.html
+CN_URBAN_SURVEYED_UNEMPLOYMENT,WIND,2023-01,5.5,2023-03-15T10:00:00+08:00,official_same_release_inferred,https://www.stats.gov.cn/sj/zxfb/202303/t20230315_1937190.html
+CN_URBAN_SURVEYED_UNEMPLOYMENT,WIND,2024-01,5.2,2024-03-18T10:00:00+08:00,official_same_release_inferred,https://www.stats.gov.cn/sj/zxfb/202403/t20240321_1948109.html
+CN_URBAN_SURVEYED_UNEMPLOYMENT,WIND,2025-01,5.2,2025-03-17T10:00:00+08:00,official_same_release_inferred,https://www.stats.gov.cn/sj/zxfb/202503/t20250317_1959010.html
+CN_URBAN_SURVEYED_UNEMPLOYMENT,WIND,2025-12,5.1,2026-01-19T10:00:00+08:00,official_same_period_direct,https://www.stats.gov.cn/sj/zxfb/202601/t20260119_1962330.html
+CN_URBAN_SURVEYED_UNEMPLOYMENT,WIND,2026-01,5.2,2026-03-16T10:00:00+08:00,official_same_release_inferred,https://www.stats.gov.cn/zwfwck/sjfb/202603/t20260316_1962780.html

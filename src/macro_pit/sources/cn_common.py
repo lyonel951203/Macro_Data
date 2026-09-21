@@ -90,8 +90,8 @@ def extract_release_evidence(soup: BeautifulSoup, text: str, first_seen: datetim
         }
 
     date_patterns = [
-        r"(?:文章来源|发布时间|发布日期)\s*[：:]?\s*(20\d{2})[-年](\d{1,2})[-月](\d{1,2})日?",
-        r"(20\d{2})-(\d{1,2})-(\d{1,2})",
+        r"(?:文章来源|发布时间|发布日期)\s*[：:]?\s*(20\d{2})[-/年](\d{1,2})[-/月](\d{1,2})日?",
+        r"(20\d{2})[-/](\d{1,2})[-/](\d{1,2})",
     ]
     for pattern in date_patterns:
         match = re.search(pattern, text)

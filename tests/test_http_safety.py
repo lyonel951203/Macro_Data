@@ -165,3 +165,28 @@ def test_unlimited_manifest_still_checks_allowed_hosts():
     _validate_manifest(['https://www.stats.gov.cn/x']*1000,rules)
     with pytest.raises(CrawlSafetyError,match='outside configured'):
         _validate_manifest(['https://example.com/x'],rules)
+
+
+def test_transient_robots_error_retries_and_still_checks_rules(tmp_path):
+    calls = []
+
+    def handler(request):
+        calls.append(str(request.url))
+        if request.url.path == "/robots.txt":
+            if calls.count(str(request.url)) == 1:
+                return httpx.Response(503, text="temporary error")
+            return httpx.Response(200, text="User-agent: *\nDisallow: /blocked\n")
+        return httpx.Response(200, text="ok")
+
+    with client(tmp_path, httpx.MockTransport(handler), allow_network=True) as http:
+        http.policy.update(
+            respect_robots_txt=True,
+            robots_retries=2,
+            robots_retry_backoff_seconds=0,
+        )
+        http.sleep = lambda seconds: None
+        assert http.fetch("https://data.stats.gov.cn/allowed").status_code == 200
+        with pytest.raises(CrawlSafetyError, match="robots.txt disallows"):
+            http.fetch("https://data.stats.gov.cn/blocked")
+    assert len([url for url in calls if url.endswith("/robots.txt")]) == 2
+    assert not any(url.endswith("/blocked") for url in calls)

@@ -74,6 +74,7 @@ SOURCE_RULES = {
         "keywords": (
             "进出口商品总值表", "进出口总值",
             "Summary of Imports and Exports",
+            "China's Total Export & Import Values",
         ),
         "kind": "customs_release",
     },
@@ -99,9 +100,18 @@ def discover_candidates(
         soup = BeautifulSoup(decode_content(path.read_bytes()), "lxml")
         for anchor in soup.find_all("a", href=True):
             title = " ".join((anchor.get("title") or anchor.get_text(" ", strip=True)).split())
+            if source_key == "CUSTOMS" and not _is_customs_total_usd_title(title):
+                # GACC monthly indexes often label anchors only "Jan."/"Feb.";
+                # the dataset label lives in the surrounding table row.
+                parent_row = anchor.find_parent("tr")
+                row_text = " ".join(parent_row.get_text(" ", strip=True).split()) if parent_row else ""
+                if _is_customs_total_usd_title(row_text):
+                    title = f"{row_text} [{title}]"
             if not title or not any(keyword in title for keyword in rule["keywords"]):
                 continue
             if any(keyword in title for keyword in rule.get("exclude_keywords", ())):
+                continue
+            if source_key == "CUSTOMS" and not _is_customs_total_usd_title(title):
                 continue
             url = urljoin(base_url, str(anchor["href"]))
             parsed_url = urlparse(url)
@@ -109,7 +119,12 @@ def discover_candidates(
                 url = parsed_url._replace(scheme="https").geturl()
             if (urlparse(url).hostname or "").lower() not in rule["hosts"]:
                 continue
-            if not re.search(r"/20\d{2}(?:\d{2}){0,2}/|20\d{10,}", url):
+            dated_path = re.search(r"/20\d{2}(?:\d{2}){0,2}/|20\d{10,}", url)
+            customs_static = (
+                source_key == "CUSTOMS"
+                and re.search(r"/statics/[0-9a-f-]{20,}\.html$", url, re.IGNORECASE)
+            )
+            if not dated_path and not customs_static:
                 continue
             candidates[url] = CandidateUrl(
                 source=source_key,
@@ -182,6 +197,21 @@ def fetch_and_discover_indexes(
     ), raw_files
 
 
+def _is_customs_total_usd_title(title: str) -> bool:
+    """Keep only the national USD total table used by the five canonical fields."""
+    normalized = " ".join(title.split()).lower()
+    if "usd" not in normalized and "美元" not in normalized:
+        return False
+    if " by " in normalized or "按" in normalized or "国别" in normalized:
+        return False
+    return (
+        "summary of imports and exports" in normalized
+        or "china's total export & import values" in normalized
+        or "进出口商品总值表" in normalized
+        or "进出口总值" in normalized
+    )
+
+
 def _title_period(title: str) -> str | None:
     match = re.search(r"(20\d{2})年\s*1\s*[-—–至]\s*(1[0-2]|0?[1-9])月", title)
     if match:
@@ -201,4 +231,26 @@ def _title_period(title: str) -> str | None:
     match = re.search(r"(20\d{2})年", title)
     if match:
         return f"{int(match.group(1)):04d}-12"
+    months = {
+        name: number
+        for number, names in enumerate(
+            (
+                ("january", "jan"), ("february", "feb"), ("march", "mar"),
+                ("april", "apr"), ("may",), ("june", "jun"),
+                ("july", "jul"), ("august", "aug"),
+                ("september", "sep", "sept"), ("october", "oct"),
+                ("november", "nov"), ("december", "dec"),
+            ),
+            start=1,
+        )
+        for name in names
+    }
+    normalized = " ".join(title.split()).lower()
+    names = "|".join(sorted(months, key=len, reverse=True))
+    match = re.search(rf"\b({names})\.?\s*,?\s*(20\d{{2}})\b", normalized)
+    if match:
+        return f"{int(match.group(2)):04d}-{months[match.group(1)]:02d}"
+    match = re.search(r"\b(0?[1-9]|1[0-2])\s*\.\s*(20\d{2})\b", normalized)
+    if match:
+        return f"{int(match.group(2)):04d}-{int(match.group(1)):02d}"
     return None

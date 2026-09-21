@@ -56,8 +56,8 @@ sources:
     allowed_hosts: ["www.customs.gov.cn", "customs.gov.cn", "english.customs.gov.cn"]
     min_interval_seconds: 60
     jitter_seconds: 30
-    max_requests_per_run: 40
-    max_requests_per_day: 60
+    max_requests_per_run: 50
+    max_requests_per_day: 100
   MOF:
     country: CN
     base_url: "https://www.mof.gov.cn"
@@ -100,7 +100,8 @@ sources:
     min_interval_seconds: 15
     jitter_seconds: 10
     max_requests_per_run: 20
-    max_requests_per_day: 30
+    # Daily and weekly runs share the same Shanghai-date ledger (16 + 16 requests).
+    max_requests_per_day: 40
   OECD:
     country: GLOBAL
     base_url: "https://sdmx.oecd.org"
@@ -108,7 +109,11 @@ sources:
     min_interval_seconds: 10
     jitter_seconds: 5
     max_requests_per_run: 30
-    max_requests_per_day: 50
+    # Retry temporary robots fetch failures, never an explicit disallow/4xx.
+    robots_retries: 2
+    robots_retry_backoff_seconds: 5
+    # Allow China daily plus global daily and weekly audits on the same day.
+    max_requests_per_day: 120
 
   CHINABOND:
     country: CN

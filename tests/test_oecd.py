@@ -113,3 +113,13 @@ def test_australia_split_retail_uses_configured_quarterly_frequency():
     retail = next(job for job in jobs if ".TOVM." in job["url"])
     assert "/AUS.Q.TOVM." in retail["url"]
     assert retail["series"][0]["frequency"] == "Q"
+
+
+def test_india_only_marks_verified_stale_queries_as_no_recent_data():
+    jobs = _expand_oecd_country_jobs({"countries": [{
+        "ref_area": "IND", "prefix": "IN",
+        "no_recent_measures": ["B1GQ_Q", "PRVM", "TOVM"],
+    }]})
+    assert jobs[0]["allow_no_recent_records"] is True
+    assert "allow_no_recent_records" not in jobs[1]
+    assert jobs[2]["allow_no_recent_records"] is True

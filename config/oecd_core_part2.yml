@@ -1,6 +1,6 @@
 countries:
   - {ref_area: AUS, prefix: AU, split_production_retail: true, production_frequency: Q, retail_frequency: Q}
   - {ref_area: KOR, prefix: KR}
-  - {ref_area: IND, prefix: IN}
+  - {ref_area: IND, prefix: IN, no_recent_measures: [B1GQ_Q, PRVM, TOVM]}
   - {ref_area: BRA, prefix: BR}
   - {ref_area: MEX, prefix: MX}

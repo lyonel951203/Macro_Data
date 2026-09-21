@@ -9,6 +9,7 @@ from pathlib import Path
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 import duckdb
+import httpx
 import yaml
 
 from .db import InsertStats, insert_observations, record_crawl_events
@@ -53,6 +54,7 @@ class PipelineResult:
     unchanged: int = 0
     parse_errors: int = 0
     coverage_warnings: int = 0
+    no_recent_records: int = 0
     errors: list[str] = field(default_factory=list)
     status: str = "SUCCESS"
     runtime_seconds: float = 0.0
@@ -610,6 +612,19 @@ def ingest_oecd_manifest(
                 result.status = "FAILED"
                 result.errors.append(f"{url}: {type(exc).__name__}: {exc}")
                 raise
+            except httpx.HTTPStatusError as exc:
+                # OECD returns 404 NoRecordsFound for a valid series when a
+                # recent-period filter excludes all its historical observations.
+                # Other 404 responses still signal a broken query or endpoint.
+                if (start_period and job.get("allow_no_recent_records")
+                        and exc.response.status_code == 404
+                        and exc.response.text.strip() == "NoRecordsFound"):
+                    result.no_recent_records += 1
+                    continue
+                result.parse_errors += 1
+                result.status = "PARTIAL"
+                result.errors.append(f"{url}: {type(exc).__name__}: {exc}")
+                _mark_parser_error(source, exc)
             except Exception as exc:
                 result.parse_errors += 1
                 result.status = "PARTIAL"
@@ -636,6 +651,7 @@ def _expand_oecd_country_jobs(payload: dict) -> list[dict]:
     suffix = "?dimensionAtObservation=AllDimensions"
     jobs: list[dict] = []
     for country in countries:
+        first_job = len(jobs)
         ref = str(country["ref_area"])
         prefix = str(country["prefix"])
         jobs.extend(
@@ -712,6 +728,12 @@ def _expand_oecd_country_jobs(payload: dict) -> list[dict]:
                     ],
                 }
             )
+        no_recent_measures = {str(value) for value in country.get("no_recent_measures", [])}
+        for job in jobs[first_job:]:
+            if no_recent_measures and all(
+                str(series["measure"]) in no_recent_measures for series in job["series"]
+            ):
+                job["allow_no_recent_records"] = True
     return jobs
 
 

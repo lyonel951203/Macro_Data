@@ -311,16 +311,26 @@ class PoliteHttpClient:
         if cached is None:
             robots_url = f"{origin}/robots.txt"
             try:
-                response = self._request(robots_url, headers={})
-                if response.status_code == 404:
-                    self._robots[origin] = True
-                    cached = True
-                else:
-                    self._check_status(response)
-                    parser = RobotFileParser(robots_url)
-                    parser.parse(response.text.splitlines())
-                    self._robots[origin] = parser
-                    cached = parser
+                retries = max(0, int(self.policy.get("robots_retries", 0)))
+                for attempt in range(retries + 1):
+                    try:
+                        response = self._request(robots_url, headers={})
+                        if response.status_code == 404:
+                            self._robots[origin] = True
+                            cached = True
+                        else:
+                            self._check_status(response)
+                            parser = RobotFileParser(robots_url)
+                            parser.parse(response.text.splitlines())
+                            self._robots[origin] = parser
+                            cached = parser
+                        break
+                    except (httpx.TransportError, httpx.HTTPStatusError) as exc:
+                        if (attempt >= retries or
+                                (isinstance(exc, httpx.HTTPStatusError) and
+                                 400 <= exc.response.status_code < 500)):
+                            raise
+                        self.sleep(float(self.policy.get("robots_retry_backoff_seconds", 5)) * (attempt + 1))
             except Exception as exc:
                 if bool(self.policy.get("stop_on_robots_error", True)):
                     self._circuit_open = True

@@ -42,7 +42,7 @@ from macro_pit.timeutils import SHANGHAI
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG = ROOT / "config" / "daily_web_update.yml"
 ALLOWED_SOURCES = (
-    "NBS", "PBOC", "PBOC_MIRROR", "MOF", "SAFE",
+    "NBS", "PBOC", "PBOC_MIRROR", "CUSTOMS", "MOF", "SAFE",
     "EASTMONEY_MACRO", "SINA_MACRO", "OECD", "RTDSM",
     "CHINABOND", "USTREASURY", "IMF",
 )
@@ -518,6 +518,7 @@ def run_manifest_source(
         "metadata_updates": 0,
         "unchanged": 0,
         "parse_errors": 0,
+        "no_recent_records": 0,
         "http_success": 0,
         "raw_downloaded": 0,
         "runtime_seconds": 0.0,
@@ -564,6 +565,7 @@ def run_manifest_source(
                     "metadata_updates": result.metadata_updates,
                     "unchanged": result.unchanged,
                     "parse_errors": result.parse_errors,
+                    "no_recent_records": result.no_recent_records,
                     "http_success": result.http_success,
                     "raw_downloaded": result.raw_downloaded,
                     "runtime_seconds": result.runtime_seconds,
@@ -579,7 +581,7 @@ def run_manifest_source(
             receipt["selected"] += requested
             for field in (
                 "new_observations", "revisions", "metadata_updates", "unchanged",
-                "parse_errors", "http_success", "raw_downloaded",
+                "parse_errors", "no_recent_records", "http_success", "raw_downloaded",
             ):
                 receipt[field] += int(manifest_run.get(field, 0))
             receipt["runtime_seconds"] += float(manifest_run.get("runtime_seconds", 0.0))
@@ -590,7 +592,8 @@ def run_manifest_source(
                 f"{source}/{manifest.name}: {manifest_run['status']} "
                 f"requested={requested} inserted={manifest_run.get('new_observations', 0)} "
                 f"revisions={manifest_run.get('revisions', 0)} "
-                f"parse_errors={manifest_run.get('parse_errors', 0)}"
+                f"parse_errors={manifest_run.get('parse_errors', 0)} "
+                f"no_recent_records={manifest_run.get('no_recent_records', 0)}"
             )
     except Exception as exc:
         statuses.append("FAILED")
@@ -1048,11 +1051,27 @@ def run_source(
     except Exception as exc:
         message = f"{type(exc).__name__}: {exc}"
         is_policy_block = bool(settings.get("policy_blocked")) and "robots.txt disallows" in message
-        receipt["status"] = "BLOCKED_POLICY" if is_policy_block else "FAILED"
-        receipt["errors"].append(message)
+        is_transport_block = bool(settings.get("transport_soft_block")) and any(
+            marker in message
+            for marker in (
+                "cannot verify robots.txt",
+                "CERTIFICATE_VERIFY_FAILED",
+                "certificate verify failed",
+            )
+        )
         if is_policy_block:
+            receipt["status"] = "BLOCKED_POLICY"
+            receipt["errors"].append(message)
             source_state["policy_status"] = "BLOCKED_POLICY"
             source_state["last_policy_error"] = message
+        elif is_transport_block:
+            receipt["status"] = "BLOCKED_TRANSPORT"
+            receipt["transport_note"] = message
+            source_state["transport_status"] = "BLOCKED_TRANSPORT"
+            source_state["last_transport_error"] = message
+        else:
+            receipt["status"] = "FAILED"
+            receipt["errors"].append(message)
         attempt_at = datetime.now(SHANGHAI)
         retry_days = [int(day) for day in settings.get("retry_backoff_days", [1, 3, 7])]
         cooldown_days = int(settings.get("not_found_cooldown_days", 30))
@@ -1082,7 +1101,7 @@ def run_source(
 def _overall_status(receipts: list[dict[str, Any]]) -> str:
     statuses = [item["status"] for item in receipts]
     successful = {
-        "SUCCESS", "SUCCESS_NO_CHANGE", "BLOCKED_POLICY", "DEFERRED_BUDGET"
+        "SUCCESS", "SUCCESS_NO_CHANGE", "BLOCKED_POLICY", "BLOCKED_TRANSPORT", "DEFERRED_BUDGET"
     }
     if statuses and all(status in successful for status in statuses):
         return "SUCCESS"
@@ -1109,12 +1128,23 @@ def render_report(report: dict[str, Any]) -> str:
             f"{item['new_observations']} | {item['revisions']} | "
             f"{item['unchanged']} | {item['parse_errors']} |"
         )
+    for item in report["sources"]:
+        if item.get("no_recent_records", 0):
+            lines.append(
+                f"{item['source']}: {item['no_recent_records']} valid OECD queries "
+                "returned NoRecordsFound within the recent window."
+            )
     lines.extend([
         "",
         "Each run archives source response bytes and uses append-only, idempotent ingestion. "
         "Parser failures remain pending in durable state and are retried even after their URL leaves the current index.",
     ])
     for item in report["sources"]:
+        if item.get("transport_note"):
+            lines.extend([
+                "", f"## {item['source']} transport block",
+                f"- {item['transport_note']}",
+            ])
         if item.get("errors"):
             lines.extend(["", f"## {item['source']} errors"])
             lines.extend(f"- {error}" for error in item["errors"])
@@ -1222,6 +1252,7 @@ def dry_run_plan(config: dict[str, Any], selected_sources: list[str]) -> dict[st
                 "policy_probe": bool(settings.get("policy_probe", False)),
                 "independent_indexes": bool(settings.get("independent_indexes", False)),
                 "independent_candidates": bool(settings.get("independent_candidates", False)),
+                "transport_soft_block": bool(settings.get("transport_soft_block", False)),
                 "mode": (
                     "government_reprint_indexes"
                     if source == "PBOC_MIRROR"
