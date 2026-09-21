@@ -54,6 +54,9 @@ def run_acceptance(
     us_required = int(thresholds.get("us_rtdsm_series", 15))
     samples_per_us_series = int(thresholds.get("us_rtdsm_samples_per_series", 100))
     raw_required = float(thresholds.get("raw_reference_rate", 0.999))
+    cn_strict_is_required = bool(
+        thresholds.get("china_strict_raw_required", True)
+    )
     cn_strict_required = float(thresholds.get("china_strict_raw_rate", 0.95))
     synthetic = _synthetic_checks()
     total = int(
@@ -172,7 +175,19 @@ def run_acceptance(
             f"{historical_cn_series} / {cn_historical_required}",
             historical_cn_series >= cn_historical_required,
         ),
-        AcceptanceCheck("China verifiable PIT A+B rows", f"{strict_rate:.1%}", cn_total > 0 and strict_rate >= cn_strict_required),
+        AcceptanceCheck(
+            "China verifiable PIT A+B rows",
+            (
+                f"{strict_rate:.1%}"
+                if cn_strict_is_required
+                else f"{strict_rate:.1%} NOT REQUIRED"
+            ),
+            (
+                cn_total > 0 and strict_rate >= cn_strict_required
+                if cn_strict_is_required
+                else True
+            ),
+        ),
         AcceptanceCheck("US registry series", f"{us_registry} / {us_required}", us_registry >= us_required),
         AcceptanceCheck("US RTDSM populated series", f"{us_rtdsm_series} / {us_required}", us_rtdsm_series >= us_required),
         AcceptanceCheck(

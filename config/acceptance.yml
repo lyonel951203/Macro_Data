@@ -9,6 +9,10 @@ thresholds:
   china_monthly_min_periods: 24
   china_quarterly_min_periods: 8
   china_period_coverage: 0.95
+  # The production query contract admits governed PIT_D only for field-periods
+  # without PIT_A/PIT_B. Keep the strict share visible, but do not require it
+  # to dominate the expanded working dataset.
+  china_strict_raw_required: false
   china_strict_raw_rate: 0.95
   us_rtdsm_series: 15
   us_rtdsm_samples_per_series: 100

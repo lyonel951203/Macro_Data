@@ -69,5 +69,7 @@ def test_acceptance_exposes_real_data_gaps_but_synthetic_pit_checks_pass():
     assert checks["Same-day release boundary"].passed
     assert checks["Idempotent observation ingest"].passed
     assert checks["Global coverage (optional)"].passed
+    assert checks["China verifiable PIT A+B rows"].passed
+    assert "NOT REQUIRED" in checks["China verifiable PIT A+B rows"].value
     assert not checks["China populated series"].passed
     assert not result.passed

@@ -6,6 +6,7 @@ Large numbers of files here do not mean they are all part of the daily runtime.
 ## Current operational entry points
 
 - `STATUS.md`
+- `PRODUCTION_ACCEPTANCE_20260921.md`
 - `daily_web_update/latest.md`
 - `daily_global_update/latest.md`
 - `weekly_web_revision/latest.md`
