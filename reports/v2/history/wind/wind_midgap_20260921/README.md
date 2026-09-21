@@ -28,12 +28,10 @@
 
 batch12和batch13均为0隔离、0重复字段期，隔离库重放全部 unchanged。调查失业率7期完成14个发布边界检查；服务业完成主库/长表39条一致性和6个代表性边界检查。复合长表已刷新为239,987条版本事件。
 
-运行顺序：
+当时使用的两个分阶段入库脚本已于2026-09-21清理，可从Git历史恢复。其余可复用命令为：
 
 ```powershell
-python scripts/one_off/2026-09-21/stage_wind_unemployment_gaps_2022_2026.py
 python scripts/tools/ingest_wind_mcp.py --pattern batch12_unemployment_gaps_2022_2026.json --output-dir reports/v2/history/wind/wind_midgap_20260921/unemployment_2022_2026 --ingest
-python scripts/one_off/2026-09-21/stage_wind_service_gaps_20260921.py
 python scripts/tools/ingest_wind_mcp.py --pattern batch13_service_production_safe_gaps.json --output-dir reports/v2/history/wind/wind_midgap_20260921/service_production --ingest
 python scripts/tools/estimate_availability.py
 python -m macro_pit --db-path macro_pit_v2.duckdb export-long --scope ALL --start-date 2005-01-01

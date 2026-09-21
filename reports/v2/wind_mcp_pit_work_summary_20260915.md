@@ -3,6 +3,7 @@
 > 工作期间：2026-09-15 至 2026-09-21
 > 主库：`E:\Macro_Data\macro_pit_v2.duckdb`（771,834 → **776,108** 条）
 > 核心成果：work 宽表覆盖率 **67.7% → 87.8%**，严格表全程零改动
+> 维护说明：文中三个一次性手工验收脚本已于2026-09-21清理；对应验证改由正式 pytest 契约执行，历史脚本可从Git恢复。
 
 ---
 
@@ -119,7 +120,7 @@ PIT 判定是两步：**① 该数据期在截点时是否已发布（可见性�
 → config/wind_mcp_mappings.csv 登记映射（名称/单位与Wind元数据逐字核对）
 → scripts/tools/ingest_wind_mcp.py 暂存校验（幂等重放/strict排除/边界/防手误）
 → 用户确认 → --ingest（带strict快照与导出哈希不变断言）
-→ 重跑 estimate_availability + export-wide --pit-mode work + verify_work_export
+→ 重跑 estimate_availability + export-wide --pit-mode work + 正式契约测试
 ```
 
 ### 4.2 批次明细
@@ -203,7 +204,7 @@ YTD/合并口径序列在 work 表中自然呈现正确节奏：**1 月末截点
 | strict/loose 排除断言 | D 级任何截点不得进入 strict/loose 快照 |
 | 入库前后哈希 | --ingest 断言 strict 快照与 data/exports 文件哈希不变 |
 | 手误防线 | 长数值列表用生成器脚本（月末日期自动生成+长度断言+单调性检查），曾兜住 3 次转存手误 |
-| 契约测试 | test_work_mode.py（work 语义）+ test_db_contracts.py（含修订快照例外）；pytest 的 tmp_path 清理在本环境触发沙箱删除确认，辅以 scripts/tools/manual_contract_check.py（7 项全过） |
+| 契约测试 | test_work_mode.py（work 语义）+ test_db_contracts.py（含修订快照例外）；当前环境可直接运行正式 pytest 契约 |
 | 逐格来源伴随表 | provenance 表让下游能区分每格证据等级，支撑敏感性分析 |
 
 ---
@@ -254,7 +255,7 @@ py -3.11 scripts/tools/ingest_wind_mcp.py --pattern "batchN_*.json" --output-dir
 # 6. 下游刷新三件套
 py -3.11 scripts/tools/estimate_availability.py
 py -3.11 -m macro_pit export-wide --pit-mode work --start-date 2005-01-31 --end-date 2026-07-31 --output-prefix data/exports/cn_pit_work_month_end_2005_20260731
-py -3.11 scripts/tools/verify_work_export.py
+py -3.11 -m pytest -q tests/test_work_mode.py tests/test_db_contracts.py
 ```
 
 ### 10.2 修订快照（Wind 终端「历史修正」xlsx）
@@ -269,7 +270,6 @@ py -3.11 scripts/tools/verify_work_export.py
 | `config/estimated_availability_rules_v1.csv` | 估计可用日规则表 v1（52 条） |
 | `scripts/tools/ingest_wind_mcp.py` | 通用 Wind MCP 入库（支持月频+季频） |
 | `scripts/tools/estimate_availability.py` | 估计可用日侧车生成 |
-| `scripts/tools/verify_work_export.py` | work 导出验收（一致性/覆盖率/升级格） |
 | `scripts/tools/calibrate_release_lag.py` | 发布滞后实证校准 |
 | `scripts/analyze_remaining_gaps.py` | 缺口分析 |
 | `reports/v2/STATUS.md` | 项目状态总账 |
@@ -288,5 +288,5 @@ py -3.11 scripts/tools/verify_work_export.py
 8. **入库前先查库确认 canonical_series_id**（非制造业 PMI 是 CN_PMI_NONMANUFACTURING 而非猜测的 ID）；
 9. **duckdb 查 TIMESTAMPTZ 列需 CAST AS VARCHAR**（py -3.11 环境缺 pytz）；
 10. **work 表的正确语义是"最新可见期优先"**，不是"等级优先"——否则会展示 13 个月前的陈旧官方值；
-11. **pytest 的 tmp_path 清理在本环境触发沙箱删除确认**，契约验证用 manual_contract_check.py 或 `-k` 避开 tmp 用例；
+11. **验收应使用正式 pytest 契约**，不要保留与特定批次绑定的手工检查脚本；
 12. **任何"让历史数据在过去可见"的操作都必须做未来泄漏 sanity 检查**（修订快照失误就是被这一检查当场抓住的）。

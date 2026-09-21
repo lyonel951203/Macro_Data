@@ -61,10 +61,10 @@ and the availability sidecar read by query code remain directly under
 
 ## Script boundary
 
-`scripts/README.md` divides scripts into scheduled runtime, `setup/`, `tools/`,
-`history/`, and dated `one_off/` work. Only the two runtime files directly under
-`scripts/` are part of the normal daily execution path. The disabled NBS history
-launcher remains there solely for scheduled-task compatibility.
+`scripts/README.md` divides scripts into scheduled runtime, `setup/`, and
+`tools/`. Only the two runtime files directly under `scripts/` are part of the
+normal daily execution path. Completed `history/` and `one_off/` executables
+were removed after their reports and inputs were preserved.
 
 ## Reports to open first
 
@@ -82,6 +82,6 @@ create them on its first corresponding scheduled run.
 
 Repository cleanup must preserve the four root launchers, their referenced
 configuration, `src/`, `tests/`, the main database, and all of `data/`.
-Regenerable `.pytest_*` and `__pycache__` directories may be removed. Moving
-historical scripts or manifests requires a reference scan and corresponding
-documentation updates first.
+Regenerable `.pytest_*` and `__pycache__` directories may be removed. Historical
+reports and manifests remain evidence; retired executable helpers can be
+recovered from Git history.

@@ -71,4 +71,4 @@
 后续优先处理 NBS 已有候选正文入库及综合稿漏解析，再补 PBOC 历史和 SAFE 原始发布时间证据；回测需同时检查数据期和陈旧程度。
 
 完整 CSV：field_history.csv；价格缺口：price_missing_ranges.csv；空缺目录：unpopulated_catalogue_fields.csv。
-复核代码：field_history_review.ipynb / field_history_review.py。该复核脚本不修改原始 CSV 或主库，也不运行全库验收。
+复核代码保留在 `field_history_review.ipynb`；一次性 Python 辅助脚本已于2026-09-21清理，可从Git历史恢复。该复核不修改原始 CSV 或主库，也不运行全库验收。

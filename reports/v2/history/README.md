@@ -14,3 +14,7 @@ reproducibility but are not read by the unattended pipeline.
 - `wind/` — completed Wind intake batches, revision evidence and gap backfills.
 
 Current daily, weekly, query, audit and status reports remain one level above.
+
+The one-time executable helpers that produced completed backfills and reviews
+were removed on 2026-09-21. Their reports, manifests, inputs and commit history
+remain available without exposing obsolete commands as current tooling.

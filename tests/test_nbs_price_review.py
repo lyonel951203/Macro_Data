@@ -1,17 +1,14 @@
 from dataclasses import replace
 from datetime import datetime
 import hashlib
-import importlib.util
 import json
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 
 from macro_pit.archive import RawArtifact
-from macro_pit.errors import CrawlSafetyError
 from macro_pit.nbs_price_review import review_price_article, search_expectation
-from macro_pit.timeutils import SHANGHAI, ensure_aware
+from macro_pit.timeutils import SHANGHAI
 
 
 @pytest.fixture
@@ -66,130 +63,3 @@ def test_search_evidence_cannot_be_silently_replaced(evidence):
     Path(item["index_raw_file"]).write_text("{}")
     with pytest.raises(ValueError, match="hash"):
         search_expectation(item)
-
-
-def load_runner():
-    path = Path(__file__).resolve().parents[1] / "scripts/history/run_nbs_price_batch_once.py"
-    spec = importlib.util.spec_from_file_location("price_batch_runner", path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-@pytest.mark.parametrize("blocked", [False, True])
-def test_bounded_runner_stops_on_block_and_cleans_lock(tmp_path, monkeypatch, evidence, blocked):
-    runner = load_runner()
-    item, content, artifact = evidence
-    manifest = tmp_path / "manifest.json"
-    manifest.write_text(json.dumps({"items": [item]}), encoding="utf-8")
-    monkeypatch.chdir(tmp_path)
-    review = review_price_article(item, content, artifact)
-
-    class Source:
-        policy = {}
-        client = SimpleNamespace(events=[])
-
-        def __init__(self, **kwargs):
-            pass
-
-        def fetch(self, *args, **kwargs):
-            if blocked:
-                raise CrawlSafetyError("HTTP 429; stop")
-            return SimpleNamespace(artifact=artifact, content=content, from_cache=True)
-
-        def parse(self, *args):
-            return [{**review, "release_at": ensure_aware(review["release_at"]),
-                     "available_at": ensure_aware(review["available_at"])}]
-
-        def close(self):
-            pass
-
-    calls = []
-    monkeypatch.setattr(runner, "NBSSource", Source)
-    monkeypatch.setattr(runner, "_validate_manifest", lambda *args: None)
-    monkeypatch.setattr(runner.subprocess, "run", lambda args, **kwargs: calls.append(args))
-    result = runner.run_batch(manifest, "nbs_test", review_only=True)
-    assert result["status"] == ("BLOCKED" if blocked else "COMPLETE")
-    assert not Path("data/history_backfill/nbs_price_batch.lock").exists()
-    assert len(calls) == (0 if blocked else 1)
-    assert all("--ingest" not in call and "--allow-network" not in call for call in calls)
-    saved = json.loads(Path("data/history_backfill/nbs_test_run.json").read_text())
-    assert saved["status"] == result["status"]
-
-
-def test_oversized_manifest_rejected_before_fetch(tmp_path):
-    runner = load_runner()
-    path = tmp_path / "manifest.json"
-    path.write_text(json.dumps({"items": [{"url": f"https://example.invalid/{i}"} for i in range(26)]}))
-    with pytest.raises(ValueError, match="1..25"):
-        runner.run_batch(path, "nbs_test")
-
-
-def test_resume_after_ingestion_only_rebuilds_exports(tmp_path, monkeypatch, evidence):
-    runner = load_runner()
-    item, content, artifact = evidence
-    review = review_price_article(item, content, artifact)
-    monkeypatch.chdir(tmp_path)
-    manifest = tmp_path / "manifest.json"
-    manifest.write_text(json.dumps({"items": [item]}))
-    out = Path("reports/v2/nbs_test")
-    out.mkdir(parents=True)
-    ingestion = {"inserted": 1, "revisions": 0, "unchanged": 0}
-    (out / "ingestion_result.json").write_text(json.dumps({"ingestion": ingestion}))
-    artifact_dict = {**artifact.__dict__, "retrieved_at": artifact.retrieved_at.isoformat()}
-    state_path = Path("data/history_backfill/nbs_test_validation_state.json")
-    state_path.parent.mkdir(parents=True)
-    state_path.write_text(json.dumps({"items": {item["url"]: {"artifact": artifact_dict}},
-                                     "manifest_sha256": hashlib.sha256(manifest.read_bytes()).hexdigest()}))
-    Path("data/history_backfill/nbs_test_run.json").write_text(json.dumps(
-        {"status": "FAILED", "review_only": False, "ingestion": ingestion}))
-    inspection = Path("reports/v2/history/pit/pit_csv_inspection")
-    inspection.mkdir(parents=True)
-    (inspection / "field_history_summary.json").write_text("{}")
-
-    class Source:
-        policy = {}
-        client = SimpleNamespace(events=[])
-
-        def __init__(self, **kwargs):
-            pass
-
-        def fetch(self, *args, **kwargs):
-            pytest.fail("Resume must use checkpointed raw content")
-
-        def parse(self, *args):
-            return [{**review, "release_at": ensure_aware(review["release_at"]),
-                     "available_at": ensure_aware(review["available_at"])}]
-
-        def close(self):
-            pass
-
-    calls = []
-
-    def command(args, **kwargs):
-        calls.append(args)
-        if "scripts/history/finalize_nbs_legacy_batch.py" in args:
-            (out / "final_result.json").write_text("{}")
-
-    monkeypatch.setattr(runner, "NBSSource", Source)
-    monkeypatch.setattr(runner, "_validate_manifest", lambda *args: None)
-    monkeypatch.setattr(runner.subprocess, "run", command)
-    notebooks = []
-    monkeypatch.setattr(runner, "execute_notebook", notebooks.append)
-    result = runner.run_batch(manifest, "nbs_test")
-    assert result["status"] == "COMPLETE"
-    assert result["ingestion"] == ingestion
-    assert len(calls) == 4 and len(notebooks) == 3
-    assert all("--ingest" not in call for call in calls)
-
-
-def test_status_refresh_preserves_surrounding_user_text(tmp_path):
-    runner = load_runner()
-    path = tmp_path / "STATUS.md"
-    path.write_text("user before\n<!-- job:start -->\nold\n<!-- job:end -->\nuser after", encoding="utf-8")
-    runner.refresh_status(path, "job", {"status": "BLOCKED", "pid": 1, "updated_at": "now",
-                                       "queue_size": 25, "reviewed": 3, "result_path": "result.json",
-                                       "error": "HTTP 429"})
-    changed = path.read_text(encoding="utf-8")
-    assert changed.startswith("user before\n") and changed.endswith("\nuser after")
-    assert "BLOCKED" in changed and "HTTP 429" in changed

@@ -1,8 +1,7 @@
 # Scripts guide
 
-This directory contains scheduled runtime code together with maintenance and
-historical reproducibility scripts. Only the first group is executed by the
-normal unattended pipeline.
+This directory contains scheduled runtime code, task setup, and current
+operator tools.
 
 ## Scheduled runtime
 
@@ -28,15 +27,12 @@ are present. Examples include `tools/export_current_field_inventory.py`,
 `tools/export_non_cn_field_inventory.py`, `tools/estimate_availability.py`,
 `tools/ingest_wind_mcp.py`, and `tools/send_latest_audit_email.py`.
 
-## Historical and one-time work
+## Retired one-time work
 
-Reusable scripts for completed source gaps and review rounds are under
-`history/`; date-specific programs are under `one_off/`. They may rely on local
-evidence in `data/` and a matching report under `reports/v2/`. Treat them as
-historical tools unless a current runbook explicitly calls them.
-
-`run_nbs_history_once.ps1` is retained for the disabled, completed NBS history
-task. It is not part of the four active daily/weekly jobs.
+Completed backfill, probe and review scripts formerly under `history/` and
+`one_off/` were removed on 2026-09-21 after their scheduled work ended. Their
+reports, inputs and Git history remain available. New reusable behavior belongs
+in `src/macro_pit/`; new operator commands belong in `tools/`.
 
 The earlier cleanup archive remains at
 `data/backups/code_cleanup/deprecated_code_20260916.zip`; its SHA-256 inventory

@@ -26,7 +26,7 @@
 
 保留原则：当前每日更新和计划任务入口、当前Wind导入与PIT导出工具、
 发布滞后校准及质量审计工具，以及仍用于本地原稿解析并由测试覆盖的解析器。
-MacroPIT-NBS-History-Daily仍引用的run_nbs_history_once.ps1明确保留。
+MacroPIT-NBS-History-Daily后来已结束；`run_nbs_history_once.ps1`于2026-09-21随一次性脚本清理移除，可从Git历史恢复。
 
 清理后验证：
 

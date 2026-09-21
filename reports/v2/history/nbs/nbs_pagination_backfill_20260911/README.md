@@ -23,7 +23,7 @@
 - 52 项测试通过，覆盖日期完整覆盖、无重叠、错误父窗口或关键词拒绝、禁止提前解除待查标记，以及既有检索、断点和 PIT 校验回归。
 - 启动前重放 363 份原稿，独立核验 804 条记录，0 不匹配、0 失败。
 - `activation.json` 记录 09:02 的配置迁移；隐藏进程 PID 3332 从第一个补查窗口启动。
-- `config_before.json`、`state_before.json`、`worker_before.py` 和 `preflight_before.json` 保留原状态；`config_proposed.json` 为审核过的 20 窗口清单，`preflight_after.json` 为通过的启动门禁。
+- `config_before.json`、`state_before.json` 和 `preflight_before.json` 保留原状态；`config_proposed.json` 为审核过的 20 窗口清单，`preflight_after.json` 为通过的启动门禁。原执行脚本快照已于2026-09-21清理，可从Git历史恢复。
 - 第一季度实际返回与恢复状态记录在 `resume.json`；实时进度见 [监控](../source_monitor/latest.md)。
 
 普通重启继续使用原断点；不要重复运行激活脚本。补查原始检索断点在 `reports/v2/history/pit/pit_history_autorun/discovery/*_q*/search_state.json`，主断点仍为 `data/history_backfill/pit_history_autorun.json`。

@@ -45,4 +45,4 @@ SAFE 2013-12 原披露值为银行结汇/售汇/净结汇 186.8/155.7/31.0 十�
 - CFLP 升级：`cflp_pmi_apr2010_summary.json`、`cflp_pmi_apr2010.csv`。
 - SAFE 转载升级：`safe_dec2013_reprint_summary.json`、`safe_dec2013_reprint.csv`。
 - Wind 原始回执：`wind_cli_m1_201912_202002.json`、`wind_cli_pmi_201003_201006.json`；财政七项见 `../wind_fiscal7_20260921/README.md`。
-- 可复跑脚本：`scripts/one_off/2026-09-21/ingest_gap_backfill_batch_20260921.py`、`scripts/one_off/2026-09-21/ingest_cflp_pmi_apr2010.py`、`scripts/one_off/2026-09-21/ingest_safe_dec2013_reprint.py`。
+- 本轮一次性入库脚本已于2026-09-21清理；输入、结果和Git历史继续保留。

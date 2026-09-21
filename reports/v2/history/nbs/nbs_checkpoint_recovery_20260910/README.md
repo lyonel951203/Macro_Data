@@ -23,4 +23,4 @@ NBS 在 18:06 完成 2026 年采购经理指数窗口后，替换主断点文件
 - 剩余窗口为 `2026_1` 至 `2026_6`。另有 5 个重复分页窗口仍待后续缩小时间范围复查。
 - 启动前重新运行离线原稿回放；校验与恢复后的实际抓取结果记录在 `resume.json`。
 
-备份文件 `worker_before.py`、`search_before.py`、`state_before.json`、`preflight_before.json` 仅用于追溯。实时状态以 [多来源监控](../source_monitor/latest.md) 为准。
+原执行脚本快照已于2026-09-21清理；`state_before.json`、`preflight_before.json` 与Git历史继续用于追溯。实时状态以 [多来源监控](../../../source_monitor/latest.md) 为准。
