@@ -32,6 +32,15 @@
 /reports/**/before_activation/
 /reports/**/nbs_baseline_before/
 
+# Mutable operational pointers. The scheduled jobs recreate these locally;
+# frozen validation and historical-run latest.md files remain tracked.
+/reports/v2/daily_web_update/latest.md
+/reports/v2/daily_global_update/latest.md
+/reports/v2/weekly_web_revision/latest.md
+/reports/v2/weekly_global_revision/latest.md
+/reports/v2/deepseek_daily_audit/*/latest.md
+/reports/v2/deepseek_weekly_audit/*/latest.md
+
 # Python and editor environments
 __pycache__/
 *.py[cod]

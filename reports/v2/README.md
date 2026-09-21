@@ -16,6 +16,11 @@ Large numbers of files here do not mean they are all part of the daily runtime.
 - `current_field_inventory/`
 - `non_cn_field_inventory/`
 
+The eight daily/weekly and DeepSeek `latest.md` pointers are mutable local
+runtime output. They are ignored by Git and are created or refreshed by the
+scheduled jobs. Stable contracts and operating instructions remain tracked in
+the surrounding README files.
+
 ## Historical evidence
 
 Directories under `history/archive_parse/`, plus `nbs_*`, `pboc_*`, `pit_*`,

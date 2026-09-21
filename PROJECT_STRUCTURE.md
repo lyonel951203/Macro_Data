@@ -74,6 +74,9 @@ launcher remains there solely for scheduled-task compatibility.
 5. `reports/v2/weekly_global_revision/latest.md` — latest global revision audit.
 6. `reports/v2/combined_pit_long/README.md` — composite long-table contract.
 
+Operational `latest.md` files are local generated pointers. A fresh clone will
+create them on its first corresponding scheduled run.
+
 ## Cleanup policy
 
 Repository cleanup must preserve the four root launchers, their referenced
