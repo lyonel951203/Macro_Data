@@ -13,6 +13,7 @@ xlrd>=2.0.1
 pytest>=8.0.0
 click>=8.1.7
 pyyaml>=6.0.1
+pytz>=2024.1
 # Install this repository so `python -m macro_pit` works after the documented
 # `pip install -r requirements.txt` step.
 -e .

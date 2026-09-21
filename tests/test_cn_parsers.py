@@ -415,6 +415,37 @@ def test_nbs_legacy_pmi_wording_without_parenthesized_abbreviation(tmp_path):
     assert rows[0]["value"] == 52.4
 
 
+def test_customs_english_usd_summary_parses_all_five_series(tmp_path):
+    content = """<html><head><title>(1) China's Total Export &amp; Import Values, Dec 2025 (in USD)</title></head><body>
+    <p>2026/01/08</p><p>Unit: USD 100 Million</p><table>
+    <tr><th>Item</th><th>12</th><th>1-to-12</th><th>Month-on-Month ±%</th><th>Year-on-Year ±%</th><th>Year-on-Year ±%</th></tr>
+    <tr><td>Total Export &amp; Import</td><td>6,014.2</td><td>63,547.7</td><td>9.6</td><td>6.2</td><td>3.2</td></tr>
+    <tr><td>Total Export</td><td>3,577.8</td><td>37,718.7</td><td>8.4</td><td>6.6</td><td>5.5</td></tr>
+    <tr><td>Total Import</td><td>2,436.4</td><td>25,829.0</td><td>11.5</td><td>5.7</td><td>0.0</td></tr>
+    <tr><td>Export-Import Balance</td><td>1,141.4</td><td>11,889.8</td><td>-</td><td>-</td><td>-</td></tr>
+    </table></body></html>""".encode("utf-8")
+    source = CustomsSource(allow_network=False)
+    try:
+        rows = source.parse_release(content, artifact(tmp_path, content, "CUSTOMS"))
+    finally:
+        source.close()
+
+    values = {row["canonical_series_id"]: row for row in rows}
+    assert set(values) == {
+        "CN_EXPORT_USD", "CN_IMPORT_USD", "CN_TRADE_BALANCE_USD",
+        "CN_EXPORT_USD_YOY", "CN_IMPORT_USD_YOY",
+    }
+    assert values["CN_EXPORT_USD"]["period"] == "2025-12"
+    assert values["CN_EXPORT_USD"]["value"] == pytest.approx(357.78)
+    assert values["CN_IMPORT_USD"]["value"] == pytest.approx(243.64)
+    assert values["CN_TRADE_BALANCE_USD"]["value"] == pytest.approx(114.14)
+    assert values["CN_EXPORT_USD_YOY"]["value"] == pytest.approx(6.6)
+    assert values["CN_IMPORT_USD_YOY"]["value"] == pytest.approx(5.7)
+    assert all(row["pit_grade"] == "B" for row in rows)
+    # Date-only evidence is usable at the next Shanghai midnight, stored as UTC.
+    assert all(row["available_at"].isoformat() == "2026-01-08T16:00:00+00:00" for row in rows)
+
+
 def test_customs_parser_refuses_silent_empty_page(tmp_path):
     content = b"<html><body>blocked</body></html>"
     source = CustomsSource(allow_network=False)

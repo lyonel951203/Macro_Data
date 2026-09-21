@@ -61,11 +61,16 @@ def build_as_of_wide(
 ) -> AsOfWideResult:
     """Build a fixed-T historical wide table without forward filling.
 
-    For each field and source period, the base value visible by T is selected
-    in the explicit order PIT_A, PIT_B, Wind. Within a tier the latest visible
-    vintage wins. A documented Wind revision is then applied as a dated event:
+    For each field and source period, PIT_A/PIT_B is authoritative. Ordinary
+    Wind PIT_D is eligible only when that field-period has no A/B record at all.
+    The same gap-only rule admits SAFE D for CN_FX_RESERVE_USD with its
+    calibrated virtual availability date. Within a tier the latest visible
+    vintage wins. A documented Wind revision
+    is then applied as a dated event:
     it replaces an older base after its revision date, while a still-later A/B
-    vintage can supersede that revision.
+    vintage can supersede that revision. A silent change later observed
+    on an official page is another dated event: it becomes usable only from
+    its first observed timestamp.
 
     Frequency M returns natural month ends through T's calendar month.
     Frequency Q returns natural quarter ends through T's calendar quarter.
@@ -135,28 +140,45 @@ def build_as_of_wide(
                    CAST(period_end AS DATE) AS period_end, value,
                    CAST(estimated_available_at AS TIMESTAMPTZ) AS available_at
             FROM read_csv_auto('{safe_path}', header=true)
-            WHERE source = 'WIND'
+            WHERE (source = 'WIND' AND canonical_series_id <> 'CN_FX_RESERVE_USD')
+               OR (source = 'SAFE' AND canonical_series_id = 'CN_FX_RESERVE_USD')
             """
         )
         wind_base_union = """
             UNION ALL
-            SELECT m.country, e.canonical_series_id, m.series_name, 'WIND' AS source,
+            SELECT m.country, e.canonical_series_id, m.series_name, e.source,
                    m.frequency, m.unit, e.period, e.period_end, e.value,
-                   'WIND' AS selection_origin, e.available_at, 0 AS vintage_no,
+                   CASE e.source
+                       WHEN 'SAFE' THEN 'SAFE_ESTIMATED_D'
+                       ELSE 'WIND'
+                   END AS selection_origin,
+                   e.available_at, 0 AS vintage_no,
                    1 AS source_priority, 'D' AS pit_grade,
                    'estimated_availability_sidecar' AS release_date_source
             FROM asof_estimated_availability e
             JOIN (
-                SELECT country, canonical_series_id, series_name, frequency, unit
+                SELECT country, canonical_series_id, series_name, frequency, unit, source
                 FROM observation_vintage
-                WHERE country = 'CN' AND source = 'WIND'
+                WHERE country = 'CN'
+                  AND (source = 'WIND' OR (
+                      source = 'SAFE'
+                      AND canonical_series_id = 'CN_FX_RESERVE_USD'
+                  ))
                 QUALIFY row_number() OVER (
-                    PARTITION BY canonical_series_id
+                    PARTITION BY canonical_series_id, source
                     ORDER BY retrieved_at DESC, vintage_no DESC
                 ) = 1
-            ) m USING (canonical_series_id)
+            ) m USING (canonical_series_id, source)
             WHERE e.available_at <= ?
               AND e.period_end BETWEEN ? AND ?
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM observation_vintage official
+                  WHERE official.country = 'CN'
+                    AND official.canonical_series_id = e.canonical_series_id
+                    AND official.period = e.period
+                    AND official.pit_grade IN ('A', 'B')
+              )
         """
         wind_revision_union = """
             UNION ALL
@@ -191,7 +213,22 @@ def build_as_of_wide(
               AND available_at <= ?
               AND period_end BETWEEN ? AND ?
         """
+        documented_revision_union = """
+            UNION ALL
+            SELECT country, canonical_series_id, series_name, source,
+                   frequency, unit, period, period_end, value,
+                   'OBSERVED_WEB_REVISION' AS selection_origin,
+                   available_at, vintage_no, 1 AS source_priority,
+                   pit_grade, release_date_source
+            FROM observation_vintage
+            WHERE country = 'CN' AND pit_grade = 'D'
+              AND release_date_source =
+                  'official_web_revision_first_seen'
+              AND available_at <= ?
+              AND period_end BETWEEN ? AND ?
+        """
         parameters.extend([
+            as_of_utc, start, output_end,
             as_of_utc, start, output_end,
             as_of_utc, start, output_end,
             as_of_utc, start, output_end,
@@ -558,7 +595,18 @@ def export_as_of_wide(
         "end_period_end": str(result.values[result.index_column][-1]),
         "rows": result.values.height,
         "fields": result.values.width - 1,
-        "selection_priority": ["PIT_A", "PIT_B", "WIND", "EASTMONEY_D", "SINA_D"],
+        "selection_priority": [
+            "PIT_A",
+            "PIT_B",
+            "OBSERVED_WEB_REVISION",
+            "SAFE_ESTIMATED_D",
+            "WIND",
+            "EASTMONEY_D",
+            "SINA_D",
+        ],
+        "official_web_revision_rule": "a changed CN official page becomes usable from its first observed timestamp",
+        "wind_base_rule": "ordinary Wind PIT_D is eligible only when no PIT_A/PIT_B exists for the same field-period",
+        "safe_fx_reserve_rule": "SAFE PIT_D for CN_FX_RESERVE_USD is eligible only without A/B and uses the calibrated virtual availability date",
         "within_tier": "latest version with availability <= T",
         "forward_fill": False,
         "wind_revision_rule": "dated revision event overrides an older base after its documented date; a later A/B vintage can supersede it",

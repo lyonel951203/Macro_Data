@@ -21,6 +21,7 @@ Outputs under reports/v2/pit_work_step2_estimated_availability/:
 from __future__ import annotations
 
 import io
+import csv
 from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
 
@@ -29,6 +30,7 @@ import polars as pl
 
 DB_PATH = r"E:\Macro_Data\macro_pit_v2.duckdb"
 RULES_PATH = r"E:\Macro_Data\config\estimated_availability_rules_v1.csv"
+OVERRIDES_PATH = Path(r"E:\Macro_Data\config\estimated_availability_overrides_v1.csv")
 OUT_DIR = Path(r"E:\Macro_Data\reports\v2\pit_work_step2_estimated_availability")
 PRE_REVISION_OVERRIDES = Path(
     r"E:\Macro_Data\data\derived\wind_pre_revision_overrides.csv"
@@ -43,6 +45,18 @@ def main() -> None:
         row["canonical_series_id"]: row
         for row in pl.read_csv(RULES_PATH).iter_rows(named=True)
     }
+    availability_overrides: dict[tuple[str, str, str], dict[str, str]] = {}
+    if OVERRIDES_PATH.is_file():
+        with OVERRIDES_PATH.open(encoding="utf-8-sig", newline="") as handle:
+            for anchor in csv.DictReader(handle):
+                key = (
+                    anchor["canonical_series_id"],
+                    anchor["source"],
+                    anchor["period"],
+                )
+                if key in availability_overrides:
+                    raise ValueError(f"duplicate availability override: {key}")
+                availability_overrides[key] = anchor
     overrides: dict[tuple[str, str, str], dict] = {}
     if PRE_REVISION_OVERRIDES.is_file():
         for row in pl.read_csv(PRE_REVISION_OVERRIDES).iter_rows(named=True):
@@ -64,6 +78,7 @@ def main() -> None:
 
     recs = []
     skipped: dict[str, int] = {}
+    applied_overrides: set[tuple[str, str, str]] = set()
     for row in df.iter_rows(named=True):
         sid = row["canonical_series_id"]
         marker = str(row.get("release_date_source") or "")
@@ -85,6 +100,24 @@ def main() -> None:
                 est_release + timedelta(days=1), time(0, 0), tzinfo=CN_TZ
             )
         value = row["value"]
+        availability_method = "estimated"
+        availability_rule_version = RULE_VERSION
+        rule_confidence = rule["confidence"]
+        key = (sid, row["source"], row["period"])
+        anchor = availability_overrides.get(key)
+        if anchor is not None:
+            if abs(float(value) - float(anchor["value"])) > 1e-9:
+                raise ValueError(f"availability override value mismatch: {key}")
+            est_avail = datetime.fromisoformat(anchor["available_at"])
+            if est_avail.tzinfo is None or est_avail.utcoffset() != timedelta(hours=8):
+                raise ValueError(f"availability override must be Asia/Shanghai: {key}")
+            if est_avail.date() <= period_end:
+                raise ValueError(f"availability override precedes source period: {key}")
+            est_release = est_avail.date()
+            availability_method = "official_dated_wind_value"
+            availability_rule_version = "estimated_availability_overrides_v1"
+            rule_confidence = "high"
+            applied_overrides.add(key)
         vintage_status = "latest_snapshot"
         override = overrides.get((sid, row["source"], row["period"]))
         if override is not None:
@@ -101,12 +134,16 @@ def main() -> None:
                 "value": value,
                 "estimated_release_date": est_release,
                 "estimated_available_at": est_avail.isoformat(),
-                "availability_method": "estimated",
-                "availability_rule_version": RULE_VERSION,
-                "rule_confidence": rule["confidence"],
+                "availability_method": availability_method,
+                "availability_rule_version": availability_rule_version,
+                "rule_confidence": rule_confidence,
                 "vintage_status": vintage_status,
             }
         )
+
+    unapplied = set(availability_overrides) - applied_overrides
+    if unapplied:
+        raise ValueError(f"unapplied availability overrides: {sorted(unapplied)}")
 
     out = pl.DataFrame(recs)
     out.write_csv(OUT_DIR / "estimated_available_v1.csv")
@@ -125,11 +162,16 @@ def main() -> None:
     buf.write("# PIT_work 第2步：PIT_D 记录的估计可用日期\n\n")
     buf.write(
         "规则版本 `estimated_availability_rules_v1`（config/estimated_availability_rules_v1.csv）。\n"
-        "口径：estimated_release_date = period_end + 规则滞后天数；非 PMI 序列自估计发布日次日 00:00（Asia/Shanghai）可用"
-        "（沿用 B 级日期保守惯例）；PMI 序列当月末 09:30 可用。\n"
+        "一般口径：estimated_release_date = period_end + 规则滞后天数；非 PMI 序列自估计发布日次日 00:00（Asia/Shanghai）可用"
+        "（沿用 B 级日期保守惯例）；PMI 序列当月末 09:30 可用。逐期官方锚定例外见下文。\n"
         "数值为终值，vintage_status=latest_snapshot；估计日期不写入主库，仅供 work 模式导出使用。\n\n"
     )
     buf.write(f"已赋估计日期的 D 记录：**{out.height}** 条\n\n")
+    if applied_overrides:
+        buf.write(
+            f"其中使用官方当期稿锚定可得时刻的 Wind D：**{len(applied_overrides)}** 条；"
+            "来源等级不变，详见 `config/estimated_availability_overrides_v1.csv`。\n\n"
+        )
     buf.write("| 序列 | 来源 | 置信度 | 记录数 | 首期 | 末期 |\n|---|---|---|---:|---|---|\n")
     for r in per_series.iter_rows(named=True):
         buf.write(

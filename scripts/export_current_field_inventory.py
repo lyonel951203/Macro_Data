@@ -162,9 +162,10 @@ UPDATE_METHODS = {
     "SAFE": "每日22:00：SAFE官方目录自动抓取、解析并幂等入库。",
     "OECD": "每日22:00：OECD官方SDMX修订API完整重取；按EDITION生成PIT_B。",
     "CHINABOND": "每日00:00：中债官方收益率曲线复查最近75天，按月末最后交易日幂等追加PIT_A。",
-    "WIND": "不自动更新：保留Wind手工导入；按用户决定不接海关官方更新。",
+    "CUSTOMS": "每日22:00：海关总署官方初值与月报目录检查；首次发布入库PIT_B，已见页面变更按首次观测时点保留修订版本。",
+    "WIND": "不自动更新：只保留既有Wind手工导入记录；每日任务不调用Wind接口。",
 }
-SOURCE_ORDER = ["NBS", "PBOC", "MOF", "SAFE", "OECD", "CHINABOND", "WIND"]
+SOURCE_ORDER = ["NBS", "PBOC", "MOF", "SAFE", "CUSTOMS", "OECD", "CHINABOND", "WIND"]
 
 
 def main() -> None:
@@ -311,7 +312,7 @@ def main() -> None:
         "",
         "开始时间和结束时间均指字段的原始数据期，不是宽表观察日期。结束时间只统计生成时点已经满足PIT可见条件的记录；库内最晚数据期另列，可能包含尚未到可用日的保守版本。",
         "",
-        "中国官方网页任务在Asia/Shanghai 22:00维护NBS、PBOC、MOF、SAFE和OECD的47个字段；00:00全球任务维护ChinaBond 3个市场字段。其余5个美元外贸字段保留Wind手工导入，按当前决定不接海关自动更新。",
+        "中国官方网页任务在Asia/Shanghai 22:00维护NBS、PBOC、MOF、SAFE、CUSTOMS和OECD；海关官方源负责美元出口、进口、差额及进出口同比5项，首次发布与后续页面修订分版本保存。00:00全球任务维护ChinaBond 3个市场字段。既有Wind记录保留，但每日任务不调用Wind接口。",
         "",
     ]
     md_lines.extend([

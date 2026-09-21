@@ -1,1 +1,3 @@
+# Official GACC English statistics indexes. Wind is not used.
+https://english.customs.gov.cn/statics/report/preliminary.html
 https://english.customs.gov.cn/statics/report/monthly.html

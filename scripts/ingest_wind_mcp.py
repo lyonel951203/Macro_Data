@@ -57,6 +57,7 @@ def load_records(pattern: str, first_seen: datetime):
         sha256 = hashlib.sha256(raw_bytes).hexdigest()
         payload = json.loads(raw_bytes.decode("utf-8"))
         retrieved = datetime.fromisoformat(payload["pulled_at"])
+        source_url = payload.get("source_url", "wind-mcp://natural_language_get_edb_data")
         for block in payload["response"]["data"]:
             meta = block["meta"]
             code = meta["code"]
@@ -109,7 +110,7 @@ def load_records(pattern: str, first_seen: datetime):
                     period_start=period_start, period_end=when,
                     value=float(v) / divisor, release_at=None, release_date_source=None,
                     first_seen_at=first_seen, available_at=first_seen, pit_grade="D",
-                    source_url="wind-mcp://natural_language_get_edb_data",
+                    source_url=source_url,
                     raw_file=str(path), raw_sha256=sha256, retrieved_at=retrieved,
                     parser_version=PARSER_VERSION,
                 ))

@@ -1,5 +1,6 @@
 ﻿wind_code,canonical_series_id,expected_name,expected_unit,target_unit,divisor,note
 M0001381,CN_M0_YOY,中国:M0:同比,%,pct_yoy,1.0,batch2
+M0001383,CN_M1_YOY,中国:M1:同比,%,pct_yoy,1.0,batch14_gap_only
 M0009941,CN_RMB_DEPOSIT_BAL_YOY,中国:金融机构各项存款余额:人民币:同比,%,pct_yoy,1.0,batch2
 M0009970,CN_RMB_LOAN_BAL_YOY,中国:金融机构各项贷款余额:人民币:同比,%,pct_yoy,1.0,batch2
 M0048261,CN_NEW_RMB_DEPOSITS_YTD,中国:金融机构:新增人民币存款:累计值,亿元,tn_cny_ytd,10000.0,batch2
@@ -25,3 +26,13 @@ M5531328,CN_INFRA_INVESTMENT_YTD_YOY,中国:固定资产投资完成额:基础�
 S0073300,CN_NEW_HOME_SALES_AREA_YTD_YOY,中国:商品房销售面积:累计同比,%,pct_yoy,1.0,batch8
 S0049591,CN_NEW_HOME_SALES_VALUE_YTD_YOY,中国:商品房销售额:累计同比,%,pct_yoy,1.0,batch8
 M0039354,CN_GDP_YOY,中国:GDP:不变价:当季同比,%,pct_yoy,1.0,batch9(季频,终值,修订敏感)
+M5809944,CN_PMI_COMPOSITE,中国综合PMI:产出指数,%,index,1.0,batch10(仅2018-04至2021-08官方缺期)
+M5650805,CN_URBAN_SURVEYED_UNEMPLOYMENT,中国:城镇调查失业率,%,pct,1.0,batch10(仅2018-04至2021-08官方缺期)
+M5767203,CN_SERVICE_PRODUCTION_YOY,中国:服务业生产指数:当月同比,%,pct_yoy,1.0,batch13(only non-Jan-Feb official single-month gaps)
+M0046169,CN_GENERAL_BUDGET_REVENUE_YTD_YOY,中国:一般公共预算收入:累计同比,%,pct_yoy,1.0,batch15_fiscal7
+M0046167,CN_GENERAL_BUDGET_EXPENDITURE_YTD_YOY,中国:一般公共预算支出:累计同比,%,pct_yoy,1.0,batch15_fiscal7
+M0046171,CN_TAX_REVENUE_YTD_YOY,中国:税收收入:累计同比,%,pct_yoy,1.0,batch15_fiscal7
+M0325670,CN_NONTAX_REVENUE_YTD_YOY,中国:非税收入:累计同比,%,pct_yoy,1.0,batch15_fiscal7
+M0096883,CN_GOV_FUND_REVENUE_YTD_YOY,中国:政府性基金收入:累计同比,%,pct_yoy,1.0,batch15_fiscal7
+M0096891,CN_GOV_FUND_EXPENDITURE_YTD_YOY,中国:政府性基金支出:累计同比,%,pct_yoy,1.0,batch15_fiscal7
+M0096886,CN_LAND_SALE_REVENUE_YTD_YOY,中国:地方本级政府性基金收入:国有土地使用权出让收入:累计同比,%,pct_yoy,1.0,batch15_fiscal7
