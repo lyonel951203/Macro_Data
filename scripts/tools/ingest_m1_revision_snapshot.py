@@ -6,8 +6,8 @@ override used by the estimated-availability sidecar. The latter is appended
 to DuckDB as a dated PIT_D revision event effective 2025-02-14.
 
 Usage:
-  py -3.11 scripts/ingest_m1_revision_snapshot.py
-  py -3.11 scripts/ingest_m1_revision_snapshot.py --ingest
+  py -3.11 scripts/tools/ingest_m1_revision_snapshot.py
+  py -3.11 scripts/tools/ingest_m1_revision_snapshot.py --ingest
 """
 from __future__ import annotations
 

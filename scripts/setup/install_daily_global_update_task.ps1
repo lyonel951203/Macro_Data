@@ -4,7 +4,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$Root = Split-Path -Parent $PSScriptRoot
+$Root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $Runner = Join-Path $Root "run_daily_global_update.cmd"
 if (-not (Test-Path -LiteralPath $Runner)) {
     throw "Runner not found: $Runner"

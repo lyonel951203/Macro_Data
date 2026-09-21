@@ -16,7 +16,7 @@ from macro_pit.snapshot import build_monthly_wide_snapshot
 from macro_pit.timeutils import SHANGHAI
 
 
-root = Path(__file__).resolve().parents[1]
+root = Path(__file__).resolve().parents[2]
 os.chdir(root)
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--output-dir", default="reports/v2/nbs_legacy")

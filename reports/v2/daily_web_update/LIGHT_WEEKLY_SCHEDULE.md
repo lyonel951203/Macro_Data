@@ -35,7 +35,7 @@
 - 每日配置：`config/daily_web_update.yml`、`config/daily_global_update.yml`
 - 每周配置：`config/weekly_web_revision.yml`、`config/weekly_global_revision.yml`
 - 每周入口：`run_weekly_web_revision.cmd`、`run_weekly_global_revision.cmd`
-- Windows安装脚本：`scripts/install_weekly_revision_tasks.ps1`
+- Windows安装脚本：`scripts/setup/install_weekly_revision_tasks.ps1`
 - 每周回执：`reports/v2/weekly_web_revision/`、`reports/v2/weekly_global_revision/`
 - 每周日志：`logs/weekly_web_revision/`、`logs/weekly_global_revision/`
 
@@ -56,7 +56,7 @@ python scripts/run_daily_web_update.py --config config/weekly_global_revision.ym
 重新注册周任务：
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/install_weekly_revision_tasks.ps1
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/setup/install_weekly_revision_tasks.ps1
 ```
 
 云服务器接手时，应建立相同的四个systemd timer：每日22:00、每日00:00、周日02:00、周日04:00，并让四个service继续共用同一锁文件。完整迁移步骤见 `CLOUD_DEPLOYMENT.md`。

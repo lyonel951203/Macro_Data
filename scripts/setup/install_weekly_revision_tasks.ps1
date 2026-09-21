@@ -1,4 +1,4 @@
-﻿param(
+param(
     [string]$WebTaskName = "Macro_Data_Weekly_Web_Revision",
     [string]$GlobalTaskName = "Macro_Data_Weekly_Global_Revision",
     [string]$DayOfWeek = "Sunday",
@@ -7,7 +7,7 @@
 )
 
 $ErrorActionPreference = "Stop"
-$Root = Split-Path -Parent $PSScriptRoot
+$Root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $cmd = Join-Path $env:SystemRoot "System32\cmd.exe"
 $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Limited
 $settings = New-ScheduledTaskSettingsSet `

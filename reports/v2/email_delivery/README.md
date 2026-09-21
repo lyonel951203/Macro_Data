@@ -40,7 +40,7 @@ DeepSeek:
 
 ```powershell
 $env:PYTHONPATH = "$PWD\src"
-python scripts\send_latest_audit_email.py
+python scripts\tools\send_latest_audit_email.py
 ```
 
 Use `--config` with any of the other three task YAML files to resend that

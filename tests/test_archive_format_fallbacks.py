@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 from datetime import datetime
 import pytest
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts/history'))
 import archive_format_fallbacks as m
 from macro_pit.archive import RawArtifact
 from macro_pit.timeutils import SHANGHAI

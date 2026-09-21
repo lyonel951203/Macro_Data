@@ -12,7 +12,7 @@ work mode keeps using the estimated-availability sidecar. Observed mode gains th
 true revision vintages (e.g. 2022-Q2 0.4 -> 0.8 effective 2025-01-18).
 
 Usage:
-  py -3.11 scripts/ingest_gdp_revision_snapshots.py [--ingest]
+  py -3.11 scripts/tools/ingest_gdp_revision_snapshots.py [--ingest]
 """
 from __future__ import annotations
 

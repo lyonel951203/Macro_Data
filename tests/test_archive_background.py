@@ -1,6 +1,6 @@
 import importlib.util,json,subprocess
 from pathlib import Path
-spec=importlib.util.spec_from_file_location('background_parse',Path(__file__).resolve().parents[1]/'scripts/parse_archives_background.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+spec=importlib.util.spec_from_file_location('background_parse',Path(__file__).resolve().parents[1]/'scripts/history/parse_archives_background.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 def test_timeout_does_not_stop_next_and_resume(tmp_path,monkeypatch):
  from types import SimpleNamespace
  monkeypatch.setattr(m,'signature',lambda:'frozen')

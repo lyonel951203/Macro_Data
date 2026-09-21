@@ -74,7 +74,7 @@ PIT 判定是两步：**① 该数据期在截点时是否已发布（可见性�
 
 ## 三、PIT_work 视图的设计与实现
 
-### 3.1 第 1 步：实证滞后分布（`scripts/calibrate_release_lag.py`）
+### 3.1 第 1 步：实证滞后分布（`scripts/tools/calibrate_release_lag.py`）
 
 只读主库，对 47 个序列的 5,508 个"数据期首次发布"样本（A/B 记录）统计发布滞后：
 
@@ -92,7 +92,7 @@ PIT 判定是两步：**① 该数据期在截点时是否已发布（可见性�
 
 产出：`reports/v2/pit_work_step1_lag/`（lag_by_period.csv、lag_stats_by_series.csv、README.md）。
 
-### 3.2 第 2 步：估计可用日期（`scripts/estimate_availability.py`）
+### 3.2 第 2 步：估计可用日期（`scripts/tools/estimate_availability.py`）
 
 - **规则表** `config/estimated_availability_rules_v1.csv`：52 条规则（47 宽表字段 + 海关 5 项），含滞后天数、是否当日可用、置信度、是否纳入、依据；
 - **口径**：`estimated_release_date = period_end + lag`；非 PMI 序列自估计发布日**次日 00:00（+08:00）**可用（沿用 B 级保守惯例）；PMI 当月末 **09:30** 可用；
@@ -117,7 +117,7 @@ PIT 判定是两步：**① 该数据期在截点时是否已发布（可见性�
 ```
 搜索确认代码（不按中文名猜）→ 分窗拉取（≤7年/窗防截断）→ 原始JSON落盘
 → config/wind_mcp_mappings.csv 登记映射（名称/单位与Wind元数据逐字核对）
-→ scripts/ingest_wind_mcp.py 暂存校验（幂等重放/strict排除/边界/防手误）
+→ scripts/tools/ingest_wind_mcp.py 暂存校验（幂等重放/strict排除/边界/防手误）
 → 用户确认 → --ingest（带strict快照与导出哈希不变断言）
 → 重跑 estimate_availability + export-wide --pit-mode work + verify_work_export
 ```
@@ -203,7 +203,7 @@ YTD/合并口径序列在 work 表中自然呈现正确节奏：**1 月末截点
 | strict/loose 排除断言 | D 级任何截点不得进入 strict/loose 快照 |
 | 入库前后哈希 | --ingest 断言 strict 快照与 data/exports 文件哈希不变 |
 | 手误防线 | 长数值列表用生成器脚本（月末日期自动生成+长度断言+单调性检查），曾兜住 3 次转存手误 |
-| 契约测试 | test_work_mode.py（work 语义）+ test_db_contracts.py（含修订快照例外）；pytest 的 tmp_path 清理在本环境触发沙箱删除确认，辅以 scripts/manual_contract_check.py（7 项全过） |
+| 契约测试 | test_work_mode.py（work 语义）+ test_db_contracts.py（含修订快照例外）；pytest 的 tmp_path 清理在本环境触发沙箱删除确认，辅以 scripts/tools/manual_contract_check.py（7 项全过） |
 | 逐格来源伴随表 | provenance 表让下游能区分每格证据等级，支撑敏感性分析 |
 
 ---
@@ -248,18 +248,18 @@ YTD/合并口径序列在 work 表中自然呈现正确节奏：**1 月末截点
 # 2. 分窗拉取（≤7年/窗），原始回执存 data/manual_import/wind_mcp/batchN_*.json
 # 3. config/wind_mcp_mappings.csv 追加映射行（名称/单位逐字核对）
 # 4. 暂存校验
-py -3.11 scripts/ingest_wind_mcp.py --pattern "batchN_*.json" --output-dir reports/v2/wind_batchN_xxx
+py -3.11 scripts/tools/ingest_wind_mcp.py --pattern "batchN_*.json" --output-dir reports/v2/wind_batchN_xxx
 # 5. 用户确认映射后入库
-py -3.11 scripts/ingest_wind_mcp.py --pattern "batchN_*.json" --output-dir reports/v2/wind_batchN_xxx --ingest
+py -3.11 scripts/tools/ingest_wind_mcp.py --pattern "batchN_*.json" --output-dir reports/v2/wind_batchN_xxx --ingest
 # 6. 下游刷新三件套
-py -3.11 scripts/estimate_availability.py
+py -3.11 scripts/tools/estimate_availability.py
 py -3.11 -m macro_pit export-wide --pit-mode work --start-date 2005-01-31 --end-date 2026-07-31 --output-prefix data/exports/cn_pit_work_month_end_2005_20260731
-py -3.11 scripts/verify_work_export.py
+py -3.11 scripts/tools/verify_work_export.py
 ```
 
 ### 10.2 修订快照（Wind 终端「历史修正」xlsx）
 
-用 `scripts/ingest_gdp_revision_snapshots.py` 的模式：**只取"修正值"非空行**，值=修正值，available_at=修正日期，release_date_source=`wind_revision_snapshot_<日期>`。**切勿锚定终值列整列**（那是导出日现行值）。
+用 `scripts/tools/ingest_gdp_revision_snapshots.py` 的模式：**只取"修正值"非空行**，值=修正值，available_at=修正日期，release_date_source=`wind_revision_snapshot_<日期>`。**切勿锚定终值列整列**（那是导出日现行值）。
 
 ### 10.3 关键文件索引
 
@@ -267,10 +267,10 @@ py -3.11 scripts/verify_work_export.py
 |---|---|
 | `config/wind_mcp_mappings.csv` | Wind 代码→字段映射登记（每批追加） |
 | `config/estimated_availability_rules_v1.csv` | 估计可用日规则表 v1（52 条） |
-| `scripts/ingest_wind_mcp.py` | 通用 Wind MCP 入库（支持月频+季频） |
-| `scripts/estimate_availability.py` | 估计可用日侧车生成 |
-| `scripts/verify_work_export.py` | work 导出验收（一致性/覆盖率/升级格） |
-| `scripts/calibrate_release_lag.py` | 发布滞后实证校准 |
+| `scripts/tools/ingest_wind_mcp.py` | 通用 Wind MCP 入库（支持月频+季频） |
+| `scripts/tools/estimate_availability.py` | 估计可用日侧车生成 |
+| `scripts/tools/verify_work_export.py` | work 导出验收（一致性/覆盖率/升级格） |
+| `scripts/tools/calibrate_release_lag.py` | 发布滞后实证校准 |
 | `scripts/analyze_remaining_gaps.py` | 缺口分析 |
 | `reports/v2/STATUS.md` | 项目状态总账 |
 

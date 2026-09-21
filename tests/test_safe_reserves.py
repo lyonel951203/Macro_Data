@@ -1,7 +1,7 @@
 import importlib.util
 from pathlib import Path
 import pytest
-spec=importlib.util.spec_from_file_location('safe_reserves',Path(__file__).resolve().parents[1]/'scripts/review_safe_reserves.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+spec=importlib.util.spec_from_file_location('safe_reserves',Path(__file__).resolve().parents[1]/'scripts/history/review_safe_reserves.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 def page(body,date='2017-08-07'):
  return f'<html><meta name="ArticleTitle" content="2017年7月外汇储备"><meta name="PubDate" content="{date}"><body>发布日期：{date}<div id="content">{body}</div></body></html>'.encode()
 @pytest.mark.parametrize('body',[

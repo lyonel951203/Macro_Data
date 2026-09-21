@@ -12,7 +12,7 @@ import duckdb
 import yaml
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DB_PATH = ROOT / "macro_pit_v2.duckdb"
 OUT_DIR = ROOT / "reports" / "v2" / "current_field_inventory"
 DAILY_CONFIG = ROOT / "config" / "daily_web_update.yml"
@@ -365,7 +365,7 @@ def main() -> None:
         f"- 数据库：{BT}macro_pit_v2.duckdb{BT}，只读聚合55个CN字段。",
         f"- 自动更新配置：{BT}config/daily_web_update.yml{BT}、{BT}config/daily_global_update.yml{BT}。",
         f"- 中文口径参考：{BT}scripts/export_current_pit_chinese.py{BT}及当前字段代码。",
-        f"- 本清单生成器：{BT}scripts/export_current_field_inventory.py{BT}。",
+        f"- 本清单生成器：{BT}scripts/tools/export_current_field_inventory.py{BT}。",
     ])
     md_path = OUT_DIR / "README.md"
     md_path.write_text("\n".join(md_lines) + "\n", encoding="utf-8")

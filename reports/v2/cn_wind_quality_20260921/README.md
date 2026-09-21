@@ -8,7 +8,7 @@
 
 Wind MCP 导入器检查代码/名称/单位映射、日期排序、空值与 2005 年前数据隔离、同字段同期间重复键、重复导入幂等，以及 D 级不会改变严格 A/B 截面。首批 Wind Excel 另隔离导出产生的零值、错误频率/单位映射，对外贸三项做进出口差额残差检查。后续批次有局部的原稿核对、宽表逐格变化核对和发布日期边界测试。这些是有价值的结构与局部数值检查，但项目里此前没有对**全部同字段同期间官方 A/B 与 Wind**持续做逐项数值对账，也没有对当前 55 字段面板统一扫描连续同值和区间内缺期。
 
-既有证据：`scripts/ingest_wind_mcp.py`、`scripts/audit_wind_expansion.py`、`reports/v2/wind_batch1/README.md`、`reports/v2/wind_batch2_mcp/README.md`。现有 20 条 Wind 明确修订事件（M1、GDP）是另一条带日期的版本链；以下对账只比较基础 Wind D 快照，排除这 20 条修订事件。
+既有证据：`scripts/tools/ingest_wind_mcp.py`、`scripts/tools/audit_wind_expansion.py`、`reports/v2/wind_batch1/README.md`、`reports/v2/wind_batch2_mcp/README.md`。现有 20 条 Wind 明确修订事件（M1、GDP）是另一条带日期的版本链；以下对账只比较基础 Wind D 快照，排除这 20 条修订事件。
 
 ## A/B 与 Wind 同期对账
 

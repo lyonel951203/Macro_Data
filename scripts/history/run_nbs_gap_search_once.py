@@ -22,7 +22,7 @@ parser.add_argument("--status-marker", default=None, help="Update an existing ma
 args = parser.parse_args()
 if not 1 <= args.max_pages_per_job <= 3:
     parser.error("max-pages-per-job must be 1..3")
-os.chdir(Path(__file__).resolve().parents[1])
+os.chdir(Path(__file__).resolve().parents[2])
 jobs = json.loads(Path(args.job_manifest).read_text(encoding="utf-8"))["jobs"]
 if not 1 <= len(jobs) <= 5:
     raise ValueError("reviewed search manifest must contain 1..5 date windows")

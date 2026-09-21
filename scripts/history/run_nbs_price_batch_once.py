@@ -192,7 +192,7 @@ def run_batch(manifest_path, batch, *, allow_network=False, review_only=False, s
             run["stage"] = "exporting"
             checkpoint()
             command("scripts/prepare_nbs_legacy_batch.py", "--coverage-only")
-            command("scripts/finalize_nbs_legacy_batch.py", *common)
+            command("scripts/history/finalize_nbs_legacy_batch.py", *common)
             run["export_summary"] = json.loads((out / "final_result.json").read_text(encoding="utf-8"))
             command("scripts/compare_nbs_batch_exports.py", "--output-dir", out, "--expected", expected_path)
             for path in [Path("reports/v2/pit_csv_inspection/review.ipynb"),
@@ -223,7 +223,7 @@ if __name__ == "__main__":
     parser.add_argument("--review-only", action="store_true")
     parser.add_argument("--status-marker")
     args = parser.parse_args()
-    os.chdir(Path(__file__).resolve().parents[1])
+    os.chdir(Path(__file__).resolve().parents[2])
     result = run_batch(args.manifest, args.batch, allow_network=args.allow_network,
                        review_only=args.review_only, status_marker=args.status_marker)
     print(json.dumps({k: v for k, v in result.items() if k not in {"export_summary", "field_summary"}}, ensure_ascii=False))

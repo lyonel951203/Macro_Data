@@ -15,25 +15,25 @@ Windows scheduled tasks.
 
 ## Task installation and credentials
 
-- `install_daily_web_update_task.ps1`
-- `install_daily_global_update_task.ps1`
-- `install_weekly_revision_tasks.ps1`
-- `set_deepseek_api_key.ps1`
+- `setup/install_daily_web_update_task.ps1`
+- `setup/install_daily_global_update_task.ps1`
+- `setup/install_weekly_revision_tasks.ps1`
+- `setup/set_deepseek_api_key.ps1`
 
 ## Current maintenance and exports
 
 Inventory, audit, calibration, availability, email, and Wind ingestion scripts
-are operator-invoked tools. They are not run merely because they are present in
-this directory. Examples include `export_current_field_inventory.py`,
-`export_non_cn_field_inventory.py`, `estimate_availability.py`,
-`ingest_wind_mcp.py`, and `send_latest_audit_email.py`.
+are operator-invoked tools under `tools/`. They are not run merely because they
+are present. Examples include `tools/export_current_field_inventory.py`,
+`tools/export_non_cn_field_inventory.py`, `tools/estimate_availability.py`,
+`tools/ingest_wind_mcp.py`, and `tools/send_latest_audit_email.py`.
 
 ## Historical and one-time work
 
-Files named for a specific source gap, revision event, probe, review round, or
-date reproduce earlier work. They may rely on local evidence in `data/` and a
-matching report under `reports/v2/`. Treat them as historical tools unless a
-current runbook explicitly calls them.
+Reusable scripts for completed source gaps and review rounds are under
+`history/`; date-specific programs are under `one_off/`. They may rely on local
+evidence in `data/` and a matching report under `reports/v2/`. Treat them as
+historical tools unless a current runbook explicitly calls them.
 
 `run_nbs_history_once.ps1` is retained for the disabled, completed NBS history
 task. It is not part of the four active daily/weekly jobs.

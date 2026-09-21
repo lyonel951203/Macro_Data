@@ -51,6 +51,6 @@
 
 ## 复用指引
 
-后续导出其他指标的「历史修正」xlsx 时，直接用 `scripts/ingest_gdp_revision_snapshots.py`
+后续导出其他指标的「历史修正」xlsx 时，直接用 `scripts/tools/ingest_gdp_revision_snapshots.py`
 的模式：只取修正值非空行，值=修正值，available_at=修正日期，
 release_date_source=wind_revision_snapshot_<日期>。切勿锚定终值列整列。

@@ -36,7 +36,7 @@ The interactive helper hides keyboard input, writes that file, and removes
 inherited ACL entries:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\set_deepseek_api_key.ps1
+powershell -ExecutionPolicy Bypass -File scripts\setup\set_deepseek_api_key.ps1
 ```
 
 ## Manual audit or connectivity test
@@ -46,14 +46,14 @@ without downloading source data again:
 
 ```powershell
 $env:PYTHONPATH = "$PWD\src"
-python scripts\run_deepseek_daily_audit.py
+python scripts\tools\run_deepseek_daily_audit.py
 ```
 
 For the global report:
 
 ```powershell
 $env:PYTHONPATH = "$PWD\src"
-python scripts\run_deepseek_daily_audit.py `
+python scripts\tools\run_deepseek_daily_audit.py `
   --config config\daily_global_update.yml
 ```
 

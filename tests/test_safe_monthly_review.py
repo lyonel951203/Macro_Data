@@ -2,7 +2,7 @@ import importlib.util
 from pathlib import Path
 import pytest
 
-SPEC=importlib.util.spec_from_file_location('safe_monthly_review',Path(__file__).resolve().parents[1]/'scripts/parse_safe_monthly_review.py')
+SPEC=importlib.util.spec_from_file_location('safe_monthly_review',Path(__file__).resolve().parents[1]/'scripts/history/parse_safe_monthly_review.py')
 module=importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(module)
 
@@ -34,7 +34,7 @@ def test_conflicting_values_held():
 def test_annual_title_not_monthly():
     with pytest.raises(ValueError,match='not_explicit'):
         module.extract(page('2015年银行结汇100亿美元。','国家外汇管理局公布2015年银行结售汇和银行代客涉外收付款数据'))
-SPEC2=importlib.util.spec_from_file_location('verify_safe_monthly',Path(__file__).resolve().parents[1]/'scripts/verify_safe_monthly_review.py')
+SPEC2=importlib.util.spec_from_file_location('verify_safe_monthly',Path(__file__).resolve().parents[1]/'scripts/history/verify_safe_monthly_review.py')
 verify_module=importlib.util.module_from_spec(SPEC2)
 SPEC2.loader.exec_module(verify_module)
 

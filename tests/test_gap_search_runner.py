@@ -13,9 +13,9 @@ def test_bounded_runner_checkpoints_refreshes_status_and_stops_on_block(tmp_path
     import macro_pit.http as http
     import macro_pit.nbs_search as search
 
-    script = Path("scripts/run_nbs_gap_search_once.py").read_text(encoding="utf-8")
-    (tmp_path / "scripts").mkdir()
-    runner = tmp_path / "scripts/run_nbs_gap_search_once.py"
+    script = Path("scripts/history/run_nbs_gap_search_once.py").read_text(encoding="utf-8")
+    (tmp_path / "scripts/history").mkdir(parents=True)
+    runner = tmp_path / "scripts/history/run_nbs_gap_search_once.py"
     runner.write_text(script, encoding="utf-8")
     (tmp_path / "config").mkdir()
     jobs = [{"name": "first", "term": "one", "start_date": "2010-01-01", "end_date": "2010-12-31", "max_network_pages": 1},

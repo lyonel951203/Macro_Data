@@ -12,7 +12,7 @@ import duckdb
 import yaml
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DB_PATH = ROOT / "macro_pit_v2.duckdb"
 OUT_DIR = ROOT / "reports" / "v2" / "non_cn_field_inventory"
 DAILY_CONFIG = ROOT / "config" / "daily_global_update.yml"
@@ -355,7 +355,7 @@ def main() -> None:
         f"- 美国RTDSM清单：{BT}config/rtdsm_core.yml{BT}。",
         f"- 美国财政部日度曲线：{BT}src/macro_pit/sources/us_treasury.py{BT}。",
         f"- 每日任务配置：{BT}config/daily_global_update.yml{BT}，OECD、RTDSM、美国财政部、ChinaBond和IMF均已调度。",
-        f"- 本清单生成器：{BT}scripts/export_non_cn_field_inventory.py{BT}。",
+        f"- 本清单生成器：{BT}scripts/tools/export_non_cn_field_inventory.py{BT}。",
     ])
     md_path = OUT_DIR / "README.md"
     md_path.write_text("\n".join(lines) + "\n", encoding="utf-8")

@@ -10,7 +10,7 @@ from macro_pit.sources.cn_common import make_observation
 from macro_pit.timeutils import SHANGHAI
 from macro_pit.fileio import atomic_write_text
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'reports/v2/history/archive_parse/archive_parse_20260911/safe_monthly'
 NUM=r'([\d,]+(?:\.\d+)?)'
 AMOUNT=rf'(?:为)?{NUM}亿美元'

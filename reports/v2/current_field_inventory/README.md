@@ -126,4 +126,4 @@ The 22:00 task also polls EASTMONEY_MACRO (11 fields) and SINA_MACRO (16 fields)
 - 数据库：`macro_pit_v2.duckdb`，只读聚合55个CN字段。
 - 自动更新配置：`config/daily_web_update.yml`、`config/daily_global_update.yml`。
 - 中文口径参考：`scripts/export_current_pit_chinese.py`及当前字段代码。
-- 本清单生成器：`scripts/export_current_field_inventory.py`。
+- 本清单生成器：`scripts/tools/export_current_field_inventory.py`。

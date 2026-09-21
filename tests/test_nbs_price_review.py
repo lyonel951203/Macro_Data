@@ -69,7 +69,7 @@ def test_search_evidence_cannot_be_silently_replaced(evidence):
 
 
 def load_runner():
-    path = Path(__file__).resolve().parents[1] / "scripts/run_nbs_price_batch_once.py"
+    path = Path(__file__).resolve().parents[1] / "scripts/history/run_nbs_price_batch_once.py"
     spec = importlib.util.spec_from_file_location("price_batch_runner", path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -168,7 +168,7 @@ def test_resume_after_ingestion_only_rebuilds_exports(tmp_path, monkeypatch, evi
 
     def command(args, **kwargs):
         calls.append(args)
-        if "scripts/finalize_nbs_legacy_batch.py" in args:
+        if "scripts/history/finalize_nbs_legacy_batch.py" in args:
             (out / "final_result.json").write_text("{}")
 
     monkeypatch.setattr(runner, "NBSSource", Source)

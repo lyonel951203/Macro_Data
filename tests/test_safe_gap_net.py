@@ -2,7 +2,7 @@ import importlib.util
 from pathlib import Path
 from datetime import datetime,timezone,timedelta
 import pytest
-spec=importlib.util.spec_from_file_location('safe_gap_net',Path(__file__).resolve().parents[1]/'scripts/review_safe_gap_net.py')
+spec=importlib.util.spec_from_file_location('safe_gap_net',Path(__file__).resolve().parents[1]/'scripts/history/review_safe_gap_net.py')
 m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 def pair():
  left=dict(source='SAFE',canonical_series_id='CN_BANK_FX_SETTLEMENT_USD',value=100.1,period='2015-01',source_url='https://www.safe.gov.cn/example',raw_sha256='abc',release_at=datetime(2015,2,1,tzinfo=timezone.utc),available_at=datetime(2015,2,2,tzinfo=timezone.utc),unit='bn_usd',frequency='M',pit_grade='B')

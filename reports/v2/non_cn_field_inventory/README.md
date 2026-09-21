@@ -189,4 +189,4 @@
 - 美国RTDSM清单：`config/rtdsm_core.yml`。
 - 美国财政部日度曲线：`src/macro_pit/sources/us_treasury.py`。
 - 每日任务配置：`config/daily_global_update.yml`，OECD、RTDSM、美国财政部、ChinaBond和IMF均已调度。
-- 本清单生成器：`scripts/export_non_cn_field_inventory.py`。
+- 本清单生成器：`scripts/tools/export_non_cn_field_inventory.py`。

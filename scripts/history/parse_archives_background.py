@@ -2,7 +2,7 @@
 from pathlib import Path
 import argparse,hashlib,json,os,subprocess,sys,time,traceback
 from datetime import datetime
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'src'))
 from macro_pit.fileio import atomic_write_text
 from macro_pit.timeutils import SHANGHAI

@@ -54,7 +54,7 @@
 
 主库 776,108 条。work 宽表覆盖率 67.7% → **87.8%**（严格表全程零改动，A/B 格 0 冲突）。
 
-**批次3-9（通用工具 `scripts/ingest_wind_mcp.py` + 映射登记 `config/wind_mcp_mappings.csv`）：**
+**批次3-9（通用工具 `scripts/tools/ingest_wind_mcp.py` + 映射登记 `config/wind_mcp_mappings.csv`）：**
 
 | 批次 | 内容 | 条数 | 覆盖率 |
 |---|---|---:|---|
@@ -612,7 +612,7 @@ GDP2013-Q4未取得新的同期单季证据；PMI2010-05在6月发布稿的历�
 - 截止日前原始月份：CPI 78、PPI 82；CSV 空值率 70.91%。
 <!-- nbs-price-batch5:end -->
 
-- 启动/恢复入口：`python scripts/run_nbs_price_batch_once.py --manifest config/history/nbs/nbs_gap_batch5_validation.json --batch nbs_gap_batch5 --allow-network --status-marker nbs-price-batch5`。运行时持有 `data/history_backfill/nbs_price_batch.lock`，不要重复启动；遇服务器阻断先复核原因，不自动重试。
+- 启动/恢复入口：`python scripts/history/run_nbs_price_batch_once.py --manifest config/history/nbs/nbs_gap_batch5_validation.json --batch nbs_gap_batch5 --allow-network --status-marker nbs-price-batch5`。运行时持有 `data/history_backfill/nbs_price_batch.lock`，不要重复启动；遇服务器阻断先复核原因，不自动重试。
 - 持久化结果：`data/history_backfill/nbs_gap_batch5_run.json`；正文断点：`nbs_gap_batch5_validation_state.json`；核对证据：`config/history/nbs/nbs_gap_batch5_expected.json`；报告目录：`reports/v2/nbs_gap_batch5/`。
 - 日志：`logs/nbs_gap_batch5.stdout.log`、`logs/nbs_gap_batch5.stderr.log`。进程关闭后查看结果 JSON 和本段状态；导出失败时保留原入库结果，恢复不会重复计数。
 
@@ -699,7 +699,7 @@ GDP2013-Q4未取得新的同期单季证据；PMI2010-05在6月发布稿的历�
 - 发布日期 2020-03-01 至 2021-09-30：CPI 完成 1/6 页、候选月份为 2021-05 至 2021-08；PPI 完成 1/4 页、候选月份为 2021-03 至 2021-08。各自状态 `PAUSED`、下一页均为 2；2020 年缺口尚未补齐。
 - 本轮另外入库 CPI 2021-05（1.3%）、2021-08（0.8%）；PPI 2021-03（4.4%）、2021-08（9.5%），全部为 PIT_A。5 条合计新增，无修订。
 - 断点：`data/history_backfill/nbs_cpi_2005_q1_search_state.json`、`nbs_cpi_2010_search_state.json`、`nbs_cpi_2020_2021_search_state.json`、`nbs_ppi_2020_2021_search_state.json`；正文断点：`nbs_gap_validation_state.json`，`COMPLETE`，待处理 0。
-- 搜索续跑：`python scripts/run_nbs_gap_search_once.py --max-pages-per-job 3 --allow-network`。按 `config/history/nbs/nbs_gap_search_jobs.json` 逐窗执行、共用一个客户端保留跨窗口限速及 robots 缓存；已完成窗口跳过，此配置下一批最多新增 6 个搜索页，完成后退出。
+- 搜索续跑：`python scripts/history/run_nbs_gap_search_once.py --max-pages-per-job 3 --allow-network`。按 `config/history/nbs/nbs_gap_search_jobs.json` 逐窗执行、共用一个客户端保留跨窗口限速及 robots 缓存；已完成窗口跳过，此配置下一批最多新增 6 个搜索页，完成后退出。
 - 本轮报告目录：`reports/v2/nbs_gap_probe_20260908/`；其中 `search_summary.json`、`new_candidates.csv`、`gap_coverage.json` 保留搜索证据，`validated_samples.csv` 保留正文、数值和发布时间证据。
 - 完整报告：`reports/v2/nbs_gap_probe_20260908/review.html`；可复跑 notebook：`review.ipynb`，全部代码单元执行通过；验收：`acceptance.txt`；完整结果：`final_result.json`。严格宽表已于 10:56 重导出，仍为 259 行、47 指标，并验证 2005-01 CPI 从 2005-02 月末可见，以及 2021-08 CPI/PPI 从 2021-09 月末可见。
 - 本轮 NBS 请求账本增加 12 次（4 个搜索页、5 篇正文及 3 次 robots 检查），当日合计 46 次；无 403/429。全部下载进程已退出，搜索和正文断点均已保存。

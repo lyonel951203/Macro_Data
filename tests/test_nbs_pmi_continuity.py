@@ -2,7 +2,7 @@ import importlib.util
 from pathlib import Path
 import pytest
 from lxml import html
-spec=importlib.util.spec_from_file_location('pmi_review',Path(__file__).resolve().parents[1]/'scripts/review_nbs_pmi_continuity.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+spec=importlib.util.spec_from_file_location('pmi_review',Path(__file__).resolve().parents[1]/'scripts/history/review_nbs_pmi_continuity.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 def body(month='2015年1月',label='生产',value='53.0'):
  return html.fromstring('<div><table><tr><td></td><td>PMI</td><td></td></tr><tr>'+''.join('<td>'+x+'</td>' for x in [label,'新订单','原材料库存','从业人员','供应商配送时间'])+'</tr><tr>'+''.join('<td>'+x+'</td>' for x in [month,'50.1',value,'51.0','48.0','49.0','50.0'])+'</tr></table></div>')
 def test_split_header():assert m.cells(body(),2015,1)['CN_PMI_PRODUCTION']==53.0

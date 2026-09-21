@@ -24,7 +24,7 @@ PBOC若被robots策略阻止，只记录失败，不绕过限制。ChinaBond仅�
 
 - 配置：`config/daily_web_update.yml`
 - 入口：`run_daily_web_update.cmd`
-- 安装：`scripts/install_daily_web_update_task.ps1`
+- 安装：`scripts/setup/install_daily_web_update_task.ps1`
 - 状态：`data/daily_web_update/state.json`
 - 回执：`reports/v2/daily_web_update/`
 - 日志：`logs/daily_web_update/`
@@ -34,7 +34,7 @@ PBOC若被robots策略阻止，只记录失败，不绕过限制。ChinaBond仅�
 
 - 配置：`config/daily_global_update.yml`
 - 入口：`run_daily_global_update.cmd`
-- 安装：`scripts/install_daily_global_update_task.ps1`
+- 安装：`scripts/setup/install_daily_global_update_task.ps1`
 - 状态：`data/daily_global_update/state.json`
 - 回执：`reports/v2/daily_global_update/`
 - 日志：`logs/daily_global_update/`

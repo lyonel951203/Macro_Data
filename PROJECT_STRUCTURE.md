@@ -60,11 +60,10 @@ under `reports/v2/`.
 
 ## Script boundary
 
-`scripts/README.md` divides scripts into scheduled runtime, installation,
-maintenance/export, and historical one-time work. Only the scheduled runtime
-files are part of the normal daily execution path. A script with a date or a
-specific backfill name should be treated as a reproducibility artifact unless
-the production configuration explicitly references it.
+`scripts/README.md` divides scripts into scheduled runtime, `setup/`, `tools/`,
+`history/`, and dated `one_off/` work. Only the two runtime files directly under
+`scripts/` are part of the normal daily execution path. The disabled NBS history
+launcher remains there solely for scheduled-task compatibility.
 
 ## Reports to open first
 

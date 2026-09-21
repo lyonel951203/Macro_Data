@@ -1,7 +1,7 @@
 """Generic Wind MCP JSON intake: stage/validate/ingest any batch as WIND/PIT_D.
 
 Usage:
-  py -3.11 scripts/ingest_wind_mcp.py --pattern "batch3_pmi_*.json" \
+  py -3.11 scripts/tools/ingest_wind_mcp.py --pattern "batch3_pmi_*.json" \
       --output-dir reports/v2/wind_batch3_pmi [--ingest]
 
 - Mappings come from config/wind_mcp_mappings.csv (append verified rows per batch).
