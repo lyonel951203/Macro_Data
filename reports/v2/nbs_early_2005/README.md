@@ -19,6 +19,6 @@
 
 [逐条原稿证据](validated_samples.csv) · [被排除的累计稿](excluded_articles.csv) · [字段覆盖变化](field_coverage_changes.csv) · [复核 notebook](review.ipynb) · [47 字段回溯顺序](history_plan.md) · [各年真实数据期数](yearly_raw_period_coverage.csv)
 
-下一步从 2005 年下半年继续，同时查 2005 年 12 月 CPI/PPI 及早期制造业 PMI。五个窄搜索窗口已写入 config/nbs_early_2005_next_search_jobs.json，未启动。原近期综合稿 9 篇队列暂后移。
+下一步从 2005 年下半年继续，同时查 2005 年 12 月 CPI/PPI 及早期制造业 PMI。五个窄搜索窗口已写入 config/history/nbs/nbs_early_2005_next_search_jobs.json，未启动。原近期综合稿 9 篇队列暂后移。
 
 只读复核：python scripts/review_nbs_early_2005.py；显式 --ingest 才追加数据库。离线导出：python scripts/finalize_nbs_early_2005.py。

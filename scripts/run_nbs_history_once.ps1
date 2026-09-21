@@ -4,8 +4,8 @@ $projectRoot = 'E:\Macro_Data'
 $python = 'C:\Users\71871\AppData\Local\Programs\Python\Python311\python.exe'
 $database = Join-Path $projectRoot 'macro_pit_v2.duckdb'
 $logFile = Join-Path $projectRoot 'logs\nbs_history_daily.stdout.log'
-$batch1 = Join-Path $projectRoot 'config\nbs_release_index_pages1_50.txt'
-$batch2 = Join-Path $projectRoot 'config\nbs_release_index_pages51_66.txt'
+$batch1 = Join-Path $projectRoot 'config\history\nbs\nbs_release_index_pages1_50.txt'
+$batch2 = Join-Path $projectRoot 'config\history\nbs\nbs_release_index_pages51_66.txt'
 
 Set-Location -LiteralPath $projectRoot
 $env:PYTHONPATH = Join-Path $projectRoot 'src'

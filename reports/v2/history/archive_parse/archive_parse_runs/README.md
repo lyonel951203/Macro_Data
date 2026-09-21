@@ -8,7 +8,7 @@
 
 迭代步骤：
 1. 当前全量轮次完成，按错误类型和文档格式分组分析。
-2. 修改相应解析器并测试，创建新轮次，只重试FAILED、TIMEOUT和NO_ROWS：powershell -File scripts/start_archive_parsing.ps1 -RetryFrom E:\Macro_Data\reports\v2\archive_parse_runs\20260912_001729
+2. 修改相应解析器并测试，创建新轮次，只重试FAILED、TIMEOUT和NO_ROWS：powershell -File scripts/start_archive_parsing.ps1 -RetryFrom E:\Macro_Data\reports\v2\history\archive_parse\archive_parse_runs\20260912_001729
 3. 结合字段真实月份缺口检查成功稿是否漏提取；这类不能仅靠失败重跑覆盖，需要针对对应成功原稿另行回放核验。
 4. 少数特殊文档最后人工（模型）读取；保留原句、单位、统计期和发布日期证据，再走独立核验、隔离试入和正式入库。
 

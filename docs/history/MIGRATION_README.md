@@ -111,7 +111,7 @@ reports/
 requirements.txt
 pyproject.toml
 README.md
-MIGRATION_README.md
+docs/history/MIGRATION_README.md
 ```
 
 推荐新电脑仍使用：
@@ -283,7 +283,7 @@ pit_mode=observed -> A、B、C、D
 - CPI、PPI、GDP、PMI、工业、消费、投资等官方历史值存在，但批量最终历史值只能先标 PIT_D；
 - 历史公告目录尚未系统回填；
 - `2026-09-04` 对 `data.stats.gov.cn` 的单次 CPI 历史接口探测返回 HTTP 403；客户端已立即停止且没有重试；
-- 失败证据记录在 `logs/update_20260904.json`，不要重复运行 `config/nbs_easyquery_cpi_history_probe.txt`；
+- 失败证据记录在 `logs/update_20260904.json`，不要重复运行 `config/history/nbs/nbs_easyquery_cpi_history_probe.txt`；
 - 不要仅把 `--source` 改成 NBS 就运行，历史任务配置尚未完成。
 
 ### PBOC：中国人民银行
@@ -324,7 +324,7 @@ py -3.11 -m macro_pit --db-path .\macro_pit_v2.duckdb backfill-raw --source PBOC
 - 两个序列使用 OECD edition 月份形成 PIT_B，不使用经验滞后；
 - 它们是中国宏观补充来源，不替代验收要求的 NBS 国内来源；
 - OECD 中国失业率没有返回数据；STES revision 数据集中中国 GDP 查询为 404；
-- 不要运行 `config/oecd_china_gdp_discovery.yml`；
+- 不要运行 `config/history/oecd/oecd_china_gdp_discovery.yml`；
 - OECD 零售字段返回巨额水平而非声明的指数，已从主库精确移除 3,739 行；工业指数的一条零值哨兵也已移除；原始 CSV 和抓取日志仍保留，可从上面的备份恢复。
 
 ### CUSTOMS：海关总署
@@ -447,7 +447,7 @@ scripts/run_nbs_history_probe_once.ps1
 
 在声明“接管完成”前，必须逐项完成：
 
-1. 已完整阅读 `MIGRATION_README.md`；
+1. 已完整阅读 `docs/history/MIGRATION_README.md`；
 2. 已确认旧电脑上的 MOF 进程停止；
 3. 已确认数据库 SHA256 与旧电脑一致；
 4. 已确认主库、raw、cache、discovery、history state 和 logs 均已复制；

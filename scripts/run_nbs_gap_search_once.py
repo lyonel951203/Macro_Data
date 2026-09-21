@@ -16,7 +16,7 @@ from macro_pit.timeutils import SHANGHAI
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--max-pages-per-job", type=int, default=1)
 parser.add_argument("--allow-network", action="store_true")
-parser.add_argument("--job-manifest", default="config/nbs_gap_search_jobs.json")
+parser.add_argument("--job-manifest", default="config/history/nbs/nbs_gap_search_jobs.json")
 parser.add_argument("--result-path", default="data/history_backfill/nbs_gap_search_run.json")
 parser.add_argument("--status-marker", default=None, help="Update an existing marked block in STATUS.md")
 args = parser.parse_args()

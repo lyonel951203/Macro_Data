@@ -147,7 +147,7 @@
 - `strict_stage_progress.json`和`STATUS.md`
 - 16字段口径字典、PIT评级与可用时间的实际配置/说明
 - 主库或相关字段导出，以及生成严格宽表的脚本和运行入口
-- `archive_parse_round26/industry_calendar/official_conflict.json`
+- `history/archive_parse/archive_parse_round26/industry_calendar/official_conflict.json`
 - `user_workbook_support/release_chart_review/precision_and_field_correction.json`
 - `user_workbook_support/earlier_release/evidence.json`
 - 已核2024—2026年规则的原始材料及映射记录

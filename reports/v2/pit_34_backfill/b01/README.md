@@ -26,6 +26,6 @@
 - [12 条原值和出处](validated_samples.csv)、[覆盖变化](field_coverage_changes.csv)、[460 格变化说明](export_changes.csv)、[首年逐期台账](first_year_period_review.csv)。
 - [可执行复核 notebook](review.ipynb)、[最终结果](final_result.json)、[归档与解析验证](validation_summary.json)、[入库记录](ingestion_result.json)。
 - 只读核验：`python scripts/review_pit34_b01.py`；`--regress` 回放冻结旧归档；显式 `--ingest` 才追加主库，重复执行不新增。
-- 原值规格 `config/pit34_b01_review_values.json`；封存清单 `config/pit34_b01_candidates.json`；下载断点 `data/history_backfill/pit34_b01_download_state.json`；当前无本批后台任务。
+- 原值规格 `config/history/pit/pit34_b01_review_values.json`；封存清单 `config/history/pit/pit34_b01_candidates.json`；下载断点 `data/history_backfill/pit34_b01_download_state.json`；当前无本批后台任务。
 
 官方来源：[2018-01 PMI](https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1899839.html)、[2017-03 服务业单月附表](https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1899470.html)、[2018 年一季度失业率首稿](https://www.stats.gov.cn/sj/xwfbh/fbhwd/202302/t20230203_1899897.html)。归档 raw 文件和 SHA256 均见原值证据表。搜索结果只用作发现线索，入库以归档原稿为准。

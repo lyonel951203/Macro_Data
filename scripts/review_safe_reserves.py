@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from macro_pit.archive import RawArtifact
 from macro_pit.sources.cn_common import make_observation
 from macro_pit.timeutils import SHANGHAI
-OUT=Path('reports/v2/archive_parse_20260911/safe_reserves')
+OUT=Path('reports/v2/history/archive_parse/archive_parse_20260911/safe_reserves')
 PATTERN=r'截至(20\d{2})年(\d{1,2})月(末|\d{1,2}日)[，,](?:我国)?外汇储备(?:规模|余额)?(?:为)?([\d,]+(?:\.\d+)?)亿美元'
 
 def extract(content):

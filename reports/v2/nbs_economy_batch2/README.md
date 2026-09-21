@@ -45,7 +45,7 @@
 - 1—2 月发布结构须逐项核对：100 格，不自动拆成单月。
 - 尚未发现综合稿候选：20 格。
 
-下一批保留 9 篇候选，见 [候选清单](next_20_candidates.csv) 和 `config/nbs_economy_batch3_candidates.json`；仅准备清单，未启动后续下载。
+下一批保留 9 篇候选，见 [候选清单](next_20_candidates.csv) 和 `config/history/nbs/nbs_economy_batch3_candidates.json`；仅准备清单，未启动后续下载。
 
 ## 验证
 

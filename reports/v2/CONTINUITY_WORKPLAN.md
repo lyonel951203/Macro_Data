@@ -70,13 +70,13 @@
 
 当前执行检查点：严格第1项（第26轮）。明确历史工业制度解决4条一月未决，现116+25；另发现2005-01原稿与制度说明冲突1项，原记录保留，不当作解析错误。12项测试通过，入库0。下轮核2005原稿年份/制度起点，再早年零售房地产；2—4等待。
 
-当前执行检查点：严格第1项进行中（第25轮）。219篇财政全文扫描无新普通一月证据；已核2023年1月增长1%为扣特殊因素口径，隔离不入库。未决120+25不变。下一轮本阶段转早年NBS2006及2009—2011日历证据，财政未知保留；2—4等待。证据archive_parse_round25/mof_calendar。
+当前执行检查点：严格第1项进行中（第25轮）。219篇财政全文扫描无新普通一月证据；已核2023年1月增长1%为扣特殊因素口径，隔离不入库。未决120+25不变。下一轮本阶段转早年NBS2006及2009—2011日历证据，财政未知保留；2—4等待。证据history/archive_parse/archive_parse_round25/mof_calendar。
 
-当前执行检查点：严格第1项进行中（第24轮）。财政2009-01收入/税收两条原稿证据已核，只解决内部日历1条（税收早于现有首期）。未决120条历史+25条合并期，11项测试通过，入库0；2、3、4等待。下一步财政2012起逐年一月依据，见archive_parse_round24/mof_calendar。
+当前执行检查点：严格第1项进行中（第24轮）。财政2009-01收入/税收两条原稿证据已核，只解决内部日历1条（税收早于现有首期）。未决120条历史+25条合并期，11项测试通过，入库0；2、3、4等待。下一步财政2012起逐年一月依据，见history/archive_parse/archive_parse_round24/mof_calendar。
 
-当前执行检查点：严格第1项进行中（第23轮）。已核2024服务业一二月合并编制，新增2条日历规则；未决121条历史日历+25条合并期，10项测试通过，入库0。下一步财政逐年发布规则/一月正向证据；2、3、4继续等待。证据archive_parse_round23/calendar_service。
+当前执行检查点：严格第1项进行中（第23轮）。已核2024服务业一二月合并编制，新增2条日历规则；未决121条历史日历+25条合并期，10项测试通过，入库0。下一步财政逐年发布规则/一月正向证据；2、3、4继续等待。证据history/archive_parse/archive_parse_round23/calendar_service。
 
-当前执行检查点：严格第1项进行中（第22轮）。服务业本地逐年反查匹配2019/2022两稿，只有累计证据，未豁免单月；121+27未决不变。下一步核验官方2020—2022表格图片及历史制度，再财政逐年规则；2、3、4继续等待。证据archive_parse_round22/calendar_service。
+当前执行检查点：严格第1项进行中（第22轮）。服务业本地逐年反查匹配2019/2022两稿，只有累计证据，未豁免单月；121+27未决不变。下一步核验官方2020—2022表格图片及历史制度，再财政逐年规则；2、3、4继续等待。证据history/archive_parse/archive_parse_round22/calendar_service。
 
 当前执行检查点（用户最新顺序要求）：严格1→2→3→4，完成一项再进入下一项。当前回到第1项发布日历/合并期口径核验：121+27项未决，未验收通过前不执行2、3、4。保留已入库成果；遇外部证据阻塞报告原因，不自动跳阶段。此规则覆盖下文全部旧循环与带未决项放行描述。
 
@@ -113,11 +113,11 @@
 
 ## 验收证据
 
-- GDP：archive_parse_round4/README.md；archive_parse_round4/gdp_2013/post_checks.json。
-- PMI：archive_parse_round6/pmi_200912/README.md及post_checks.json。
-- 全量价格反查：archive_parse_round10/prices/README.md及remaining_months.csv。
-- CPI/PPI：archive_parse_round9/prices/README.md、remaining_months.csv和post_checks.json（已处理上批12条候选）。
-- NBS月度：archive_parse_round2/nbs_verified/README.md及remaining_calendar_gaps.csv。
-- 后台二轮：archive_parse_runs/20260912_090538/latest.md。该页为已结束轮次的快照，后续人工审核入库不修改旧轮次统计。
+- GDP：history/archive_parse/archive_parse_round4/README.md；history/archive_parse/archive_parse_round4/gdp_2013/post_checks.json。
+- PMI：history/archive_parse/archive_parse_round6/pmi_200912/README.md及post_checks.json。
+- 全量价格反查：history/archive_parse/archive_parse_round10/prices/README.md及remaining_months.csv。
+- CPI/PPI：history/archive_parse/archive_parse_round9/prices/README.md、remaining_months.csv和post_checks.json（已处理上批12条候选）。
+- NBS月度：history/archive_parse/archive_parse_round2/nbs_verified/README.md及remaining_calendar_gaps.csv。
+- 后台二轮：history/archive_parse/archive_parse_runs/20260912_090538/latest.md。该页为已结束轮次的快照，后续人工审核入库不修改旧轮次统计。
 
 不能将6/7或43/55当作全项目完成率：它们仅对应两份既定内部缺口清单。全47字段的连续历史尚未完成。

@@ -1,35 +1,47 @@
-# Maintained scripts
+# Scripts guide
 
-This directory now contains production runners, task installers, current
-ingestion/export utilities, and the historical parsers that remain covered by
-the test suite.
+This directory contains scheduled runtime code together with maintenance and
+historical reproducibility scripts. Only the first group is executed by the
+normal unattended pipeline.
 
-The completed one-off review, migration, and round-specific scripts were
-removed from the active tree on 2026-09-16. Their local recovery archive is:
+## Scheduled runtime
 
-    data/backups/code_cleanup/deprecated_code_20260916.zip
+- `run_daily_web_update.py` — shared China/global and daily/weekly runner.
+- `run_with_live_log.py` — streams task output into launcher logs.
 
-The SHA-256 inventory is recorded in:
+The four root `run_*update.cmd` and `run_*revision.cmd` files call these two
+scripts. Do not rename or move them without updating and reinstalling the
+Windows scheduled tasks.
 
-    reports/v2/code_cleanup/removed_code_manifest.csv
+## Task installation and credentials
 
-Current scheduled-task entry points must remain here:
-
-- run_daily_web_update.py
-- run_with_live_log.py
-- run_nbs_history_once.ps1
-- install_daily_web_update_task.ps1
-- install_daily_global_update_task.ps1
-
-`run_daily_web_update.py` also drives the 00:00 global task. IMF's official
-commodity workbook, the ChinaBond structured source, and the official U.S. Treasury daily yield-curve XML source are enabled. ChinaBond
-uses a user-authorized bounded robots.txt retrieval-failure exception; an explicit
-Disallow response remains blocking.
-
-Weekly revision entry points:
-
+- `install_daily_web_update_task.ps1`
+- `install_daily_global_update_task.ps1`
 - `install_weekly_revision_tasks.ps1`
-- `run_weekly_web_revision.cmd` (workspace root)
-- `run_weekly_global_revision.cmd` (workspace root)
+- `set_deepseek_api_key.ps1`
 
-Daily jobs use recent/conditional refreshes; weekly jobs perform the complete OECD/RTDSM revision audit. Failed web pages use 1/3/7-day backoff and 404 pages use a 30-day cooldown.
+## Current maintenance and exports
+
+Inventory, audit, calibration, availability, email, and Wind ingestion scripts
+are operator-invoked tools. They are not run merely because they are present in
+this directory. Examples include `export_current_field_inventory.py`,
+`export_non_cn_field_inventory.py`, `estimate_availability.py`,
+`ingest_wind_mcp.py`, and `send_latest_audit_email.py`.
+
+## Historical and one-time work
+
+Files named for a specific source gap, revision event, probe, review round, or
+date reproduce earlier work. They may rely on local evidence in `data/` and a
+matching report under `reports/v2/`. Treat them as historical tools unless a
+current runbook explicitly calls them.
+
+`run_nbs_history_once.ps1` is retained for the disabled, completed NBS history
+task. It is not part of the four active daily/weekly jobs.
+
+The earlier cleanup archive remains at
+`data/backups/code_cleanup/deprecated_code_20260916.zip`; its SHA-256 inventory
+is `reports/v2/code_cleanup/removed_code_manifest.csv`.
+
+Daily jobs use recent or conditional refreshes. Weekly jobs perform broader
+OECD/RTDSM and official-source revision checks. Failed pages use 1/3/7-day
+backoff; HTTP 404 pages use a 30-day cooldown.

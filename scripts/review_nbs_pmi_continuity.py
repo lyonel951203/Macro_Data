@@ -6,7 +6,7 @@ import pandas as pd
 from lxml import html
 from macro_pit.db import get_connection
 from macro_pit.timeutils import SHANGHAI
-OUT=Path('reports/v2/archive_parse_20260912/nbs_pmi')
+OUT=Path('reports/v2/history/archive_parse/archive_parse_20260912/nbs_pmi')
 KEYS=['CN_PMI_'+x for x in ['MANUFACTURING','PRODUCTION','NEW_ORDERS','RAW_MATERIAL_INVENTORY','EMPLOYMENT','SUPPLIER_DELIVERY']]
 LABELS=['PMI','生产','新订单','原材料库存','从业人员','供应商配送时间']
 def compact(s):return re.sub(r'\s+','',s).replace('主要原材料库存','原材料库存').replace('供应商配送时间','供应商配送').replace('供应商配送','供应商配送时间')
@@ -33,7 +33,7 @@ def cells(body,y,m):
  return dict(zip(KEYS,proofs[0]))
 def main():
  OUT.mkdir(parents=True,exist_ok=True)
- f=pd.read_parquet('reports/v2/archive_parse_20260911/unverified_candidates.parquet')
+ f=pd.read_parquet('reports/v2/history/archive_parse/archive_parse_20260911/unverified_candidates.parquet')
  with get_connection('macro_pit_v2.duckdb',read_only=True) as c:
   old=set(c.sql("select canonical_series_id,period from observation_vintage where country='CN' and pit_grade in ('A','B')").fetchall())
  f=f[f.canonical_series_id.isin(KEYS)].copy();f=f[pd.Series([(r.canonical_series_id,r.period) not in old for r in f.itertuples()],index=f.index)]

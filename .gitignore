@@ -1,6 +1,7 @@
 # Local datasets, source archives, exports and runtime checkpoints
 /data/
 /logs/
+/outputs/
 *.duckdb
 *.duckdb.*
 *.db
@@ -17,7 +18,6 @@
 *.7z
 *.tar
 *.gz
-/pboc_pagination.html
 
 # Generated reports and evidence stay local. Keep documentation, analysis code,
 # and the small frozen task manifests required by the backfill scripts.

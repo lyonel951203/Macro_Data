@@ -4,6 +4,12 @@ Append-only DuckDB/Parquet pipeline for point-in-time macroeconomic data. The
 project treats an official publication timestamp and a reproducible raw file as
 part of every strict-PIT observation.
 
+Start with [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) for the four production
+entry points, active configuration boundary, report index, and cleanup rules.
+The short rule is: scheduled launchers live in the repository root, production
+code lives in `src/macro_pit/`, and `data/` is local evidence that repository
+cleanup must not modify.
+
 ## Repository contents and local data
 
 This repository contains source code, configuration, tests, documentation, and

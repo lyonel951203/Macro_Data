@@ -10,8 +10,8 @@ from macro_pit.archive import RawArtifact
 from macro_pit.sources.cn_common import make_observation
 from macro_pit.timeutils import SHANGHAI
 
-OUT=Path('reports/v2/archive_parse_20260911/safe_gap_net')
-OLD=Path('reports/v2/archive_parse_20260911/safe_monthly')
+OUT=Path('reports/v2/history/archive_parse/archive_parse_20260911/safe_gap_net')
+OLD=Path('reports/v2/history/archive_parse/archive_parse_20260911/safe_monthly')
 SPECS=[
  ('https://www.safe.gov.cn/safe/2011/1125/4942.html','2011-10','2011-11-25','2011年10月份,境内银行代客涉外收入为1868亿美元,对外付款为1759亿美元', [('CN_CROSS_BORDER_RECEIPTS_USD',186.8),('CN_CROSS_BORDER_PAYMENTS_USD',175.9)]),
  ('https://www.safe.gov.cn/safe/2020/0220/15482.html','2020-01','2020-02-21','2020年1月,银行代客涉外收入2871亿美元,对外付款2797亿美元',[('CN_CROSS_BORDER_RECEIPTS_USD',287.1),('CN_CROSS_BORDER_PAYMENTS_USD',279.7)]),

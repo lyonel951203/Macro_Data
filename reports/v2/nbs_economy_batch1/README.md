@@ -53,7 +53,7 @@
 
 这些参考格不等于必须存在 648 次独立发布。答记者问的归档也不等于相应完整综合稿已经归档。
 
-下一批 [20 篇候选](next_20_candidates.csv)已保存为 `config/nbs_economy_batch2_candidates.json`，状态 **READY_NOT_STARTED**。优先补 2022 年至 2025 年已有官方链接的实体经济缺月，每篇目前有 10 个目标字段无记录；实际可入库数须由正文核验决定，不能把 20 × 10 当作已确认增量。本批结束后未自动启动下一批。
+下一批 [20 篇候选](next_20_candidates.csv)已保存为 `config/history/nbs/nbs_economy_batch2_candidates.json`，状态 **READY_NOT_STARTED**。优先补 2022 年至 2025 年已有官方链接的实体经济缺月，每篇目前有 10 个目标字段无记录；实际可入库数须由正文核验决定，不能把 20 × 10 当作已确认增量。本批结束后未自动启动下一批。
 
 ## 验证与复跑
 

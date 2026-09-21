@@ -104,7 +104,7 @@
 - [逐期间待证CSV](stage1_completion/full_target_calendar_queue.csv)
 - [2005年起完整期间台账](stage1_completion/full_target_period_inventory.csv)
 - [严格阶段状态](strict_stage_progress.json)
-- [官方冲突记录](archive_parse_round26/industry_calendar/official_conflict.json)
+- [官方冲突记录](history/archive_parse/archive_parse_round26/industry_calendar/official_conflict.json)
 - [精度与串指标说明更正](user_workbook_support/release_chart_review/precision_and_field_correction.json)
 - [2011年一月社零更早证据](user_workbook_support/earlier_release/evidence.json)
 - [项目当前状态](STATUS.md)

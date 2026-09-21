@@ -93,7 +93,7 @@ def discover_index(
 @cli.command("discover-nbs-legacy")
 @click.option(
     "--term-manifest",
-    default="config/nbs_legacy_search_terms.txt",
+    default="config/history/nbs/nbs_legacy_search_terms.txt",
     show_default=True,
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
 )

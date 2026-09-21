@@ -185,14 +185,14 @@ def process_article(candidate,source,state,targets):
 
 def run(allow_network=False):
     os.chdir(ROOT)
-    config=json.loads(Path('config/pit_history_autorun.json').read_text(encoding='utf-8'))
+    config=json.loads(Path('config/history/pit/pit_history_autorun.json').read_text(encoding='utf-8'))
     preflight=json.loads((OUT/'preflight.json').read_text(encoding='utf-8'))
     assert preflight['status']=='PASS', 'Offline replay must pass before unattended execution'
     assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==sha for p,sha in preflight['sha256'].items()), 'Code changed since offline replay'
     jobs=jobs_for(config)
     OUT.mkdir(parents=True,exist_ok=True)
     state=json.loads(STATE.read_text(encoding='utf-8')) if STATE.exists() else dict(completed_jobs=[],articles={},inserted=0)
-    digest=hashlib.sha256(Path('config/pit_history_autorun.json').read_bytes()).hexdigest()
+    digest=hashlib.sha256(Path('config/history/pit/pit_history_autorun.json').read_bytes()).hexdigest()
     assert state.get('config_sha256',digest)==digest
     if state.get('status') in {'SOURCE_BLOCKED','QUEUE_DRAINED_WITH_REVIEW_PENDING'}:
         raise RuntimeError('Blocked/completed queue requires review before restart')
@@ -312,6 +312,6 @@ if __name__=='__main__':
     p.add_argument('--show-plan',action='store_true')
     args=p.parse_args()
     if args.show_plan:
-        print(json.dumps(jobs_for(json.loads((ROOT/'config/pit_history_autorun.json').read_text(encoding='utf-8'))),ensure_ascii=False,indent=2))
+        print(json.dumps(jobs_for(json.loads((ROOT/'config/history/pit/pit_history_autorun.json').read_text(encoding='utf-8'))),ensure_ascii=False,indent=2))
     else:
         run(args.allow_network)

@@ -11,7 +11,7 @@ before = pd.read_csv(out / "before" / (name + "_values.csv"))
 after = pd.read_csv(root / "data/exports" / (name + "_values.csv"))
 old_periods = pd.read_parquet(out / "before" / (name + "_periods.parquet"))
 new_periods = pd.read_parquet(root / "data/exports" / (name + "_periods.parquet"))
-expected = json.loads((root / "config/nbs_gap_batch4_expected.json").read_text(encoding="utf-8"))
+expected = json.loads((root / "config/history/nbs/nbs_gap_batch4_expected.json").read_text(encoding="utf-8"))
 assert before.columns.tolist() == after.columns.tolist()
 assert before.as_of_month_end.tolist() == after.as_of_month_end.tolist()
 assert len(after) == 259

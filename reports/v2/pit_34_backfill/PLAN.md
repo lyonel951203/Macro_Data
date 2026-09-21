@@ -68,8 +68,8 @@
 
 ## 已准备的入口与证据
 
-- 计划规格：`config/pit34_backfill_plan.json`；生成/校验：`python scripts/plan_pit_34_backfill.py`（离线，不写主库）。
-- 五个 NBS 窄搜窗口：`config/nbs_pit34_discovery_jobs.json`。可用既有 `scripts/run_nbs_gap_search_once.py`，传入该 manifest、独立 result-path 和 `--max-pages-per-job 1`；显式网络运行时仍受来源预算与 robots 控制。本轮未执行这些窗口。
+- 计划规格：`config/history/pit/pit34_backfill_plan.json`；生成/校验：`python scripts/plan_pit_34_backfill.py`（离线，不写主库）。
+- 五个 NBS 窄搜窗口：`config/history/nbs/nbs_pit34_discovery_jobs.json`。可用既有 `scripts/run_nbs_gap_search_once.py`，传入该 manifest、独立 result-path 和 `--max-pages-per-job 1`；显式网络运行时仍受来源预算与 robots 控制。本轮未执行这些窗口。
 - [官方证据清单](source_evidence.json)仅用于规划与候选，未冒充已归档 HTML。
 - 2017-03 服务业**单月**附表：[统计局 2017-04-17 原稿](https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1899470.html)。初次按月发布与单月数据起点不同。
 - 2018-01 综合 PMI 及其他 PMI 样本：[统计局 2018-01-31 原稿](https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1899839.html)。

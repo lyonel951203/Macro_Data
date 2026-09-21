@@ -8,7 +8,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from macro_pit.timeutils import SHANGHAI
 
-OUT=Path('reports/v2/archive_parse_20260911/safe_monthly')
+OUT=Path('reports/v2/history/archive_parse/archive_parse_20260911/safe_monthly')
 NUMBER=r'[0-9][0-9,]*(?:\.[0-9]+)?'
 MONEY=rf'(?:{NUMBER}亿美元|{NUMBER}亿元人民币[（(]等值{NUMBER}亿美元[）)])'
 
