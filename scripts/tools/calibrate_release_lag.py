@@ -6,7 +6,7 @@ became visible - and measure the lag from period_end to the release date
 (Asia/Shanghai). Outputs per-series distribution stats used to build the
 estimated_available_at rule table.
 
-Outputs (under reports/v2/pit_work_step1_lag/):
+Outputs (under reports/v2/history/pit/pit_work_step1_lag/):
   - lag_by_period.csv      one row per (series, period): first release timing
   - lag_stats_by_series.csv  per-series distribution summary
   - README.md              human-readable summary

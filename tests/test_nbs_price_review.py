@@ -143,8 +143,8 @@ def test_resume_after_ingestion_only_rebuilds_exports(tmp_path, monkeypatch, evi
                                      "manifest_sha256": hashlib.sha256(manifest.read_bytes()).hexdigest()}))
     Path("data/history_backfill/nbs_test_run.json").write_text(json.dumps(
         {"status": "FAILED", "review_only": False, "ingestion": ingestion}))
-    inspection = Path("reports/v2/pit_csv_inspection")
-    inspection.mkdir()
+    inspection = Path("reports/v2/history/pit/pit_csv_inspection")
+    inspection.mkdir(parents=True)
     (inspection / "field_history_summary.json").write_text("{}")
 
     class Source:

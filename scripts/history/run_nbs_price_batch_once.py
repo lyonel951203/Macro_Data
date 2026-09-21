@@ -195,10 +195,10 @@ def run_batch(manifest_path, batch, *, allow_network=False, review_only=False, s
             command("scripts/history/finalize_nbs_legacy_batch.py", *common)
             run["export_summary"] = json.loads((out / "final_result.json").read_text(encoding="utf-8"))
             command("scripts/compare_nbs_batch_exports.py", "--output-dir", out, "--expected", expected_path)
-            for path in [Path("reports/v2/pit_csv_inspection/review.ipynb"),
-                         Path("reports/v2/pit_csv_inspection/field_history_review.ipynb"), out / "review.ipynb"]:
+            for path in [Path("reports/v2/history/pit/pit_csv_inspection/review.ipynb"),
+                         Path("reports/v2/history/pit/pit_csv_inspection/field_history_review.ipynb"), out / "review.ipynb"]:
                 execute_notebook(path)
-            run["field_summary"] = json.loads(Path("reports/v2/pit_csv_inspection/field_history_summary.json").read_text(encoding="utf-8"))
+            run["field_summary"] = json.loads(Path("reports/v2/history/pit/pit_csv_inspection/field_history_summary.json").read_text(encoding="utf-8"))
         run["status"] = "COMPLETE"
         run["stage"] = "review_only_complete" if review_only else "exported_and_checked"
     except Exception as exc:

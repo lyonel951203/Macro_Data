@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from macro_pit.archive import RawArtifact,UrlCache
 from macro_pit.sources.cn_common import make_observation
 from macro_pit.timeutils import SHANGHAI
-OUT=Path('reports/v2/pre2010_backfill/nbs_realestate_2008')
+OUT=Path('reports/v2/history/pit/pre2010_backfill/nbs_realestate_2008')
 SPECS=[('1919483',2008,11,'2008/12/12 10:13',26546,22.7),('1919504',2009,3,'2009/04/13 08:22',4880,4.1)]
 def compact(x):return re.sub(r'\s+','',x)
 def extract(text,month):

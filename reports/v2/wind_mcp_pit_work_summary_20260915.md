@@ -90,7 +90,7 @@ PIT 判定是两步：**① 该数据期在截点时是否已发布（可见性�
 | 外汇储备 | 7 天 | 7–7 | 最稳 |
 | OECD 两指数 | 62–91 天 | — | **受批量入库污染，不可用恒定规则，排除** |
 
-产出：`reports/v2/pit_work_step1_lag/`（lag_by_period.csv、lag_stats_by_series.csv、README.md）。
+产出：`reports/v2/history/pit/pit_work_step1_lag/`（lag_by_period.csv、lag_stats_by_series.csv、README.md）。
 
 ### 3.2 第 2 步：估计可用日期（`scripts/tools/estimate_availability.py`）
 

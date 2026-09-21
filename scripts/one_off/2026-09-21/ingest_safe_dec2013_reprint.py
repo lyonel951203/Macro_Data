@@ -21,7 +21,7 @@ from macro_pit.sources.cn_common import html_text
 
 
 ROOT = Path(__file__).resolve().parents[3]
-REPORT_DIR = ROOT / "reports/v2/gap_backfill_batches_20260921"
+REPORT_DIR = ROOT / "reports/v2/history/pit/gap_backfill_batches_20260921"
 # The legacy host presents a mismatched TLS certificate in 2026. Its public
 # HTTP endpoint remains available and is used only after a robots.txt check.
 URL = "http://finance.people.com.cn/money/n/2014/0124/c42877-24217093.html"

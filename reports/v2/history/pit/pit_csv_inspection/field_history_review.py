@@ -10,7 +10,7 @@ import pandas as pd
 root = next(p for p in [Path.cwd(), *Path.cwd().parents]
             if (p / "data/exports/cn_pit_month_end_2005_20260731_values.csv").exists())
 prefix = root / "data/exports/cn_pit_month_end_2005_20260731"
-out = root / "reports/v2/pit_csv_inspection"
+out = root / "reports/v2/history/pit/pit_csv_inspection"
 values = pd.read_csv(str(prefix) + "_values.csv")
 periods = pd.read_parquet(str(prefix) + "_periods.parquet")
 metadata = pd.read_csv(str(prefix) + "_metadata.csv")

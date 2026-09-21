@@ -10,7 +10,7 @@ from macro_pit.archive import RawArtifact
 from macro_pit.sources.cn_common import make_observation
 from macro_pit.sources.cn_pboc import METRICS
 from macro_pit.timeutils import SHANGHAI
-OUT=Path('reports/v2/pre2010_backfill/pboc_2009')
+OUT=Path('reports/v2/history/pit/pre2010_backfill/pboc_2009')
 SPECS=[
  dict(url='https://www.mof.gov.cn/zhengwuxinxi/caijingshidian/zyzfmhwz/200906/t20090612_166811.htm',period='2009-05',date='2009-06-12',values=[
  ('CN_M2_YOY',25.74,'广义货币供应量(M2)余额54.82万亿元,同比增长25.74%'),

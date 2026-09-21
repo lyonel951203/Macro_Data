@@ -40,7 +40,7 @@ task. It is not part of the four active daily/weekly jobs.
 
 The earlier cleanup archive remains at
 `data/backups/code_cleanup/deprecated_code_20260916.zip`; its SHA-256 inventory
-is `reports/v2/code_cleanup/removed_code_manifest.csv`.
+is `reports/v2/history/project_cleanup/removed_code_manifest.csv`.
 
 Daily jobs use recent or conditional refreshes. Weekly jobs perform broader
 OECD/RTDSM and official-source revision checks. Failed pages use 1/3/7-day

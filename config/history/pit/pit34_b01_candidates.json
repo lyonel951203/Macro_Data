@@ -1,8 +1,8 @@
 {
   "batch":"PIT34_B01",
   "items":[
-    {"url":"https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1899839.html", "title":"2018年1月中国采购经理指数运行情况", "kind":"web_discovery_seed", "index_raw_file":"reports/v2/pit_34_backfill/b01/discovery_evidence.json"},
-    {"url":"https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1899470.html", "title":"一季度国民经济运行开局良好", "kind":"web_discovery_seed", "index_raw_file":"reports/v2/pit_34_backfill/b01/discovery_evidence.json"},
-    {"url":"https://www.stats.gov.cn/sj/xwfbh/fbhwd/202302/t20230203_1899897.html", "title":"一季度国民经济实现良好开局", "kind":"web_discovery_seed", "index_raw_file":"reports/v2/pit_34_backfill/b01/discovery_evidence.json"}
+    {"url":"https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1899839.html", "title":"2018年1月中国采购经理指数运行情况", "kind":"web_discovery_seed", "index_raw_file":"reports/v2/history/pit/pit_34_backfill/b01/discovery_evidence.json"},
+    {"url":"https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1899470.html", "title":"一季度国民经济运行开局良好", "kind":"web_discovery_seed", "index_raw_file":"reports/v2/history/pit/pit_34_backfill/b01/discovery_evidence.json"},
+    {"url":"https://www.stats.gov.cn/sj/xwfbh/fbhwd/202302/t20230203_1899897.html", "title":"一季度国民经济实现良好开局", "kind":"web_discovery_seed", "index_raw_file":"reports/v2/history/pit/pit_34_backfill/b01/discovery_evidence.json"}
   ]
 }

@@ -34,7 +34,7 @@ from macro_pit.db import get_connection, insert_observations
 
 ROOT = Path(__file__).resolve().parents[3]
 DB_PATH = ROOT / "macro_pit_v2.duckdb"
-REPORT_DIR = ROOT / "reports/v2/gap_backfill_batches_20260921"
+REPORT_DIR = ROOT / "reports/v2/history/pit/gap_backfill_batches_20260921"
 PMI_RAW = ROOT / "data/raw/nbs/2026/09/09/55091bb9f7f878262847cfd4ba79724bea9983a808577b31c6b872f8891a131c.html"
 HOME_RAW = ROOT / "data/raw/nbs/2026/09/10/193910cc11c03b6dc4d55b7e6812098433daf5d4f4c6b8612af324b31645cbb0.html"
 WIND_M1_RAW = REPORT_DIR / "wind_cli_m1_201912_202002.json"

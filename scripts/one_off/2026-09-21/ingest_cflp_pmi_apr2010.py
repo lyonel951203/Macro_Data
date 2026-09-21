@@ -20,7 +20,7 @@ from macro_pit.db import get_connection, insert_observations
 
 ROOT = Path(__file__).resolve().parents[3]
 RAW = ROOT / "data/raw/cflp/2026/09/21/d9dd5c4456a7173bd273ad068a8e1b614362e09a7f3516e7e5641fb3d2ce3e02.html"
-REPORT_DIR = ROOT / "reports/v2/gap_backfill_batches_20260921"
+REPORT_DIR = ROOT / "reports/v2/history/pit/gap_backfill_batches_20260921"
 URL = "http://old.chinawuliu.com.cn/office/30/176/8125.shtml"
 TZ = ZoneInfo("Asia/Shanghai")
 VALUES = [

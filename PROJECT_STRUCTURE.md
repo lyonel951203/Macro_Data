@@ -54,9 +54,10 @@ Completed architecture and migration documents are under `docs/history/`.
 They describe earlier project states and should not override the current
 scheduled configurations or `reports/v2/STATUS.md`.
 
-Completed archive-parser rounds and the finished NBS, PBOC and Wind work
-families are grouped under `reports/v2/history/`; current operational reports
-remain directly under `reports/v2/`.
+Completed parsing, source backfills, PIT construction, quality checks and
+migrations are grouped under `reports/v2/history/`; current operational reports
+and the availability sidecar read by query code remain directly under
+`reports/v2/`.
 
 ## Script boundary
 

@@ -26,7 +26,7 @@ from macro_pit.timeutils import SHANGHAI
 from pit_autorun_validation import verify
 
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/'reports/v2/pit_history_autorun'
+OUT=ROOT/'reports/v2/history/pit/pit_history_autorun'
 STATE=ROOT/'data/history_backfill/pit_history_autorun.json'
 LOCK=ROOT/'data/history_backfill/nbs_price_batch.lock'
 MARKER='PIT_HISTORY_AUTORUN'
@@ -51,7 +51,7 @@ def checkpoint(state):
         f"- 已处理正文 {len(state['articles'])} 篇；本任务累计新增严格记录 {state['inserted']} 条；待审正文 {sum(bool(v.get('held')) for v in state['articles'].values())} 篇。",
         '- 自动执行范围：NBS 17 个目标字段的发现与已核格式补缺；未知格式/口径隔离待审。PBOC 10 项、SAFE 7 项仍需适配，不能标成全自动完成。',
         '- 检索从 2005 到 2026-07，逐年连续推进；每日和每轮请求数量不限，来源限速与熔断保留。此进程最长运行 7 天，关机/休眠时不推进，重启后可从断点启动。',
-        '- 进度以 `data/history_backfill/pit_history_autorun.json` 为准；已插入记录/待审原稿见 `reports/v2/pit_history_autorun/`。候选数与非空格不代表真实历史完整度。',
+        '- 进度以 `data/history_backfill/pit_history_autorun.json` 为准；已插入记录/待审原稿见 `reports/v2/history/pit/pit_history_autorun/`。候选数与非空格不代表真实历史完整度。',
         f"- 最近导出：{state.get('last_export_at','尚未有新记录需要导出')}；运行说明见 [README](pit_history_autorun/README.md)。",
         *([f"- 暂停/错误：{state['last_error']}"] if state.get('last_error') else []),end])
     if start in original and end in original:
@@ -80,7 +80,7 @@ def export(state):
         build_monthly_wide_snapshot(conn,prefix,'2005-01-31','2026-07-31',country='CN',pit_mode='strict')
         coverage=conn.sql("SELECT canonical_series_id,count(DISTINCT period) actual_periods,min(period) first_period,max(period) last_period,min(available_at) first_available_at FROM observation_vintage WHERE country='CN' AND pit_grade IN ('A','B') AND available_at<=TIMESTAMPTZ '2026-07-31 23:59:59+08:00' GROUP BY canonical_series_id").df()
     # This existing report script is entirely offline and reads the new exports.
-    runpy.run_path('reports/v2/pit_csv_inspection/field_history_review.py')
+    runpy.run_path('reports/v2/history/pit/pit_csv_inspection/field_history_review.py')
     values=pd.read_csv(prefix+'_values.csv')
     periods=pd.read_parquet(prefix+'_periods.parquet')
     assert values.iloc[:,1:].notna().equals(periods.iloc[:,1:].notna())
@@ -109,11 +109,11 @@ def export(state):
             frequency=metadata.loc[canonical,'frequency'],first_nonnull_as_of=values.loc[i,'as_of_month_end'],
             first_selected_source_period=periods.loc[i,canonical],first_value=values.loc[i,canonical],
             strict_first_data_period=record.first_period,strict_original_period_count=int(record.actual_periods)))
-    pd.DataFrame(first).to_csv('reports/v2/pit_csv_inspection/first_points.csv',index=False,encoding='utf-8-sig')
-    save(Path('reports/v2/pit_csv_inspection/first_points_check.json'),dict(status='PASS',at=now().isoformat(),fields=len(first),
+    pd.DataFrame(first).to_csv('reports/v2/history/pit/pit_csv_inspection/first_points.csv',index=False,encoding='utf-8-sig')
+    save(Path('reports/v2/history/pit/pit_csv_inspection/first_points_check.json'),dict(status='PASS',at=now().isoformat(),fields=len(first),
         sha256={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in [prefix+'_values.csv',prefix+'_periods.parquet']}))
-    history=pd.read_csv('reports/v2/pit_csv_inspection/field_history.csv')
-    tasks=pd.read_csv('reports/v2/pit_34_backfill/tasks.csv')
+    history=pd.read_csv('reports/v2/history/pit/pit_csv_inspection/field_history.csv')
+    tasks=pd.read_csv('reports/v2/history/pit/pit_34_backfill/tasks.csv')
     tasks[['task_id','indicator','batch']].merge(history,on='indicator').to_csv(OUT/'live_34_field_coverage.csv',index=False,encoding='utf-8-sig')
     state['last_export_at']=now().isoformat()
     state['exported_inserted']=state['inserted']
@@ -212,7 +212,7 @@ def run(allow_network=False):
                         [row['raw_sha256'],row['canonical_series_id'],row['period'],row['value'],row['available_at']]).fetchone()[0]
                     recovered+=bool(found)
         state['inserted']=recovered
-        targets=set(pd.read_csv('reports/v2/pit_34_backfill/tasks.csv').query("source=='NBS'").indicator)
+        targets=set(pd.read_csv('reports/v2/history/pit/pit_34_backfill/tasks.csv').query("source=='NBS'").indicator)
         source=NBSSource(allow_network=allow_network)
         if all(source.client.policy[key] is None for key in ('max_requests_per_day','max_requests_per_run')):
             if 'budget exhausted' in state.get('last_error',''):

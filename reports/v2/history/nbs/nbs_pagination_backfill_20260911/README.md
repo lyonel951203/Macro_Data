@@ -26,4 +26,4 @@
 - `config_before.json`、`state_before.json`、`worker_before.py` 和 `preflight_before.json` 保留原状态；`config_proposed.json` 为审核过的 20 窗口清单，`preflight_after.json` 为通过的启动门禁。
 - 第一季度实际返回与恢复状态记录在 `resume.json`；实时进度见 [监控](../source_monitor/latest.md)。
 
-普通重启继续使用原断点；不要重复运行激活脚本。补查原始检索断点在 `reports/v2/pit_history_autorun/discovery/*_q*/search_state.json`，主断点仍为 `data/history_backfill/pit_history_autorun.json`。
+普通重启继续使用原断点；不要重复运行激活脚本。补查原始检索断点在 `reports/v2/history/pit/pit_history_autorun/discovery/*_q*/search_state.json`，主断点仍为 `data/history_backfill/pit_history_autorun.json`。

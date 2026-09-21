@@ -10,7 +10,7 @@ out = root / "reports/v2/history/wind/wind_download_plan"
 out.mkdir(parents=True, exist_ok=True)
 for source, target in [
     (root / "reports/v2/cn_coverage.csv", out / "coverage_snapshot.csv"),
-    (root / "reports/v2/pit_csv_inspection/field_history.csv", out / "field_history_snapshot.csv"),
+    (root / "reports/v2/history/pit/pit_csv_inspection/field_history.csv", out / "field_history_snapshot.csv"),
 ]:
     if not target.exists():
         target.write_bytes(source.read_bytes())

@@ -521,7 +521,7 @@ GDP2013-Q4未取得新的同期单季证据；PMI2010-05在6月发布稿的历�
 - 已处理正文 1070 篇；本任务累计新增严格记录 322 条；待审正文 1050 篇。
 - 自动执行范围：NBS 17 个目标字段的发现与已核格式补缺；未知格式/口径隔离待审。PBOC 10 项、SAFE 7 项仍需适配，不能标成全自动完成。
 - 检索从 2005 到 2026-07，逐年连续推进；每日和每轮请求数量不限，来源限速与熔断保留。此进程最长运行 7 天，关机/休眠时不推进，重启后可从断点启动。
-- 进度以 `data/history_backfill/pit_history_autorun.json` 为准；已插入记录/待审原稿见 `reports/v2/pit_history_autorun/`。候选数与非空格不代表真实历史完整度。
+- 进度以 `data/history_backfill/pit_history_autorun.json` 为准；已插入记录/待审原稿见 `reports/v2/history/pit/pit_history_autorun/`。候选数与非空格不代表真实历史完整度。
 - 最近导出：2026-09-11T11:24:48.208803+08:00；运行说明见 [README](pit_history_autorun/README.md)。
 <!-- PIT_HISTORY_AUTORUN:end -->
 
@@ -627,7 +627,7 @@ GDP2013-Q4未取得新的同期单季证据；PMI2010-05在6月发布稿的历�
 - 最新全量验收仍为 **FAIL**：必需来源 4/5、核心指标 14/16、历史深度 19/25、可验证 A/B **76.3%**；18 个序列内部覆盖低于 95%。raw 可追溯率 100%、重复 0；美国 RTDSM 通过。
 - 已发现旧稿候选仍为 **332 篇，其中 19 篇已入库**；本批六篇待补价格稿已完成。另已列出 **25 个尚未入库的 2020—2021 价格数据期候选**（CPI 11、PPI 14），见 `reports/v2/history/nbs/nbs_gap_batch4/next_price_candidates.csv`；仍须下载正文并核对。
 - 本批下载与验证均已退出，断点 `data/history_backfill/nbs_gap_batch4_validation_state.json` 为 **COMPLETE / pending 0**。本批使用 6 篇网络正文及 3 篇缓存；请求账本由 55 增至 63（含 1 次本机沙箱连接拒绝及 1 次 robots 检查），未遇服务器 403/429，未启动下一批网络任务。
-- 复核入口：`reports/v2/history/nbs/nbs_gap_batch4/review.html`、`review.ipynb`（5 个代码单元执行通过）、`validated_samples.csv`、`cached_regression.json`、`export_changes.csv`、`final_result.json`。原导出已保存在该目录 `before/`。逐字段起点、覆盖及两个检查 notebook 已同步刷新至 `reports/v2/pit_csv_inspection/`。
+- 复核入口：`reports/v2/history/nbs/nbs_gap_batch4/review.html`、`review.ipynb`（5 个代码单元执行通过）、`validated_samples.csv`、`cached_regression.json`、`export_changes.csv`、`final_result.json`。原导出已保存在该目录 `before/`。逐字段起点、覆盖及两个检查 notebook 已同步刷新至 `reports/v2/history/pit/pit_csv_inspection/`。
 
 ### 后台窄搜第三批
 
@@ -825,7 +825,7 @@ Read `docs/history/MIGRATION_README.md` before copying the project. Its migratio
 - Added daily lightweight current-history adapters for `EASTMONEY_MACRO` and `SINA_MACRO`; each archives raw responses and keeps only the newest three periods.
 - Reviewed direct coverage is 11 and 16 fields respectively, with 19 unique fields. All records are PIT_D and become visible only from this project first observed them.
 - Query priority is now `PIT_A > PIT_B > WIND > EASTMONEY_D > SINA_D`. Formal 2026-09-17 validation selected 104 A, 32 B, and 15 Wind cells and no fallback cells because higher evidence existed.
-- Initial production load added 33 Eastmoney rows and 48 Sina rows with zero parse errors. Full suite: 254 passed. See `reports/v2/fallback_validation/README.md`.
+- Initial production load added 33 Eastmoney rows and 48 Sina rows with zero parse errors. Full suite: 254 passed. See `reports/v2/history/quality/fallback_validation/README.md`.
 
 ## 2026-09-18 DeepSeek audit and email delivery
 
@@ -851,7 +851,7 @@ Read `docs/history/MIGRATION_README.md` before copying the project. Its migratio
 - 第二批找到 SAFE 2013-12 完整历史转载，六项均以 PIT_B 入库：银行结汇/售汇/净结汇 186.8/155.7/31.0 十亿美元，涉外收入/付款/净收入 311.3/303.0/8.3 十亿美元；保守可得日为2014-01-25。后来 SAFE 汇编 D 值保留审计，但不覆盖当期 B 版本。
 - 主库现为780,425条；复合长表已重建为239,698个有效版本事件；中国月频内部空月由847降至698。验证普通 Wind 与任何 A/B 同字段期共存数为0。
 - 剩余698个空月已分类：408个结构性/早期源频率空月，218个已停止历史补齐的财政七项，72个外汇储备月份已有后来 SAFE D 汇编但缺当期 A/B 发布证据。Wind `M0048261` 真实查询确认2006年新增人民币存款也只有季度端点，因此没有补造8个月度值。
-- 详细证据：`reports/v2/gap_backfill_batches_20260921/README.md`；更新后的质量审计：`reports/v2/cn_wind_quality_current_20260921/README.md`。
+- 详细证据：`reports/v2/history/pit/gap_backfill_batches_20260921/README.md`；更新后的质量审计：`reports/v2/history/quality/cn_wind_quality_current_20260921/README.md`。
 
 ## 2026-09-21 外汇储备经验可得日补齐
 

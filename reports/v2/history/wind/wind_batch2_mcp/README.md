@@ -33,7 +33,7 @@
 ## 下游刷新（已完成）
 
 - `estimate_availability.py` 重跑：侧车 `estimated_available_v1.csv` 5,067 条（WIND 3,652 + SAFE 1,415），七序列沿用规则表 v1（滞后 12–14 天、low 置信）；
-- work 模式宽表重导：覆盖率 67.7% → **77.0%**（+1,132 格，其中本批贡献 +585 格）；严格表 8,247 非空格 0 改动。验收见 `reports/v2/pit_work_step3_work_mode/README.md`。
+- work 模式宽表重导：覆盖率 67.7% → **77.0%**（+1,132 格，其中本批贡献 +585 格）；严格表 8,247 非空格 0 改动。验收见 `reports/v2/history/pit/pit_work_step3_work_mode/README.md`。
 
 ## 使用注意
 

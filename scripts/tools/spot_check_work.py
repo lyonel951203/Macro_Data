@@ -6,7 +6,7 @@ w = pl.read_csv(r"data/exports/cn_pit_work_month_end_2005_20260731_values.csv")
 p = pl.read_csv(r"data/exports/cn_pit_work_month_end_2005_20260731_provenance.csv")
 per = pl.read_parquet(r"data/exports/cn_pit_work_month_end_2005_20260731_periods.parquet")
 
-out = io.open(r"reports/v2/pit_work_step1_lag/spot_check.txt", "w", encoding="utf-8")
+out = io.open(r"reports/v2/history/pit/pit_work_step1_lag/spot_check.txt", "w", encoding="utf-8")
 for d in ["2005-01-31", "2005-02-28", "2005-03-31"]:
     i = w["as_of_month_end"].to_list().index(d)
     out.write(
