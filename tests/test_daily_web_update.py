@@ -82,6 +82,8 @@ def test_default_china_plan_has_official_sources_and_no_wind():
     mof = next(item for item in plan["sources"] if item["source"] == "MOF")
     assert mof["mode"] == "official_web_index"
     assert mof["bootstrap_existing_as_baseline"] is True
+    assert mof["independent_indexes"] is True
+    assert len(mof["index_urls"]) == 1
     assert all("gks.mof.gov.cn" in url for url in mof["index_urls"])
     mirror = next(
         item for item in plan["sources"] if item["source"] == "PBOC_MIRROR"
@@ -355,6 +357,70 @@ def test_customs_unverifiable_tls_is_explicit_neutral_transport_block(tmp_path, 
     assert "cannot verify robots.txt" in receipt["transport_note"]
     assert receipt["errors"] == []
     assert state["transport_status"] == "BLOCKED_TRANSPORT"
+    assert _overall_status([receipt]) == "SUCCESS"
+
+
+def test_independent_mof_indexes_keep_successful_page_when_archive_page_fails(
+    tmp_path, monkeypatch,
+):
+    manifest = tmp_path / "mof_indexes.txt"
+    current = "https://gks.mof.gov.cn/tongjishuju/"
+    archive = "https://gks.mof.gov.cn/tongjishuju/index_1.htm"
+    manifest.write_text(f"{current}\n{archive}\n", encoding="utf-8")
+    candidate = CandidateUrl(
+        source="MOF",
+        title="2026年1—8月财政收支情况",
+        url="https://gks.mof.gov.cn/tongjishuju/202609/release.htm",
+        period="2026-08",
+        kind="fiscal_release",
+        index_raw_file="raw/current.html",
+    )
+
+    def fetch_indexes(conn, *, source, urls, **kwargs):
+        assert source == "MOF"
+        if urls == [archive]:
+            raise ConnectionError("archive page temporarily refused connection")
+        assert urls == [current]
+        return [candidate], ["raw/current.html"]
+
+    def ingest_candidate(*args, **kwargs):
+        return SimpleNamespace(
+            status="SUCCESS",
+            new_observations=0,
+            revisions=0,
+            metadata_updates=0,
+            unchanged=1,
+            parse_errors=0,
+            http_success=1,
+            raw_downloaded=0,
+            runtime_seconds=0.01,
+            errors=[],
+        )
+
+    monkeypatch.setattr(daily_runner, "fetch_and_discover_indexes", fetch_indexes)
+    monkeypatch.setattr(daily_runner, "ingest_url_manifest", ingest_candidate)
+    receipt = run_source(
+        "MOF",
+        {
+            "index_manifests": [str(manifest)],
+            "independent_indexes": True,
+            "bootstrap_existing_as_baseline": True,
+            "recheck_latest": 1,
+            "max_candidates_per_run": 20,
+            "retry_backoff_days": [1, 3, 7],
+            "not_found_cooldown_days": 30,
+        },
+        {},
+        db_path=tmp_path / "mof.duckdb",
+        allow_network=True,
+        logs_dir=tmp_path,
+    )
+    assert receipt["status"] == "SUCCESS"
+    assert receipt["discovered"] == 1
+    assert receipt["baseline_skipped"] == 1
+    assert receipt["errors"] == []
+    assert len(receipt["index_errors"]) == 1
+    assert archive in receipt["index_errors"][0]
     assert _overall_status([receipt]) == "SUCCESS"
 
 

@@ -18,6 +18,7 @@ These reference the active source manifests:
 - `pboc_mirror_index_urls.txt`
 - `customs_english_index_urls.txt`
 - `daily_mof_index_urls.txt`
+- `weekly_mof_index_urls.txt`
 - `daily_safe_index_urls.txt`
 - `oecd_china_core.yml`
 - `oecd_core_part1.yml`

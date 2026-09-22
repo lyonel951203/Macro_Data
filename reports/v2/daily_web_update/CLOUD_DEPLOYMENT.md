@@ -45,7 +45,7 @@
 Windows的 `StartWhenAvailable` 和Linux systemd的 `Persistent=true` 都只会在恢复后补执行一次，不会为每个错过的自然日分别运行一次。项目通过“目录回溯＋持久待处理队列”补足这一点：
 
 - NBS每次检查当前发布目录、前两页历史目录和综合发布目录。
-- MOF每次检查当前财政收支目录和前一页；首次接入把既有链接设为基线，只复查最新3篇，不清理历史缺口。
+- MOF每日只检查当前财政收支目录；周任务另检查当前页和`index_1.htm`。目录相互独立，单个分页临时拒绝连接时保留成功目录的结果并记录告警。首次接入把既有链接设为基线，只复查最新3篇，不清理历史缺口。
 - SAFE每次检查当前统计数据页、当前解读页和解读前一页。
 - 本次目录发现的所有URL先写入状态；单轮最多处理20个，剩余URL以后继续排队。
 - 已经发现但解析失败的URL保存在 `state.json`，即使退出当前目录页也继续重试。
@@ -134,7 +134,7 @@ sudo -u macrodata .venv/bin/python -m pytest \
 - 来源只有 `NBS`、`PBOC`、`MOF`、`SAFE`、`OECD`、`RTDSM`
 - 所有目录URL为预期官方域名
 - NBS包含当前页和 `index_1.html`、`index_2.html`
-- MOF显示当前页、`index_1.htm` 及 `bootstrap_existing_as_baseline: true`
+- MOF日任务显示当前页，周任务另含`index_1.htm`；两者均显示`independent_indexes: true`和`bootstrap_existing_as_baseline: true`
 - SAFE包含当前页和 `index_2.html`
 - OECD显示 `official_sdmx_revisions_api` 模式及中国、全球part1、全球part2三个清单
 - RTDSM显示 `official_rtdsm_vintage_workbooks` 模式及 `config/rtdsm_core.yml`

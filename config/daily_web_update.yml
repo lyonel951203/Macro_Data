@@ -57,6 +57,7 @@ sources:
     retry_backoff_days: [1, 3, 7]
     not_found_cooldown_days: 30
     bootstrap_existing_as_baseline: true
+    independent_indexes: true
   SAFE:
     enabled: true
     index_manifests:

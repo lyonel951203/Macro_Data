@@ -1,3 +1,2 @@
-# Current MOF fiscal releases plus one recent page for missed-run recovery.
+# Current MOF fiscal releases only. The weekly revision job checks index_1.htm.
 https://gks.mof.gov.cn/tongjishuju/
-https://gks.mof.gov.cn/tongjishuju/index_1.htm

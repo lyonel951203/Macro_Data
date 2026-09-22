@@ -79,3 +79,7 @@ Unregister-ScheduledTask -TaskName Macro_Data_Daily_Global_Update -Confirm:$fals
 00:00全球每日任务新增 `USTREASURY`，读取美国财政部官方 Daily Treasury Par Yield Curve Rates XML。系统每天复查最近75天，周日04:00任务复查最近400天；首次回补从2005-01开始。主库保存每月最后一个已公布交易日的2年、10年、30年恒定到期收益率。
 
 财政部年度XML只提供观察日期，未提供稳定的精确发布时间。为避免前视，`release_at` 与 `available_at` 均保守记为观察日期次日00:00（America/New_York），PIT等级为B。原始XML逐次归档，变值按新vintage追加。30年期因官方停发历史，从2006-02开始。
+
+## 2026-09-22 中国财政部目录容错
+
+9月21日22:00任务中，财政部当前目录成功，但归档分页`index_1.htm`三次被远端拒绝连接；旧配置因此把整个MOF来源标成失败。日任务现只读取当前目录，周任务再读取当前目录和`index_1.htm`。所有MOF目录按独立单元处理，只要至少一个官方目录成功，就继续发现和解析，失败分页仅记录`index_errors`。隔离联网验证发现8篇稿件，最新稿解析7条、0个解析错误，状态为`SUCCESS`。
